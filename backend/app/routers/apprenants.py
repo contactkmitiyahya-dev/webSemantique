@@ -93,6 +93,69 @@ def detail_apprenant(id: str):
     if not valid_id(id):
         raise HTTPException(status_code=400, detail="ID invalide : doit commencer par une majuscule et ne contenir que des lettres, chiffres ou underscores.")
 
+    # Informations de base (avec OPTIONAL pour les champs qui peuvent manquer)
+    query = f"""
+    SELECT ?nom ?prenom ?email ?niveau ?dateN WHERE {{
+        edu:{id} edu:nom ?nom ;
+                 edu:prenom ?prenom .
+        OPTIONAL {{ edu:{id} edu:email ?email }}
+        OPTIONAL {{ edu:{id} edu:niveauEtudes ?niveau }}
+        OPTIONAL {{ edu:{id} edu:dateNaissance ?dateN }}
+    }}
+    """
+    res = select(query)
+    if not res:
+        raise HTTPException(status_code=404, detail=f"Apprenant '{id}' introuvable.")
+    r = res[0]
+
+    # Relations : formations, competences, certifications
+    q_rel = f"""
+    SELECT ?type ?objId ?label WHERE {{
+        {{
+            edu:{id} edu:estInscritA ?obj .
+            ?obj rdfs:label ?label .
+            BIND("formation" AS ?type)
+            BIND(STR(?obj) AS ?objId)
+        }}
+        UNION
+        {{
+            edu:{id} edu:possedeCompetence ?obj .
+            ?obj edu:intitule ?label .
+            BIND("competence" AS ?type)
+            BIND(STR(?obj) AS ?objId)
+        }}
+        UNION
+        {{
+            edu:{id} edu:obtientCertification ?obj .
+            ?obj rdfs:label ?label .
+            BIND("certification" AS ?type)
+            BIND(STR(?obj) AS ?objId)
+        }}
+    }}
+    """
+    rels = select(q_rel)
+    relations = {"formations": [], "competences": [], "certifications": []}
+    for rel in rels:
+        cle = rel["type"]["value"] + "s"
+        if cle in relations:
+            relations[cle].append({
+                "id": rel["objId"]["value"].split("#")[-1],
+                "label": rel["label"]["value"],
+            })
+
+    # Gestion des champs potentiellement vides avec .get()
+    return {
+        "id": id,
+        "nom": r["nom"]["value"] if "nom" in r else "Inconnu",
+        "prenom": r["prenom"]["value"] if "prenom" in r else "Inconnu",
+        "email": r["email"]["value"] if "email" in r else "Non renseigné",
+        "niveau": r["niveau"]["value"] if "niveau" in r else "Non renseigné",
+        "dateNaissance": r["dateN"]["value"] if "dateN" in r else None,
+        "relations": relations,
+    }
+    if not valid_id(id):
+        raise HTTPException(status_code=400, detail="ID invalide : doit commencer par une majuscule et ne contenir que des lettres, chiffres ou underscores.")
+
     # Informations de base
     query = f"""
     SELECT ?nom ?prenom ?email ?niveau ?dateN WHERE {{
