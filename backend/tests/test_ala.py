@@ -271,7 +271,7 @@ def test_organismes_get_liste(client):
 def test_organismes_get_detail(client):
     o = client.get("/api/organismes/EduParcours_Academie").json()
     assert o["type"] == "AcademieEnLigne"
-    assert len(o["formations"]) == 5                          # les deux sens (|)
+    assert len(o["formations"]) >= 5   # les deux sens (|) ; >= : les autres membres en ajoutent (Imem : 2)
     modifiables = {f["modifiable"] for f in o["formations"]}
     assert modifiables == {True, False}                       # proposeFormation ET estProposeePar
 

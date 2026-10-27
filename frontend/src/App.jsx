@@ -14,10 +14,27 @@ import ParcoursListe from './pages/imem/ParcoursListe'
 import ParcoursFiche from './pages/imem/ParcoursFiche'
 import ParcoursForm from './pages/imem/ParcoursForm'
 import RechercheGlobale from './pages/imem/RechercheGlobale'
+import ApprenantsListe from './pages/yahya/ApprenantsListe'
+import ApprenantFiche from './pages/yahya/ApprenantFiche'
+import ApprenantForm from './pages/yahya/ApprenantForm'
+import ApprenantsStats from './pages/yahya/ApprenantsStats'
+import CertificationsListe from './pages/yahya/CertificationsListe'
+import CertificationForm from './pages/yahya/CertificationForm'
+import CertificationFiche from './pages/yahya/CertificationFiche'
+import NlpTester from './pages/yahya/NlpTester'
 import './App.css'
 
 // Menu : une entrée par membre
 const MENU = [
+  {
+    membre: 'Yahya',
+    liens: [
+      { to: '/apprenants', texte: 'Apprenants' },
+      { to: '/apprenants/stats', texte: 'Statistiques' },
+      { to: '/certifications', texte: 'Certifications' },
+      { to: '/nlp', texte: 'Question (NLP)' },
+    ],
+  },
   {
     membre: 'Ala',
     liens: [
@@ -90,6 +107,14 @@ export default function App() {
             <Route path="/parcours/:id" element={<ParcoursFiche />} />
             <Route path="/parcours/:id/modifier" element={<ParcoursForm />} />
             <Route path="/recherche" element={<RechercheGlobale />} />
+            <Route path="/apprenants" element={<ApprenantsListe />} />
+            <Route path="/apprenants/stats" element={<ApprenantsStats />} />
+            <Route path="/apprenants/nouveau" element={<ApprenantForm />} />
+            <Route path="/apprenants/:id" element={<ApprenantFiche />} />
+            <Route path="/certifications" element={<CertificationsListe />} />
+            <Route path="/certifications/nouvelle" element={<CertificationForm />} />
+            <Route path="/certifications/:id" element={<CertificationFiche />} />
+            <Route path="/nlp" element={<NlpTester />} />
             <Route path="*" element={<NonDisponible />} />
           </Routes>
         </main>

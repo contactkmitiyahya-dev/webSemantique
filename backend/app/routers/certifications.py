@@ -6,7 +6,7 @@ Endpoints : liste, detail, creation, attribution a un apprenant.
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional
-from ..sparql_client import select, update
+from ..sparql_client import select_brut as select, update  # format brut : r["x"]["value"]
 from ..utils import valid_id, esc
 
 router = APIRouter()

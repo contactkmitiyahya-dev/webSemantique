@@ -153,9 +153,12 @@ export default function NlpTester() {
             {reponse.entites && Object.keys(reponse.entites).length > 0 && (
               <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem", flexWrap: "wrap" }}>
                 <span className="info-label" style={{ alignSelf: "center" }}>Entités extraites :</span>
+                {/* Format commun : liste de {texte, uri, type} ; ancien format : {cle: valeur} */}
                 {Object.entries(reponse.entites).map(([k, v]) => (
                   <span key={k} className="tag tag-green">
-                    <strong>{k}</strong>: {v}
+                    {typeof v === "object"
+                      ? <><strong>{v.type}</strong>: {v.texte} → {v.uri}</>
+                      : <><strong>{k}</strong>: {v}</>}
                   </span>
                 ))}
               </div>

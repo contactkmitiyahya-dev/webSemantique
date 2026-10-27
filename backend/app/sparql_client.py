@@ -42,6 +42,16 @@ def select(query: str) -> list[dict]:
     return [{cle: _local(v["value"]) for cle, v in ligne.items()} for ligne in lignes]
 
 
+def select_brut(query: str) -> list[dict]:
+    """SELECT au format SPARQL JSON brut : {"var": {"type": ..., "value": ...}}.
+    Utilisé par les routeurs de Yahya (r["nom"]["value"]), écrits avant le format simple de select()."""
+    log.info("SELECT\n%s", query)
+    s = SPARQLWrapper(QUERY_URL)
+    s.setQuery(PREFIXES + query)
+    s.setReturnFormat(JSON)
+    return s.query().convert()["results"]["bindings"]
+
+
 def ask(query: str) -> bool:
     """Exécute un ASK et renvoie True ou False."""
     log.info("ASK\n%s", query)

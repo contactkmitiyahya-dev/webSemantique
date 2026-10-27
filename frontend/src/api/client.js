@@ -43,6 +43,7 @@ client.interceptors.response.use(
     }
     const erreur = new Error(message)
     erreur.status = err.response?.status // utile pour réagir à un 404 ou un 409
+    erreur.response = err.response // pages de Yahya : err.response?.status, err.response.data.detail
     return Promise.reject(erreur)
   },
 )

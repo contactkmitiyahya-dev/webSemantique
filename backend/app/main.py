@@ -8,7 +8,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.routers import domaines, formateurs, formations, nlp, organismes, parcours, recherche, responsables
+from app.routers import (apprenants, certifications, domaines, formateurs, formations, nlp, organismes,
+                         parcours, recherche, responsables)
 
 # Niveau INFO : chaque requête SPARQL exécutée s'affiche dans le terminal (logger "sparql")
 logging.basicConfig(level=logging.INFO, format="%(levelname)s [%(name)s] %(message)s")
@@ -39,12 +40,23 @@ async def erreurs_serveur(request: Request, call_next):
 
 
 # Ajouté APRÈS le middleware d'erreurs : CORS l'englobe, donc les réponses 500 ont aussi les en-têtes CORS
+# Vite peut choisir 5174 ou 5175 si 5173 est déjà pris (Yahya)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Routeurs de Yahya : préfixe donné ici (APIRouter() sans préfixe)
+app.include_router(apprenants.router, prefix="/api/apprenants", tags=["Apprenants"])
+app.include_router(certifications.router, prefix="/api/certifications", tags=["Certifications"])
+# Routeurs d'Ala et d'Imem : préfixe déclaré dans APIRouter(prefix=...)
 for module in (formateurs, responsables, organismes, domaines, formations, parcours, recherche, nlp):
     app.include_router(module.router)
+
+
+@app.get("/api/sante", tags=["Sante"])
+def sante():
+    """Health-check (Yahya) : l'API est opérationnelle."""
+    return {"status": "ok", "service": "EduParcours API v1.0"}

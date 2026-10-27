@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from rapidfuzz import fuzz
 
 from app.ala_commun import motif_type
-from app.nlp import ala, imem
+from app.nlp import ala, imem, yahya
 from app.nlp.intents import detecter_intention
 from app.nlp.normalisation import normaliser
 from app.sparql_client import select
@@ -20,15 +20,15 @@ from app.sparql_client import select
 router = APIRouter(prefix="/api/nlp", tags=["NLP (TEMPORAIRE)"])
 
 SEUIL_FLOU = 85  # rapidfuzz : tolère une petite faute de frappe (« Mansoury » -> « Mansouri »)
-CLASSES = ["Formateur", "Organisme", "Domaine", "Cours", "Formation", "Apprenant"]
+CLASSES = ["Formateur", "Organisme", "Domaine", "Cours", "Formation", "Apprenant", "Certification"]
 
 # Intentions de chaque membre (même contrat : GABARITS, ENTITE_ATTENDUE, EXEMPLES)
-MODULES = (ala, imem)
+MODULES = (ala, imem, yahya)
 GABARITS = {i: g for m in MODULES for i, g in m.GABARITS.items()}
 ENTITE_ATTENDUE = {i: c for m in MODULES for i, c in m.ENTITE_ATTENDUE.items()}
 EXEMPLES = {i: q for m in MODULES for i, q in m.EXEMPLES.items()}
-# Les gabarits d'Imem lisent aussi la question (montant, niveau) : gabarit(entite, question)
-AVEC_QUESTION = set(imem.GABARITS)
+# Les gabarits d'Imem et de Yahya lisent aussi la question (montant, niveau) : gabarit(entite, question)
+AVEC_QUESTION = set(imem.GABARITS) | set(yahya.GABARITS)
 
 
 class Question(BaseModel):
@@ -112,9 +112,15 @@ def aide(message: str) -> str:
     return f"{message} Exemples de questions : {exemples}"
 
 
+@router.get("/exemples", summary="Une question type par intention (page NLP de Yahya)")
+def exemples():
+    return [{"id": n, "question": q, "intention": i} for n, (i, q) in enumerate(EXEMPLES.items(), start=1)]
+
+
 @router.post("/question", summary="Question en langage naturel -> requête SPARQL -> résultats")
 def question(q: Question):
-    reponse = {"intention": "INCONNUE", "entites": [], "sparql": None, "resultats": []}
+    # source : la page NLP de Yahya affiche « Fuseki (En direct) » ; plus aucun résultat simulé
+    reponse = {"intention": "INCONNUE", "entites": [], "sparql": None, "resultats": [], "source": "fuseki"}
 
     if not q.question.strip():
         return {**reponse, "message": aide("La question est vide.")}
