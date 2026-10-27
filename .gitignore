@@ -1,0 +1,8 @@
+apache-jena-fuseki-*/
+jena-*/
+venv/
+node_modules/
+__pycache__/
+*.pyc
+.env
+databases/
