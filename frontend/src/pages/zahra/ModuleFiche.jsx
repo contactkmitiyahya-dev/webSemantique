@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import client from "../../api/client";
+import RelationSelect from "../../components/RelationSelect";
 
 const PROFONDEUR_MAX = 5;
 
@@ -40,6 +41,20 @@ export default function ModuleFiche() {
   const [erreur, setErreur] = useState("");
   const [erreurSuppression, setErreurSuppression] = useState("");
   const navigate = useNavigate();
+  const [rafraichir, setRafraichir] = useState(0);
+  const [prerequisAjout, setPrerequisAjout] = useState("");
+  const [erreurAjout, setErreurAjout] = useState("");
+
+  async function ajouterPrerequis() {
+    setErreurAjout("");
+    try {
+      await client.post(`/modules/${module.id}/prerequis`, { prerequisId: prerequisAjout });
+      setPrerequisAjout("");
+      setRafraichir((n) => n + 1);
+    } catch (e) {
+      setErreurAjout(e.message);
+    }
+  }
 
   async function supprimer() {
     if (!window.confirm(`Supprimer le module « ${module.intitule} » ?`)) return;
@@ -64,7 +79,7 @@ export default function ModuleFiche() {
       })
       .catch((e) => setErreur(e.message))
       .finally(() => setChargement(false));
-  }, [id]);
+  }, [id, rafraichir]);
 
   if (chargement) {
     return <main style={styles.page}><p>Chargement...</p></main>;
@@ -113,6 +128,20 @@ export default function ModuleFiche() {
           ))}
         </ul>
       )}
+
+      <h2>Ajouter un prérequis</h2>
+      <div style={{ display: "flex", gap: "8px", alignItems: "flex-end" }}>
+        <RelationSelect
+          endpoint="/modules"
+          valeur={prerequisAjout}
+          onChange={setPrerequisAjout}
+          label="Module prérequis"
+        />
+        <button onClick={ajouterPrerequis} disabled={!prerequisAjout}>
+          Ajouter
+        </button>
+      </div>
+      {erreurAjout && <p style={styles.erreur}>{erreurAjout}</p>}
 
       <h2>Tous les prérequis (directs et indirects)</h2>
       {prerequisTous.length === 0 ? (

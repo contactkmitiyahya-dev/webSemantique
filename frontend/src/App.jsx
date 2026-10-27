@@ -8,6 +8,7 @@ import CoursForm from "./pages/zahra/CoursForm";
 import RessourcesListe from "./pages/zahra/RessourcesListe";
 import RessourceFiche from "./pages/zahra/RessourceFiche";
 import RessourceForm from "./pages/zahra/RessourceForm";
+import Questions from "./pages/zahra/Questions";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Link to="/modules">Modules</Link>
         <Link to="/cours" style={{ marginLeft: "16px" }}>Cours</Link>
         <Link to="/ressources" style={{ marginLeft: "16px" }}>Ressources</Link>
+        <Link to="/questions" style={{ marginLeft: "16px" }}>Questions</Link>
       </nav>
       <Routes>
         <Route path="/modules" element={<ModulesListe />} />
@@ -27,6 +29,7 @@ export default function App() {
         <Route path="/ressources/nouveau" element={<RessourceForm />} />
         <Route path="/ressources/:id" element={<RessourceFiche />} />
         <Route path="/ressources/:id/modifier" element={<RessourceForm />} />
+        <Route path="/questions" element={<Questions />} />
         <Route path="/modules/nouveau" element={<ModuleForm />} />
         <Route path="/modules/:id" element={<ModuleFiche />} />
         <Route path="/modules/:id/modifier" element={<ModuleForm />} />

@@ -49,6 +49,7 @@ def test_competences_requises_module():
 
 
 def test_creer_modifier_supprimer_module():
+    client.delete("/api/modules/Test_Pytest_Module")
     corps = {"intitule": "Test Pytest Module", "dureeHeures": 10, "niveauDifficulte": "Débutant"}
     r = client.post("/api/modules", json=corps)
     assert r.status_code == 201

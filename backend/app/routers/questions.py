@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 from app import sparql_client as sp
 from app.nlp.entities import reconnaitre
-from app.nlp.intentions import detecter_intention
+from app.nlp.intentions import detecter_intention, lemmes
 from app.routers.cours import detail_cours
 from app.routers.modules import competences_requises, detail_module, prerequis_module
 from app.routers.ressources import lister_ressources
@@ -63,9 +63,10 @@ def _repondre(intention: str, id_entite: str):
 
 @router.post("")
 def poser_question(body: Question):
+    mots = sorted(lemmes(body.question))
     intention = detecter_intention(body.question)
     if intention == "INCONNUE":
-        return {"intention": intention, "message": "Question non reconnue."}
+        return {"intention": intention, "lemmes": mots, "message": "Question non reconnue."}
 
     type_requis = TYPE_REQUIS[intention]
     entite = None
@@ -75,13 +76,14 @@ def poser_question(body: Question):
             None,
         )
         if entite is None:
-            return {"intention": intention, "message": f"Aucun {type_requis.lower()} reconnu dans la question."}
+            return {"intention": intention, "lemmes": mots, "message": f"Aucun {type_requis.lower()} reconnu dans la question."}
 
     elif intention == "VIDEOS":
         entite = next((e for e in reconnaitre(body.question) if e["type"] == "Competence"), None)
 
     return {
         "intention": intention,
+        "lemmes": mots,
         "entite": entite,
         "reponse": _repondre(intention, entite["id"] if entite else ""),
     }
