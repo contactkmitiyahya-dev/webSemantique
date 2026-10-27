@@ -1,0 +1,89 @@
+﻿/* ============================================================
+   App-level styles — global layout & navbar
+   ============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0f1117;
+  color: #e2e8f0;
+  font-family: "Inter", system-ui, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* --- Navbar --- */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .75rem 2rem;
+  background: rgba(15,17,23,.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  gap: 1rem;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #e2e8f0;
+  text-decoration: none;
+}
+.brand-icon { font-size: 1.4rem; }
+.brand-tag  { background: linear-gradient(135deg,#6366f1,#22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: .8rem; font-weight: 700; margin-left: .25rem; }
+
+.nav-links { display: flex; gap: .25rem; }
+.nav-link  { color: #8892a4; font-size: .9rem; font-weight: 500; text-decoration: none; padding: .45rem .9rem; border-radius: 6px; transition: all .2s; }
+.nav-link:hover { color: #e2e8f0; background: rgba(255,255,255,.05); }
+.nav-active { color: #6366f1 !important; background: rgba(99,102,241,.1) !important; }
+
+/* --- Main content --- */
+.main-content { min-height: calc(100vh - 57px); }
+
+/* --- Buttons (shared with yahya.css tokens) --- */
+.btn {
+  padding: .6rem 1.25rem;
+  border-radius: 6px;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary  { background: linear-gradient(135deg,#6366f1,#22d3ee); color:#fff; }
+.btn-primary:hover { filter:brightness(1.15); transform:translateY(-1px); box-shadow:0 4px 14px rgba(99,102,241,.4); }
+.btn-secondary { background: #22263a; color: #e2e8f0; border: 1px solid rgba(255,255,255,.08); }
+.btn-secondary:hover { border-color: #6366f1; color:#6366f1; }
+
+/* --- Home page --- */
+.home { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem; }
+.home-hero { text-align: center; padding: 3rem 0 4rem; }
+.hero-icon { font-size: 4rem; margin-bottom: 1rem; }
+.home-hero h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: .75rem; background: linear-gradient(135deg,#6366f1,#22d3ee); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.home-hero p  { color: #8892a4; font-size: 1rem; margin-bottom: 2rem; }
+.hero-links   { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 1.25rem; }
+.feature-card { background: #1a1d27; border: 1px solid rgba(255,255,255,.07); border-radius: 12px; padding: 1.5rem; transition: all .2s; }
+.feature-card:hover { transform: translateY(-3px); border-color: #6366f1; box-shadow: 0 8px 24px rgba(99,102,241,.15); }
+.feature-icon { font-size: 2rem; display: block; margin-bottom: .75rem; }
+.feature-card h3 { color: #e2e8f0; font-size: 1rem; font-weight: 600; margin-bottom: .35rem; }
+.feature-card p  { color: #8892a4; font-size: .83rem; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f1117; }
+::-webkit-scrollbar-thumb { background: #22263a; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #6366f1; }

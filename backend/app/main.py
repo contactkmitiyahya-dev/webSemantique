@@ -1,4 +1,4 @@
-﻿"""
+"""
 Point d'entree principal de l'API EduParcours.
 Lance le serveur avec : uvicorn app.main:app --reload
 """
@@ -13,10 +13,14 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Middleware CORS pour autoriser le front-end React (Vite sur port 5173)
+# Middleware CORS — Vite peut choisir 5173, 5174 ou 5175 si le port est deja pris
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

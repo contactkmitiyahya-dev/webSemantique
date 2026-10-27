@@ -1,4 +1,4 @@
-﻿"""
+"""
 Routeur FastAPI pour la ressource Certification.
 Endpoints : liste, detail, creation, attribution a un apprenant.
 """
@@ -43,8 +43,9 @@ def liste_certifications(
     if q:
         filtre = f'FILTER(CONTAINS(LCASE(STR(?label)), LCASE("{esc(q)}"))) '
 
+    # DISTINCT elimine les doublons produits par le chemin a/rdfs:subClassOf*
     query = f"""
-    SELECT ?id ?label ?validite ?organisme WHERE {{
+    SELECT DISTINCT ?id ?label ?validite ?organisme WHERE {{
         ?id a/rdfs:subClassOf* edu:Certification ;
             rdfs:label ?label .
         OPTIONAL {{ ?id edu:dureeValiditeAns ?validite }}
