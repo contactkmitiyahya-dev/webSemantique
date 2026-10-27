@@ -1,86 +1,45 @@
-import { Routes, Route, Link, NavLink, useLocation } from "react-router-dom";
-import ApprenantsListe  from "./pages/yahya/ApprenantsListe";
-import ApprenantFiche   from "./pages/yahya/ApprenantFiche";
-import ApprenantForm    from "./pages/yahya/ApprenantForm";
-import ApprenantsStats  from "./pages/yahya/ApprenantsStats";
-import CertificationsListe from "./pages/yahya/CertificationsListe";
-import CertificationForm   from "./pages/yahya/CertificationForm";
-import CertificationFiche  from "./pages/yahya/CertificationFiche";
-import NlpTester           from "./pages/yahya/NlpTester";
-import "./App.css";
+import { Routes, Route, Link } from "react-router-dom";
+import ModulesListe from "./pages/zahra/ModulesListe";
+import ModuleFiche from "./pages/zahra/ModuleFiche";
+import ModuleForm from "./pages/zahra/ModuleForm";
+import CoursListe from "./pages/zahra/CoursListe";
+import CoursFiche from "./pages/zahra/CoursFiche";
+import CoursForm from "./pages/zahra/CoursForm";
+import RessourcesListe from "./pages/zahra/RessourcesListe";
+import RessourceFiche from "./pages/zahra/RessourceFiche";
+import RessourceForm from "./pages/zahra/RessourceForm";
 
-function NavItem({ to, label }) {
+export default function App() {
   return (
-    <NavLink to={to} className={({ isActive }) => "nav-link" + (isActive ? " nav-active" : "")}>
-      {label}
-    </NavLink>
+    <>
+      <nav style={{ padding: "12px 24px", borderBottom: "1px solid #ddd" }}>
+        <Link to="/modules">Modules</Link>
+        <Link to="/cours" style={{ marginLeft: "16px" }}>Cours</Link>
+        <Link to="/ressources" style={{ marginLeft: "16px" }}>Ressources</Link>
+      </nav>
+      <Routes>
+        <Route path="/modules" element={<ModulesListe />} />
+        <Route path="/cours" element={<CoursListe />} />
+        <Route path="/cours/nouveau" element={<CoursForm />} />
+        <Route path="/cours/:id" element={<CoursFiche />} />
+        <Route path="/cours/:id/modifier" element={<CoursForm />} />
+        <Route path="/ressources" element={<RessourcesListe />} />
+        <Route path="/ressources/nouveau" element={<RessourceForm />} />
+        <Route path="/ressources/:id" element={<RessourceFiche />} />
+        <Route path="/ressources/:id/modifier" element={<RessourceForm />} />
+        <Route path="/modules/nouveau" element={<ModuleForm />} />
+        <Route path="/modules/:id" element={<ModuleFiche />} />
+        <Route path="/modules/:id/modifier" element={<ModuleForm />} />
+        <Route
+          path="*"
+          element={
+            <main style={{ padding: "24px", fontFamily: "sans-serif" }}>
+              <h1>EduParcours</h1>
+              <p>Application en cours de construction.</p>
+            </main>
+          }
+        />
+      </Routes>
+    </>
   );
 }
-
-function App() {
-  return (
-    <div className="app">
-      <header className="navbar">
-        <Link to="/" className="nav-brand">
-          <span className="brand-icon">🎓</span>
-          <span>EduParcours</span>
-          <span className="brand-tag">Yahya</span>
-        </Link>
-        <nav className="nav-links">
-          <NavItem to="/apprenants"            label="Apprenants" />
-          <NavItem to="/apprenants/stats"      label="Statistiques" />
-          <NavItem to="/certifications"        label="Certifications" />
-          <NavItem to="/nlp"                   label="NLP" />
-        </nav>
-      </header>
-
-      <main className="main-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/apprenants"           element={<ApprenantsListe />} />
-          <Route path="/apprenants/stats"     element={<ApprenantsStats />} />
-          <Route path="/apprenants/nouveau"   element={<ApprenantForm />} />
-          <Route path="/apprenants/:id"       element={<ApprenantFiche />} />
-          <Route path="/certifications"             element={<CertificationsListe />} />
-          <Route path="/certifications/nouvelle"    element={<CertificationForm />} />
-          <Route path="/certifications/:id"         element={<CertificationFiche />} />
-          <Route path="/nlp"                        element={<NlpTester />} />
-        </Routes>
-      </main>
-    </div>
-  );
-}
-
-function HomePage() {
-  return (
-    <div className="home">
-      <div className="home-hero">
-        <div className="hero-icon">🎓</div>
-        <h1>Module Apprenants &amp; Certifications</h1>
-        <p>Interface de gestion de la tranche Yahya — connectée à Fuseki via FastAPI</p>
-        <div className="hero-links">
-          <Link to="/apprenants" className="btn btn-primary">Voir les Apprenants</Link>
-          <Link to="/certifications" className="btn btn-secondary">Voir les Certifications</Link>
-          <Link to="/nlp" className="btn btn-secondary">Tester le NLP 🤖</Link>
-        </div>
-      </div>
-      <div className="feature-grid">
-        {[
-          { icon:"👤", title:"Apprenants", desc:"CRUD complet, recherche et filtres" },
-          { icon:"📊", title:"Statistiques", desc:"Distribution par niveau d'études" },
-          { icon:"🏆", title:"Certifications", desc:"Création, attribution aux apprenants" },
-          { icon:"🤖", title:"Module NLP", desc:"Questions en langage naturel vers requêtes SPARQL" },
-          { icon:"🔗", title:"Relations SPARQL", desc:"Requêtes vers Fuseki en temps réel" },
-        ].map(({ icon, title, desc }) => (
-          <div key={title} className="feature-card">
-            <span className="feature-icon">{icon}</span>
-            <h3>{title}</h3>
-            <p>{desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default App;

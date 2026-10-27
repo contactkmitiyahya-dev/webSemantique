@@ -1,8 +1,9 @@
-Yahya,"Quels sont les apprenants de niveau Master ?",APPRENANTS_NIVEAU,"niveau: Master","SELECT ?a ?n WHERE { ?a a/rdfs:subClassOf* edu:Apprenant ; edu:niveauEtudes ?n . FILTER(?n = ""Master"") }"
-Yahya,"Quelles sont les compétences de Omar ?",COMPETENCES_APPRENANT,"personne: Omar","SELECT ?c WHERE { edu:Omar edu:possedeCompetence ?c }"
-Yahya,"À quelles formations est inscrit Ahmed ?",FORMATIONS_APPRENANT,"personne: Ahmed","SELECT ?f WHERE { edu:Ahmed edu:estInscritA ?f }"
-Yahya,"Qui est inscrit à la Formation Full-Stack ?",APPRENANTS_FORMATION,"formation: Formation_FullStack","SELECT ?a WHERE { ?a edu:estInscritA edu:Formation_FullStack }"
-Yahya,"Combien y a-t-il d'apprenants en tout ?",COMPTER_APPRENANTS,"","SELECT (COUNT(?a) AS ?n) WHERE { ?a a/rdfs:subClassOf* edu:Apprenant }"
-Yahya,"Quelles certifications a obtenu Lina ?",CERTIFS_APPRENANT,"personne: Lina","SELECT ?c WHERE { edu:Lina_Master edu:obtientCertification ?c }"
-Yahya,"Quels modules sont requis pour le Certificat Développeur Front-end ?",MODULES_CERTIF,"certification: Certificat_Frontend","SELECT ?m WHERE { edu:Certificat_Frontend edu:certificationRequiertModule ?m }"
-Yahya,"Qui sont les coéquipiers de Nour ?",COEQUIPIERS,"personne: Nour","SELECT ?c WHERE { edu:Nour edu:estCoequipierDe ?c }"
+question,intention
+Quels sont les prérequis du module Interactivité et dynamisme ?,PREREQUIS
+Quels cours sont dans le Module HTML ?,COURS_MODULE
+Quelles compétences faut-il pour suivre le module Mise en production ?,COMPETENCES_MODULE
+Quel est le module qui suit Interactivité et dynamisme ?,SUIVANT_MODULE
+Quelles technologies sont utilisées dans le cours HTML5 sémantique et accessibilité ?,TECHNO_COURS
+Quelles ressources existent pour la compétence HTML ?,RESSOURCES_COMPETENCE
+Quelles vidéos sont disponibles sur HTML ?,VIDEOS
+Quel est le niveau du cours Introduction HTML ?,NIVEAU_COURS
