@@ -4,10 +4,10 @@ Endpoints CRUD + inscription aux formations + statistiques.
 """
 
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+from pydantic import BaseModel
+from typing import Optional
 from ..sparql_client import select, update
-from ..utils import valid_id, esc, make_id
+from ..utils import valid_id, esc
 
 router = APIRouter()
 
@@ -23,10 +23,6 @@ class ApprenantCreate(BaseModel):
     email: str
     niveauEtudes: str
     dateNaissance: str
-
-
-class InscriptionRequest(BaseModel):
-    formation_id: str
 
 
 # ---------------------------------------------------------------------------
@@ -191,8 +187,11 @@ def creer_apprenant(apprenant: ApprenantCreate):
 # ---------------------------------------------------------------------------
 
 @router.post("/{id}/inscription", summary="Inscrire un apprenant a une formation")
-def inscrire_apprenant(id: str, body: InscriptionRequest):
-    if not valid_id(id) or not valid_id(body.formation_id):
+def inscrire_apprenant(
+    id: str, 
+    formation_id: str = Query(..., description="ID de la formation a laquelle inscrire l'apprenant")
+):
+    if not valid_id(id) or not valid_id(formation_id):
         raise HTTPException(status_code=400, detail="ID invalide.")
 
     # Contrainte OWL : max 3 inscriptions simultanees
@@ -206,12 +205,12 @@ def inscrire_apprenant(id: str, body: InscriptionRequest):
         )
 
     # Verifier que la formation existe
-    check_f = select(f"SELECT ?p WHERE {{ edu:{body.formation_id} ?p ?o }} LIMIT 1")
+    check_f = select(f"SELECT ?p WHERE {{ edu:{formation_id} ?p ?o }} LIMIT 1")
     if not check_f:
-        raise HTTPException(status_code=404, detail=f"Formation '{body.formation_id}' introuvable.")
+        raise HTTPException(status_code=404, detail=f"Formation '{formation_id}' introuvable.")
 
-    update(f"INSERT DATA {{ edu:{id} edu:estInscritA edu:{body.formation_id} }}")
-    return {"message": "Inscription reussie", "apprenant": id, "formation": body.formation_id}
+    update(f"INSERT DATA {{ edu:{id} edu:estInscritA edu:{formation_id} }}")
+    return {"message": "Inscription reussie", "apprenant": id, "formation": formation_id}
 
 
 # ---------------------------------------------------------------------------
