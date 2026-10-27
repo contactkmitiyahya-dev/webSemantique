@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../../api/client";
 import "./yahya.css";
@@ -30,7 +30,7 @@ export default function ApprenantFiche() {
   const handleInscription = (e) => {
     e.preventDefault();
     setErreur(""); setSucces("");
-    api.post(`/apprenants/${id}/inscription`, { formation_id: formationId })
+    api.post(`/apprenants/${id}/inscription?formation_id=${encodeURIComponent(formationId.trim())}`)
       .then(() => {
         setSucces("Inscription réussie !");
         setFormationId("");

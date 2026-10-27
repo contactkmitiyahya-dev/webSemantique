@@ -5,7 +5,7 @@ Lance le serveur avec : uvicorn app.main:app --reload
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import apprenants, certifications
+from .routers import apprenants, certifications, nlp
 
 app = FastAPI(
     title="EduParcours API",
@@ -29,6 +29,7 @@ app.add_middleware(
 # Inclusion des routeurs metier
 app.include_router(apprenants.router, prefix="/api/apprenants", tags=["Apprenants"])
 app.include_router(certifications.router, prefix="/api/certifications", tags=["Certifications"])
+app.include_router(nlp.router, prefix="/api/nlp", tags=["NLP"])
 
 
 @app.get("/api/sante", tags=["Sante"])

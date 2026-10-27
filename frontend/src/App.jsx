@@ -6,6 +6,7 @@ import ApprenantsStats  from "./pages/yahya/ApprenantsStats";
 import CertificationsListe from "./pages/yahya/CertificationsListe";
 import CertificationForm   from "./pages/yahya/CertificationForm";
 import CertificationFiche  from "./pages/yahya/CertificationFiche";
+import NlpTester           from "./pages/yahya/NlpTester";
 import "./App.css";
 
 function NavItem({ to, label }) {
@@ -29,6 +30,7 @@ function App() {
           <NavItem to="/apprenants"            label="Apprenants" />
           <NavItem to="/apprenants/stats"      label="Statistiques" />
           <NavItem to="/certifications"        label="Certifications" />
+          <NavItem to="/nlp"                   label="NLP" />
         </nav>
       </header>
 
@@ -42,6 +44,7 @@ function App() {
           <Route path="/certifications"             element={<CertificationsListe />} />
           <Route path="/certifications/nouvelle"    element={<CertificationForm />} />
           <Route path="/certifications/:id"         element={<CertificationFiche />} />
+          <Route path="/nlp"                        element={<NlpTester />} />
         </Routes>
       </main>
     </div>
@@ -58,6 +61,7 @@ function HomePage() {
         <div className="hero-links">
           <Link to="/apprenants" className="btn btn-primary">Voir les Apprenants</Link>
           <Link to="/certifications" className="btn btn-secondary">Voir les Certifications</Link>
+          <Link to="/nlp" className="btn btn-secondary">Tester le NLP 🤖</Link>
         </div>
       </div>
       <div className="feature-grid">
@@ -65,6 +69,7 @@ function HomePage() {
           { icon:"👤", title:"Apprenants", desc:"CRUD complet, recherche et filtres" },
           { icon:"📊", title:"Statistiques", desc:"Distribution par niveau d'études" },
           { icon:"🏆", title:"Certifications", desc:"Création, attribution aux apprenants" },
+          { icon:"🤖", title:"Module NLP", desc:"Questions en langage naturel vers requêtes SPARQL" },
           { icon:"🔗", title:"Relations SPARQL", desc:"Requêtes vers Fuseki en temps réel" },
         ].map(({ icon, title, desc }) => (
           <div key={title} className="feature-card">

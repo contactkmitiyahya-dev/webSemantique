@@ -107,3 +107,41 @@ def test_limite_inscriptions():
 def test_suppression_apprenant_inexistant():
     response = client.delete("/api/apprenants/Apprenant_Inexistant_XYZ")
     assert response.status_code in [200, 404]
+
+# ==========================================
+# 6. Tests du Module NLP
+# ==========================================
+
+def test_nlp_exemples():
+    response = client.get("/api/nlp/exemples")
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) >= 8
+
+def test_nlp_question_niveau():
+    response = client.post("/api/nlp/question", json={"question": "Quels sont les apprenants de niveau Master ?"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["intention"] == "APPRENANTS_NIVEAU"
+    assert "sparql" in data
+    assert "resultats" in data
+    assert "SELECT" in data["sparql"]
+
+def test_nlp_question_compter():
+    response = client.post("/api/nlp/question", json={"question": "Combien y a-t-il d'apprenants en tout ?"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["intention"] == "COMPTER_APPRENANTS"
+    assert "COUNT" in data["sparql"]
+
+def test_nlp_question_compter_certifications():
+    response = client.post("/api/nlp/question", json={"question": "combien y a-t-il de certifications en tout"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["intention"] == "COMPTER_CERTIFICATIONS"
+    assert "Certification" in data["sparql"]
+    assert "resultats" in data
+    # La valeur retournée doit être 6 (ou 6 en string)
+    assert any("6" in str(v) for row in data["resultats"] for v in row.values())
+
