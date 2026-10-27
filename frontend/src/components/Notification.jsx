@@ -1,23 +1,29 @@
-// TEMPORAIRE (Ala) – à remplacer par la version de Linda
-//
-// Props : message (rien n'est affiché s'il est vide), type ('succes' | 'erreur'), onFermer, duree (ms)
-import { useEffect } from 'react'
-import './composants.css'
+import { useEffect, useRef } from "react";
+import "./components.css";
 
-export default function Notification({ message, type = 'succes', onFermer, duree = 3500 }) {
+/**
+ * Message temporaire en bas a droite (succes ou erreur), ferme apres `duree` ms.
+ * <Notification notif={{ type: "succes", message: "Enregistre" }} onFermer={() => setNotif(null)} />
+ * Accepte aussi l'ancienne forme d'Ala (pages d'Ala et d'Imem) :
+ * <Notification message="Enregistre" type="succes" onFermer={...} />
+ */
+export default function Notification({ notif: notifObjet, message, type = "succes", onFermer, duree = 4000 }) {
+  // Ref : le minuteur ne redemarre pas a chaque rendu du parent (fonction onFermer recreee)
+  const fermer = useRef(onFermer);
+  useEffect(() => { fermer.current = onFermer; });
+
   useEffect(() => {
-    if (!message) return undefined
-    const minuteur = setTimeout(onFermer, duree)
-    return () => clearTimeout(minuteur)
-    // onFermer volontairement absent : une fonction recréée à chaque rendu relancerait le minuteur
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message, duree])
+    if (!notifObjet && !message) return undefined;
+    const minuteur = setTimeout(() => fermer.current(), duree);
+    return () => clearTimeout(minuteur);
+  }, [notifObjet, message, duree]);
 
-  if (!message) return null
+  const notif = notifObjet ?? (message ? { message, type } : null);
+  if (!notif) return null;
   return (
-    <div className={`notification ${type}`} role="status">
-      <span>{message}</span>
-      <button onClick={onFermer} aria-label="Fermer">×</button>
+    <div className={`notification notification-${notif.type || "succes"}`} role="status">
+      <span>{notif.type === "erreur" ? "⚠️" : "✅"} {notif.message}</span>
+      <button type="button" className="notification-fermer" onClick={onFermer} aria-label="Fermer">×</button>
     </div>
-  )
+  );
 }

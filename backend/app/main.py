@@ -8,8 +8,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.routers import (apprenants, certifications, domaines, formateurs, formations, nlp, organismes,
-                         parcours, recherche, responsables)
+from app.routers import (apprenants, certifications, competences, domaines, evaluations, formateurs, formations,
+                         nlp, organismes, parcours, recherche, responsables, technologies)
 
 # Niveau INFO : chaque requête SPARQL exécutée s'affiche dans le terminal (logger "sparql")
 logging.basicConfig(level=logging.INFO, format="%(levelname)s [%(name)s] %(message)s")
@@ -48,9 +48,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routeurs de Yahya : préfixe donné ici (APIRouter() sans préfixe)
+# Routeurs de Yahya et de Linda : préfixe donné ici (APIRouter() sans préfixe)
 app.include_router(apprenants.router, prefix="/api/apprenants", tags=["Apprenants"])
 app.include_router(certifications.router, prefix="/api/certifications", tags=["Certifications"])
+app.include_router(competences.router, prefix="/api/competences", tags=["Competences"])
+app.include_router(technologies.router, prefix="/api/technologies", tags=["Technologies"])
+app.include_router(evaluations.router, prefix="/api/evaluations", tags=["Evaluations"])
 # Routeurs d'Ala et d'Imem : préfixe déclaré dans APIRouter(prefix=...)
 for module in (formateurs, responsables, organismes, domaines, formations, parcours, recherche, nlp):
     app.include_router(module.router)

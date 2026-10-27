@@ -13,6 +13,10 @@ from rapidfuzz import fuzz
 
 from app.ala_commun import motif_type
 from app.nlp import ala, imem, yahya
+from app.nlp.linda import EXEMPLES as EXEMPLES_LINDA
+from app.nlp.linda import MOTS_TRANCHE as MOTS_LINDA
+from app.nlp.linda import analyser as analyser_linda
+from app.nlp.matcher import normaliser as normaliser_linda
 from app.nlp.intents import detecter_intention
 from app.nlp.normalisation import normaliser
 from app.sparql_client import select
@@ -114,7 +118,8 @@ def aide(message: str) -> str:
 
 @router.get("/exemples", summary="Une question type par intention (page NLP de Yahya)")
 def exemples():
-    return [{"id": n, "question": q, "intention": i} for n, (i, q) in enumerate(EXEMPLES.items(), start=1)]
+    paires = [*EXEMPLES.items(), *(("LINDA", q) for q in EXEMPLES_LINDA)]
+    return [{"id": n, "question": q, "intention": i} for n, (i, q) in enumerate(paires, start=1)]
 
 
 @router.post("/question", summary="Question en langage naturel -> requête SPARQL -> résultats")
@@ -124,6 +129,23 @@ def question(q: Question):
 
     if not q.question.strip():
         return {**reponse, "message": aide("La question est vide.")}
+
+    # Tranche Linda (compétences, technologies, évaluations) : son propre analyseur (PhraseMatcher spaCy
+    # + rapidfuzz), essayé en premier ; il renvoie None hors de sa tranche. Ses entités restent au format
+    # {rôle: "libellé -> uri"} (tests de Linda) ; à unifier avec le format liste quand l'équipe aura choisi.
+    # Seulement si la question parle de sa tranche : sinon « après » / « à venir » (Imem) était pris
+    # pour EVALUATIONS_APRES.
+    texte_linda = normaliser_linda(q.question)
+    tranche_linda = any(m in texte_linda for m in (*MOTS_LINDA, "technolog", "note minimal"))
+    modele = analyser_linda(q.question) if tranche_linda else None
+    if modele:
+        reponse.update(intention=modele["intention"], entites=modele["entites"], sparql=modele["sparql"])
+        if not modele["sparql"]:
+            return {**reponse, "message": modele["message"]}
+        reponse["resultats"] = select(modele["sparql"])
+        if not reponse["resultats"]:
+            reponse["message"] = "La requête est correcte mais ne renvoie aucun résultat."
+        return reponse
 
     intention = detecter_intention(q.question)
     reponse["intention"] = intention

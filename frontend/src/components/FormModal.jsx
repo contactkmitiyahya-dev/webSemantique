@@ -1,37 +1,38 @@
-// TEMPORAIRE (Ala) – à remplacer par la version de Linda
-//
-// Props : ouvert, titre, onFermer, onValider (appelé à la soumission du formulaire),
-//         enCours (désactive les boutons), erreur (message affiché), texteValider, children (les champs)
-import './composants.css'
+import "./components.css";
 
+/**
+ * Formulaire dans une fenetre modale. Les champs sont passes en children.
+ * <FormModal ouvert titre="Nouvelle sous-competence" onValider={...} onFermer={...} erreur={...}>
+ *   <input ... />
+ * </FormModal>
+ * Accepte aussi la prop texteValider de l'ancienne version d'Ala.
+ */
 export default function FormModal({
-  ouvert, titre, onFermer, onValider, enCours = false, erreur, texteValider = 'Enregistrer', children,
+  ouvert, titre, children, erreur, enCours = false,
+  libelleValider, texteValider, onValider, onFermer,
 }) {
-  if (!ouvert) return null
-
+  const libelle = libelleValider ?? texteValider ?? "Enregistrer";
+  if (!ouvert) return null;
   const soumettre = (e) => {
-    e.preventDefault() // pas de rechargement de page
-    onValider()
-  }
-
+    e.preventDefault();
+    onValider();
+  };
   return (
-    <div className="modal-fond" onMouseDown={(e) => e.target === e.currentTarget && onFermer()}>
-      <form className="modal" onSubmit={soumettre}>
+    <div className="modal-fond" onClick={onFermer}>
+      <form className="modal-boite" role="dialog" aria-modal="true" onSubmit={soumettre} onClick={(e) => e.stopPropagation()}>
         <div className="modal-entete">
-          <h2>{titre}</h2>
-          <button type="button" className="fermer" onClick={onFermer} aria-label="Fermer">×</button>
+          <h2 className="modal-titre">{titre}</h2>
+          <button type="button" className="modal-fermer" onClick={onFermer} aria-label="Fermer">×</button>
         </div>
-        <div className="modal-corps">
-          {children}
-          {erreur && <p className="erreur">{erreur}</p>}
-        </div>
-        <div className="modal-pied">
-          <button type="button" className="btn" onClick={onFermer} disabled={enCours}>Annuler</button>
-          <button type="submit" className="btn primaire" disabled={enCours}>
-            {enCours ? 'Enregistrement…' : texteValider}
+        {erreur && <div className="alert alert-error">{erreur}</div>}
+        <div className="modal-corps">{children}</div>
+        <div className="modal-actions">
+          <button type="button" className="btn btn-secondary" onClick={onFermer}>Annuler</button>
+          <button type="submit" className="btn btn-primary" disabled={enCours}>
+            {enCours ? "Enregistrement…" : libelle}
           </button>
         </div>
       </form>
     </div>
-  )
+  );
 }

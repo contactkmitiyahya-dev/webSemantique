@@ -22,6 +22,16 @@ import CertificationsListe from './pages/yahya/CertificationsListe'
 import CertificationForm from './pages/yahya/CertificationForm'
 import CertificationFiche from './pages/yahya/CertificationFiche'
 import NlpTester from './pages/yahya/NlpTester'
+import CompetencesListe from './pages/linda/CompetencesListe'
+import CompetenceFiche from './pages/linda/CompetenceFiche'
+import CompetenceForm from './pages/linda/CompetenceForm'
+import TechnologiesListe from './pages/linda/TechnologiesListe'
+import TechnologieFiche from './pages/linda/TechnologieFiche'
+import TechnologieForm from './pages/linda/TechnologieForm'
+import EvaluationsListe from './pages/linda/EvaluationsListe'
+import EvaluationFiche from './pages/linda/EvaluationFiche'
+import EvaluationForm from './pages/linda/EvaluationForm'
+import QuestionBar from './components/QuestionBar'
 import './App.css'
 
 // Menu : une entrée par membre
@@ -50,6 +60,14 @@ const MENU = [
       { to: '/formations', texte: 'Formations' },
       { to: '/parcours', texte: 'Parcours' },
       { to: '/recherche', texte: 'Recherche globale' },
+    ],
+  },
+  {
+    membre: 'Linda',
+    liens: [
+      { to: '/competences', texte: 'Compétences' },
+      { to: '/technologies', texte: 'Technologies' },
+      { to: '/evaluations', texte: 'Évaluations' },
     ],
   },
 ]
@@ -90,6 +108,8 @@ export default function App() {
           ))}
         </nav>
         <main className="contenu">
+          {/* Barre de question NLP (Linda), présente sur toutes les pages */}
+          <QuestionBar />
           <Routes>
             <Route path="/" element={<Accueil />} />
             <Route path="/formateurs" element={<FormateursListe />} />
@@ -115,6 +135,18 @@ export default function App() {
             <Route path="/certifications/nouvelle" element={<CertificationForm />} />
             <Route path="/certifications/:id" element={<CertificationFiche />} />
             <Route path="/nlp" element={<NlpTester />} />
+            <Route path="/competences" element={<CompetencesListe />} />
+            <Route path="/competences/nouvelle" element={<CompetenceForm />} />
+            <Route path="/competences/:id" element={<CompetenceFiche />} />
+            <Route path="/competences/:id/modifier" element={<CompetenceForm />} />
+            <Route path="/technologies" element={<TechnologiesListe />} />
+            <Route path="/technologies/nouvelle" element={<TechnologieForm />} />
+            <Route path="/technologies/:id" element={<TechnologieFiche />} />
+            <Route path="/technologies/:id/modifier" element={<TechnologieForm />} />
+            <Route path="/evaluations" element={<EvaluationsListe />} />
+            <Route path="/evaluations/nouvelle" element={<EvaluationForm />} />
+            <Route path="/evaluations/:id" element={<EvaluationFiche />} />
+            <Route path="/evaluations/:id/modifier" element={<EvaluationForm />} />
             <Route path="*" element={<NonDisponible />} />
           </Routes>
         </main>
