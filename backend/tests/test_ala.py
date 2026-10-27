@@ -349,9 +349,14 @@ def test_injection_dans_un_champ_stocke_tel_quel(client):
 
 # =============================================================================== NLP
 
+COLONNES_CSV = ["auteur", "question", "intention", "entites", "requete_attendue"]
+
+
 def questions_ala() -> list[dict]:
-    with open(CSV_QUESTIONS, encoding="utf-8", newline="") as f:
-        return [l for l in csv.DictReader(f) if l["auteur"] == "Ala"]
+    """Colonnes données explicitement : le fichier commun n'a pas d'en-tête
+    (format de Yahya) ; une éventuelle ligne d'en-tête est écartée par le filtre « Ala »."""
+    with open(CSV_QUESTIONS, encoding="utf-8-sig", newline="") as f:
+        return [l for l in csv.DictReader(f, fieldnames=COLONNES_CSV) if l["auteur"] == "Ala"]
 
 
 @pytest.mark.parametrize("ligne", questions_ala(), ids=lambda l: l["intention"])
