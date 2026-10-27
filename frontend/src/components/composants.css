@@ -1,0 +1,42 @@
+/* TEMPORAIRE (Ala) – styles des composants communs, à remplacer avec les versions d'Imem, Zahra et Linda */
+
+/* ---------- DataTable ---------- */
+.dt { width: 100%; border-collapse: collapse; background: var(--surface); }
+.dt th, .dt td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--bordure); }
+.dt th { font-size: 0.85rem; color: var(--texte-doux); font-weight: 600; white-space: nowrap; user-select: none; }
+.dt th.triable { cursor: pointer; }
+.dt th.triable:hover { color: var(--accent); }
+.dt tbody tr.cliquable { cursor: pointer; }
+.dt tbody tr:hover { background: var(--survol); }
+.dt-vide { padding: 24px; text-align: center; color: var(--texte-doux); }
+.dt-pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; font-size: 0.9rem; color: var(--texte-doux); }
+.dt-pagination div { display: flex; gap: 6px; align-items: center; }
+.dt-conteneur { overflow-x: auto; border: 1px solid var(--bordure); border-radius: 8px; }
+
+/* ---------- FilterBar / SearchBox ---------- */
+.filtres { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 14px; }
+.filtres label { display: flex; flex-direction: column; font-size: 0.8rem; color: var(--texte-doux); gap: 3px; }
+.recherche { min-width: 220px; }
+
+/* ---------- RelationSelect ---------- */
+.rs { border: 1px solid var(--bordure); border-radius: 6px; padding: 6px; }
+.rs-filtre { width: 100%; margin-bottom: 6px; }
+.rs-liste { max-height: 160px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+.rs-liste label { display: flex; gap: 6px; align-items: center; font-size: 0.9rem; cursor: pointer; }
+.rs-aide { font-size: 0.8rem; color: var(--texte-doux); margin: 4px 0 0; }
+
+/* ---------- FormModal / ConfirmDialog ---------- */
+.modal-fond { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: flex; align-items: flex-start; justify-content: center; padding: 6vh 16px; z-index: 50; overflow-y: auto; }
+.modal { background: var(--surface); border-radius: 10px; width: 100%; max-width: 560px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+.modal.petit { max-width: 420px; }
+.modal-entete { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--bordure); }
+.modal-entete h2 { margin: 0; font-size: 1.1rem; }
+.modal-corps { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+.modal-pied { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--bordure); }
+.fermer { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--texte-doux); padding: 0 4px; }
+
+/* ---------- Notification ---------- */
+.notification { position: fixed; right: 20px; bottom: 20px; padding: 12px 16px; border-radius: 8px; color: #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.2); z-index: 60; display: flex; gap: 12px; align-items: center; max-width: 420px; }
+.notification.succes { background: #15803d; }
+.notification.erreur { background: #b91c1c; }
+.notification button { background: none; border: none; color: #fff; font-size: 1.1rem; cursor: pointer; }

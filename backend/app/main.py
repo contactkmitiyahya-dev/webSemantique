@@ -1,38 +1,50 @@
-"""
-Point d'entree principal de l'API EduParcours.
-Lance le serveur avec : uvicorn app.main:app --reload
-"""
+# TEMPORAIRE (Ala) – à remplacer par la version de Yahya
+"""Point d'entrée FastAPI : uvicorn app.main:app --reload --port 8000 (depuis backend/)."""
+import logging
+from urllib.error import URLError
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import apprenants, certifications, nlp
+from fastapi.responses import JSONResponse
 
-app = FastAPI(
-    title="EduParcours API",
-    description="API REST pour la tranche Yahya - Apprenants et Certifications",
-    version="1.0.0",
-)
+from app.routers import domaines, formateurs, nlp, organismes, responsables
 
-# Middleware CORS — Vite peut choisir 5173, 5174 ou 5175 si le port est deja pris
+# Niveau INFO : chaque requête SPARQL exécutée s'affiche dans le terminal (logger "sparql")
+logging.basicConfig(level=logging.INFO, format="%(levelname)s [%(name)s] %(message)s")
+log = logging.getLogger("api")
+
+app = FastAPI(title="EduParcours API", description="Projet Web sémantique – 5TWIN")
+
+
+# TEMPORAIRE (Ala) – gestionnaire d'erreurs {detail} à remplacer par celui de Zahra
+@app.exception_handler(RequestValidationError)
+async def erreur_validation(request: Request, exc: RequestValidationError):
+    """Corps de requête mal formé (ex. texte à la place d'un entier) : 400 au lieu de 422."""
+    messages = [f"{'.'.join(str(x) for x in e['loc'][1:])} : {e['msg']}" for e in exc.errors()]
+    return JSONResponse(status_code=400, content={"detail": " ; ".join(messages)})
+
+
+@app.middleware("http")
+async def erreurs_serveur(request: Request, call_next):
+    """Toute exception non prévue (Fuseki éteint, requête SPARQL refusée...) -> 500 {"detail"}."""
+    try:
+        return await call_next(request)
+    except URLError:
+        log.exception("Fuseki injoignable")
+        return JSONResponse(status_code=500, content={"detail": "Fuseki est injoignable (port 3030) : est-il lancé ?"})
+    except Exception as e:
+        log.exception("Erreur interne")
+        return JSONResponse(status_code=500, content={"detail": f"Erreur interne : {e}"})
+
+
+# Ajouté APRÈS le middleware d'erreurs : CORS l'englobe, donc les réponses 500 ont aussi les en-têtes CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:5175",
-    ],
-    allow_credentials=True,
+    allow_origins=["http://localhost:5173"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Inclusion des routeurs metier
-app.include_router(apprenants.router, prefix="/api/apprenants", tags=["Apprenants"])
-app.include_router(certifications.router, prefix="/api/certifications", tags=["Certifications"])
-app.include_router(nlp.router, prefix="/api/nlp", tags=["NLP"])
-
-
-@app.get("/api/sante", tags=["Sante"])
-def sante():
-    """Endpoint de health-check pour verifier que l'API est operationnelle."""
-    return {"status": "ok", "service": "EduParcours API v1.0"}
+for module in (formateurs, responsables, organismes, domaines, nlp):
+    app.include_router(module.router)

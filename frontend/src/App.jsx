@@ -1,86 +1,75 @@
-import { Routes, Route, Link, NavLink, useLocation } from "react-router-dom";
-import ApprenantsListe  from "./pages/yahya/ApprenantsListe";
-import ApprenantFiche   from "./pages/yahya/ApprenantFiche";
-import ApprenantForm    from "./pages/yahya/ApprenantForm";
-import ApprenantsStats  from "./pages/yahya/ApprenantsStats";
-import CertificationsListe from "./pages/yahya/CertificationsListe";
-import CertificationForm   from "./pages/yahya/CertificationForm";
-import CertificationFiche  from "./pages/yahya/CertificationFiche";
-import NlpTester           from "./pages/yahya/NlpTester";
-import "./App.css";
+// TEMPORAIRE (Ala) – à remplacer par la version de Yahya (React Router, menu, accueil)
+// Seules les routes d'Ala sont branchées ; les autres membres ajouteront les leurs.
+import { BrowserRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import FormateursListe from './pages/ala/FormateursListe'
+import FormateurFiche from './pages/ala/FormateurFiche'
+import PersonnelListe from './pages/ala/PersonnelListe'
+import OrganismesListe from './pages/ala/OrganismesListe'
+import OrganismeFiche from './pages/ala/OrganismeFiche'
+import DomainesListe from './pages/ala/DomainesListe'
+import './App.css'
 
-function NavItem({ to, label }) {
+// Menu : une entrée par membre
+const MENU = [
+  {
+    membre: 'Ala',
+    liens: [
+      { to: '/formateurs', texte: 'Formateurs' },
+      { to: '/personnel', texte: 'Personnel' },
+      { to: '/organismes', texte: 'Organismes' },
+      { to: '/domaines', texte: 'Domaines' },
+    ],
+  },
+]
+
+function Accueil() {
   return (
-    <NavLink to={to} className={({ isActive }) => "nav-link" + (isActive ? " nav-active" : "")}>
-      {label}
-    </NavLink>
-  );
+    <div>
+      <h1>EduParcours</h1>
+      <p>Projet Web sémantique – thématique Éducation et Formation.</p>
+      <p className="doux">React (5173) → FastAPI (8000) → Fuseki (3030). Choisissez une rubrique dans le menu.</p>
+    </div>
+  )
 }
 
-function App() {
+// Route d'un autre membre pas encore fusionnée (ex. /cours/Cours_React depuis une fiche)
+function NonDisponible() {
+  const { pathname } = useLocation()
   return (
-    <div className="app">
-      <header className="navbar">
-        <Link to="/" className="nav-brand">
-          <span className="brand-icon">🎓</span>
-          <span>EduParcours</span>
-          <span className="brand-tag">Yahya</span>
-        </Link>
-        <nav className="nav-links">
-          <NavItem to="/apprenants"            label="Apprenants" />
-          <NavItem to="/apprenants/stats"      label="Statistiques" />
-          <NavItem to="/certifications"        label="Certifications" />
-          <NavItem to="/nlp"                   label="NLP" />
+    <div>
+      <h1>Page non disponible</h1>
+      <p>La page <code>{pathname}</code> appartient à une autre partie du projet et n'est pas encore intégrée.</p>
+      <Link to="/">← Accueil</Link>
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <div className="mise-en-page">
+        <nav className="menu">
+          <Link to="/" className="logo">EduParcours</Link>
+          {MENU.map((groupe) => (
+            <div key={groupe.membre} className="menu-groupe">
+              <span className="menu-membre">{groupe.membre}</span>
+              {groupe.liens.map((l) => <NavLink key={l.to} to={l.to}>{l.texte}</NavLink>)}
+            </div>
+          ))}
         </nav>
-      </header>
-
-      <main className="main-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/apprenants"           element={<ApprenantsListe />} />
-          <Route path="/apprenants/stats"     element={<ApprenantsStats />} />
-          <Route path="/apprenants/nouveau"   element={<ApprenantForm />} />
-          <Route path="/apprenants/:id"       element={<ApprenantFiche />} />
-          <Route path="/certifications"             element={<CertificationsListe />} />
-          <Route path="/certifications/nouvelle"    element={<CertificationForm />} />
-          <Route path="/certifications/:id"         element={<CertificationFiche />} />
-          <Route path="/nlp"                        element={<NlpTester />} />
-        </Routes>
-      </main>
-    </div>
-  );
-}
-
-function HomePage() {
-  return (
-    <div className="home">
-      <div className="home-hero">
-        <div className="hero-icon">🎓</div>
-        <h1>Module Apprenants &amp; Certifications</h1>
-        <p>Interface de gestion de la tranche Yahya — connectée à Fuseki via FastAPI</p>
-        <div className="hero-links">
-          <Link to="/apprenants" className="btn btn-primary">Voir les Apprenants</Link>
-          <Link to="/certifications" className="btn btn-secondary">Voir les Certifications</Link>
-          <Link to="/nlp" className="btn btn-secondary">Tester le NLP 🤖</Link>
-        </div>
+        <main className="contenu">
+          <Routes>
+            <Route path="/" element={<Accueil />} />
+            <Route path="/formateurs" element={<FormateursListe />} />
+            <Route path="/formateurs/:id" element={<FormateurFiche />} />
+            <Route path="/personnel" element={<PersonnelListe />} />
+            <Route path="/organismes" element={<OrganismesListe />} />
+            <Route path="/organismes/:id" element={<OrganismeFiche />} />
+            <Route path="/domaines" element={<DomainesListe />} />
+            <Route path="*" element={<NonDisponible />} />
+          </Routes>
+        </main>
       </div>
-      <div className="feature-grid">
-        {[
-          { icon:"👤", title:"Apprenants", desc:"CRUD complet, recherche et filtres" },
-          { icon:"📊", title:"Statistiques", desc:"Distribution par niveau d'études" },
-          { icon:"🏆", title:"Certifications", desc:"Création, attribution aux apprenants" },
-          { icon:"🤖", title:"Module NLP", desc:"Questions en langage naturel vers requêtes SPARQL" },
-          { icon:"🔗", title:"Relations SPARQL", desc:"Requêtes vers Fuseki en temps réel" },
-        ].map(({ icon, title, desc }) => (
-          <div key={title} className="feature-card">
-            <span className="feature-icon">{icon}</span>
-            <h3>{title}</h3>
-            <p>{desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    </BrowserRouter>
+  )
 }
-
-export default App;

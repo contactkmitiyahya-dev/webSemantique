@@ -1,2 +1,41 @@
-﻿/* Global reset — App.css handles the rest */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* TEMPORAIRE (Ala) – à remplacer par la version de Yahya : variables et styles de base */
+
+:root {
+  --fond: #f4f6fa;
+  --surface: #ffffff;
+  --texte: #1e293b;
+  --texte-doux: #64748b;
+  --bordure: #e2e8f0;
+  --survol: #f1f5f9;
+  --accent: #2563eb;
+  --accent-fond: #dbeafe;
+  --danger: #dc2626;
+  --menu-fond: #0f172a;
+
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--texte);
+  background: var(--fond);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); }
+h1 { font-size: 1.6rem; margin: 0 0 12px; }
+a { color: var(--accent); }
+code { background: var(--survol); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+
+input, select { font: inherit; padding: 6px 8px; border: 1px solid var(--bordure); border-radius: 6px; background: var(--surface); color: var(--texte); }
+input:focus, select:focus { outline: 2px solid var(--accent-fond); border-color: var(--accent); }
+
+.btn { font: inherit; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--bordure); background: var(--surface); color: var(--texte); cursor: pointer; }
+.btn:hover:not(:disabled) { background: var(--survol); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn.primaire { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primaire:hover:not(:disabled) { background: #1d4ed8; }
+.btn.danger { color: var(--danger); border-color: #fecaca; }
+.btn.danger:hover:not(:disabled) { background: #fef2f2; }
+.btn.petit { padding: 3px 10px; font-size: 0.85rem; }
+
+.erreur { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
+.doux { color: var(--texte-doux); }

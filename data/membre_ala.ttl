@@ -1,0 +1,197 @@
+# =============================================================================
+# EduParcours – données de la tranche d'Ala
+# Classes : Formateur, ResponsableFormation, ServiceScolarite, Organisme, Domaine
+# Chargement : python scripts/load_data.py --reset
+# =============================================================================
+#
+# À L'ATTENTION DES AUTRES MEMBRES – liens créés vers vos individus
+# (le sujet du triplet est toujours un individu d'Ala ; vos fichiers ne sont pas
+#  modifiés, mais ces liens apparaîtront dans vos fiches via les chemins ^ et |)
+#
+# Zahra (cours) – edu:enseigne :
+#   Dr_Mansouri   -> Cours_NodeJS, Cours_Express, Cours_SQL
+#   Mr_Ferchichi  -> Cours_Intro_HTML, Cours_CSS_Avance
+#   Mme_Bouazizi  -> Cours_Agile, Cours_Git_Collab
+#   Mr_Jaziri     -> Cours_Docker, Cours_CI_CD
+#
+# Yahya (apprenants, certifications) :
+#   Dr_Mansouri            edu:encadre              Lina_Master
+#   Mr_Ferchichi           edu:encadre              Yassine
+#   Ministere_FormationPro edu:delivreCertification Certificat_DeveloppeurWeb
+#   Editeur_DevTools       edu:delivreCertification Certificat_Frontend
+#
+# Imem (parcours, formations) :
+#   Mr_Ferchichi      edu:animeParcours       Parcours_Frontend_Accelere
+#   Mme_Bouazizi      edu:animeParcours       Parcours_Debutant
+#   Mr_Jaziri         edu:animeParcours       Parcours_Backend
+#   Mme_Karoui        edu:administreFormation BootCamp_Web
+#   Mr_Zouari         edu:administreFormation Atelier_HTML_CSS
+#   Universite_Sfax   edu:proposeFormation    Formation_Master_Web
+#   MOOC_FrontendPro  edu:proposeFormation    Formation_Frontend
+#   Domaine_FullStack edu:regroupeFormation   Formation_FullStack, BootCamp_Web
+#   Domaine_UI        edu:regroupeFormation   Formation_Frontend
+#   Domaine_IA        edu:regroupeFormation   Formation_Master_Web
+#
+# NOTE pour Zahra et Linda (reconnaissance d'entités) :
+#   utilisez normaliser(q, lemmes=False). Avec la lemmatisation spaCy,
+#   « EduParcours » devient « eduparcour » et « prérequis » devient « prerequi » :
+#   les libellés d'entités ne seraient plus reconnus.
+#
+# Remarques de modélisation :
+#   - Ces relations ne sont ni fonctionnelles ni limitées en cardinalité :
+#     un cours peut avoir plusieurs formateurs sans incohérence HermiT.
+#   - Les agents de scolarité n'ont pas de lien : administreFormation a pour
+#     domaine ResponsableFormation, disjoint de ServiceScolarite.
+#   - Dr_Mansouri enseigne 3 cours : HermiT le classe FormateurPolyvalent.
+#   - Formateurs sans prénom complétés ; aucun second edu:nom ajouté.
+#   - Aucun prénom en double parmi toutes les personnes (vérifié par requête).
+#     Seul doublon restant : le NOM « Gharbi » (Omar, apprenant, et Mr_Gharbi,
+#     formateur), tous deux dans l'ontologie : à gérer dans le NLP (Yahya).
+# =============================================================================
+
+@prefix edu:  <http://www.eduparcours.org/ontologie#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# -----------------------------------------------------------------------------
+# 1. Compléments des individus existants (prénom / email uniquement)
+# -----------------------------------------------------------------------------
+
+edu:Mr_Hamdi
+    edu:prenom "Youssef"^^xsd:string ;
+    edu:email  "youssef.hamdi@eduparcours.org"^^xsd:string .
+
+edu:Mme_Trabelsi
+    edu:prenom "Amira"^^xsd:string ;
+    edu:email  "amira.trabelsi@eduparcours.org"^^xsd:string .
+
+edu:Mr_Gharbi
+    edu:prenom "Hatem"^^xsd:string ;
+    edu:email  "hatem.gharbi@eduparcours.org"^^xsd:string .
+
+edu:Mme_Salhi
+    edu:prenom "Leila"^^xsd:string .
+
+# -----------------------------------------------------------------------------
+# 2. Formateurs
+# -----------------------------------------------------------------------------
+
+edu:Dr_Mansouri a owl:NamedIndividual, edu:FormateurSenior ;
+    rdfs:label "Dr. Mansouri"@fr ;
+    edu:nom "Mansouri"^^xsd:string ;
+    edu:prenom "Hichem"^^xsd:string ;
+    edu:email "hichem.mansouri@eduparcours.org"^^xsd:string ;
+    edu:telephone "+216 71 100 201"^^xsd:string ;
+    edu:specialiteFormateur "Développement back-end"^^xsd:string ;
+    edu:anneesExperience 15 ;
+    edu:enseigne edu:Cours_NodeJS, edu:Cours_Express, edu:Cours_SQL ;
+    edu:encadre edu:Lina_Master .
+
+edu:Mr_Ferchichi a owl:NamedIndividual, edu:FormateurJunior ;
+    rdfs:label "M. Ferchichi"@fr ;
+    edu:nom "Ferchichi"^^xsd:string ;
+    edu:prenom "Bilel"^^xsd:string ;
+    edu:email "bilel.ferchichi@eduparcours.org"^^xsd:string ;
+    edu:telephone "+216 71 100 202"^^xsd:string ;
+    edu:specialiteFormateur "Intégration front-end"^^xsd:string ;
+    edu:anneesExperience 2 ;                       # FormateurJunior : 3 ans au plus
+    edu:enseigne edu:Cours_Intro_HTML, edu:Cours_CSS_Avance ;
+    edu:encadre edu:Yassine ;
+    edu:animeParcours edu:Parcours_Frontend_Accelere .
+
+# Vacataire : typé FormateurInvite (classe feuille sous FormateurVacataire)
+edu:Mme_Bouazizi a owl:NamedIndividual, edu:FormateurInvite ;
+    rdfs:label "Mme Bouazizi"@fr ;
+    edu:nom "Bouazizi"^^xsd:string ;
+    edu:prenom "Rania"^^xsd:string ;
+    edu:email "rania.bouazizi@eduparcours.org"^^xsd:string ;
+    edu:telephone "+216 71 100 203"^^xsd:string ;
+    edu:specialiteFormateur "Méthodes agiles"^^xsd:string ;
+    edu:anneesExperience 6 ;
+    edu:enseigne edu:Cours_Agile, edu:Cours_Git_Collab ;
+    edu:animeParcours edu:Parcours_Debutant .
+
+edu:Mr_Jaziri a owl:NamedIndividual, edu:FormateurExpertIndustrie ;
+    rdfs:label "M. Jaziri"@fr ;
+    edu:nom "Jaziri"^^xsd:string ;
+    edu:prenom "Anis"^^xsd:string ;
+    edu:email "anis.jaziri@eduparcours.org"^^xsd:string ;
+    edu:telephone "+216 71 100 204"^^xsd:string ;
+    edu:specialiteFormateur "DevOps et cloud"^^xsd:string ;
+    edu:anneesExperience 10 ;
+    edu:enseigne edu:Cours_Docker, edu:Cours_CI_CD ;
+    edu:animeParcours edu:Parcours_Backend .
+
+# -----------------------------------------------------------------------------
+# 3. Personnel administratif
+# -----------------------------------------------------------------------------
+
+edu:Mme_Karoui a owl:NamedIndividual, edu:ResponsableDeFormation ;
+    rdfs:label "Mme Karoui"@fr ;
+    edu:nom "Karoui"^^xsd:string ;
+    edu:prenom "Nadia"^^xsd:string ;
+    edu:email "nadia.karoui@eduparcours.org"^^xsd:string ;
+    edu:telephone "+216 71 100 301"^^xsd:string ;
+    edu:administreFormation edu:BootCamp_Web .
+
+edu:Mr_Zouari a owl:NamedIndividual, edu:ResponsablePedagogique ;
+    rdfs:label "M. Zouari"@fr ;
+    edu:nom "Zouari"^^xsd:string ;
+    edu:prenom "Mehdi"^^xsd:string ;
+    edu:email "mehdi.zouari@eduparcours.org"^^xsd:string ;
+    edu:telephone "+216 71 100 302"^^xsd:string ;
+    edu:administreFormation edu:Atelier_HTML_CSS .
+
+edu:Mme_Gharsalli a owl:NamedIndividual, edu:AgentScolarite ;
+    rdfs:label "Mme Gharsalli"@fr ;
+    edu:nom "Gharsalli"^^xsd:string ;
+    edu:prenom "Amel"^^xsd:string ;
+    edu:email "amel.gharsalli@eduparcours.org"^^xsd:string ;
+    edu:telephone "+216 71 100 401"^^xsd:string .
+
+edu:Mr_BenAmor a owl:NamedIndividual, edu:GestionnaireInscription ;
+    rdfs:label "M. Ben Amor"@fr ;
+    edu:nom "Ben Amor"^^xsd:string ;
+    edu:prenom "Fares"^^xsd:string ;
+    edu:email "fares.benamor@eduparcours.org"^^xsd:string ;
+    edu:telephone "+216 71 100 402"^^xsd:string .
+
+# -----------------------------------------------------------------------------
+# 4. Organismes
+# -----------------------------------------------------------------------------
+
+edu:Universite_Sfax a owl:NamedIndividual, edu:Universite ;
+    rdfs:label "Université de Sfax"@fr ;
+    edu:proposeFormation edu:Formation_Master_Web .
+
+edu:MOOC_FrontendPro a owl:NamedIndividual, edu:MOOC ;
+    rdfs:label "MOOC Front-end Pro"@fr ;
+    edu:proposeFormation edu:Formation_Frontend .
+
+edu:Ministere_FormationPro a owl:NamedIndividual, edu:MinistereFormation ;
+    rdfs:label "Ministère de la Formation professionnelle"@fr ;
+    edu:delivreCertification edu:Certificat_DeveloppeurWeb .
+
+edu:Editeur_DevTools a owl:NamedIndividual, edu:EditeurTechnologique ;
+    rdfs:label "Éditeur DevTools"@fr ;
+    edu:delivreCertification edu:Certificat_Frontend .
+
+# -----------------------------------------------------------------------------
+# 5. Domaines
+# -----------------------------------------------------------------------------
+
+edu:Domaine_FullStack a owl:NamedIndividual, edu:DeveloppementFullStack ;
+    rdfs:label "Développement full-stack"@fr ;
+    edu:intitule "Développement full-stack"^^xsd:string ;
+    edu:regroupeFormation edu:Formation_FullStack, edu:BootCamp_Web .
+
+edu:Domaine_UI a owl:NamedIndividual, edu:UIDesign ;
+    rdfs:label "Design d'interface (UI)"@fr ;
+    edu:intitule "Design d'interface (UI)"^^xsd:string ;
+    edu:regroupeFormation edu:Formation_Frontend .
+
+edu:Domaine_IA a owl:NamedIndividual, edu:ApprentissageAutomatique ;
+    rdfs:label "Apprentissage automatique"@fr ;
+    edu:intitule "Apprentissage automatique"^^xsd:string ;
+    edu:regroupeFormation edu:Formation_Master_Web .

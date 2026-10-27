@@ -1,0 +1,3028 @@
+@prefix edu: <http://www.eduparcours.org/ontologie#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.eduparcours.org/ontologie> a owl:Ontology ;
+    rdfs:label "EduParcours"@fr ;
+    rdfs:comment "Ontologie de l'Éducation et de la Formation (développement web) : compétences, programmes, prérequis et parcours."@fr ;
+    owl:versionInfo "1.0 - version finale" .
+
+edu:ApprenantFullStackReady a owl:Class ;
+    rdfs:label "Apprenant Full-Stack ready"@fr ;
+    rdfs:comment "Apprenant maîtrisant React et Node.js (classé par le raisonneur)."@fr ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( edu:Apprenant [ a owl:Restriction ;
+                        owl:onProperty edu:possedeCompetence ;
+                        owl:someValuesFrom edu:CompetenceReact ] [ a owl:Restriction ;
+                        owl:onProperty edu:possedeCompetence ;
+                        owl:someValuesFrom edu:CompetenceNodeJS ] ) ] .
+
+edu:ApprenantQualifieFrontend a owl:Class ;
+    rdfs:label "Apprenant qualifie front-end"@fr ;
+    rdfs:comment "Apprenant possédant à la fois HTML et CSS (classé par le raisonneur)."@fr ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( edu:Apprenant [ a owl:Restriction ;
+                        owl:hasValue edu:Comp_HTML ;
+                        owl:onProperty edu:possedeCompetence ] [ a owl:Restriction ;
+                        owl:hasValue edu:Comp_CSS ;
+                        owl:onProperty edu:possedeCompetence ] ) ] .
+
+edu:Certificat_Frontend a edu:CertificationFrontend,
+        owl:NamedIndividual ;
+    rdfs:label "Certificat Développeur Front-end"@fr ;
+    edu:certificationRequiertModule edu:Module_CSS,
+        edu:Module_HTML,
+        edu:Module_JavaScript,
+        edu:Module_React ;
+    edu:delivreeParOrganisme edu:EduParcours_Academie ;
+    edu:dureeValiditeAns 4 .
+
+edu:CertificationDataAnalyst a owl:Class ;
+    rdfs:label "Certification data analyst"@fr ;
+    rdfs:subClassOf edu:CertificationDonnees .
+
+edu:Design_UX a edu:UXDesign,
+        owl:NamedIndividual ;
+    rdfs:label "Design UX"@fr ;
+    edu:intitule "Design UX"^^xsd:string .
+
+edu:FormateurPolyvalent a owl:Class ;
+    rdfs:label "Formateur polyvalent"@fr ;
+    rdfs:comment "Formateur enseignant au moins 3 cours (classé par le raisonneur)."@fr ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( edu:Formateur [ a owl:Restriction ;
+                        owl:minQualifiedCardinality "3"^^xsd:nonNegativeInteger ;
+                        owl:onClass edu:Cours ;
+                        owl:onProperty edu:enseigne ] ) ] .
+
+edu:FormationAccessibleDebutant a owl:Class ;
+    rdfs:label "Formation accessible débutant"@fr ;
+    rdfs:comment "Formation dont tous les modules sont de niveau Débutant (classé par le raisonneur)."@fr ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( edu:Formation [ a owl:Restriction ;
+                        owl:allValuesFrom [ a owl:Restriction ;
+                                owl:hasValue "Débutant"^^xsd:string ;
+                                owl:onProperty edu:niveauDifficulte ] ;
+                        owl:onProperty edu:composeDe ] ) ] .
+
+edu:Mme_Hamrouni a edu:GestionnaireInscription,
+        owl:NamedIndividual ;
+    rdfs:label "Mme Hamrouni"@fr ;
+    edu:email "salma.hamrouni@eduparcours.org"^^xsd:string ;
+    edu:nom "Hamrouni"^^xsd:string ;
+    edu:prenom "Salma"^^xsd:string .
+
+edu:ModuleAvecPrerequis a owl:Class ;
+    rdfs:label "Module avec prerequis"@fr ;
+    rdfs:comment "Module ayant au moins un prérequis (classé par le raisonneur)."@fr ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( edu:Module [ a owl:Restriction ;
+                        owl:onProperty edu:aPourPrerequis ;
+                        owl:someValuesFrom edu:Module ] ) ] .
+
+edu:Quiz_Docker a edu:QuizEnPresentiel,
+        owl:NamedIndividual ;
+    rdfs:label "Quiz Docker"@fr ;
+    edu:coefficient 1.0 ;
+    edu:dateEvaluation "2026-12-05T00:00:00"^^xsd:dateTime ;
+    edu:evaluationDuModule edu:Module_Deploiement ;
+    edu:evalue edu:Cours_Docker ;
+    edu:noteMinimale 10.0 ;
+    edu:porteSurCompetence edu:Comp_Deploiement .
+
+edu:Rattrapage_JavaScript a edu:ExamenRattrapage,
+        owl:NamedIndividual ;
+    rdfs:label "Examen de rattrapage JavaScript"@fr ;
+    edu:coefficient 2.0 ;
+    edu:dateEvaluation "2026-12-15T00:00:00"^^xsd:dateTime ;
+    edu:evaluationDuModule edu:Module_JavaScript ;
+    edu:evalue edu:Cours_JavaScript ;
+    edu:noteMinimale 10.0 ;
+    edu:porteSurCompetence edu:Comp_JavaScript .
+
+edu:Rim a edu:ProfessionnelEnMiseANiveau,
+        owl:NamedIndividual ;
+    rdfs:label "Rim"@fr ;
+    edu:dateInscription "2026-10-01T00:00:00"^^xsd:dateTime ;
+    edu:dateNaissance "1992-12-05T00:00:00"^^xsd:dateTime ;
+    edu:email "rim@eduparcours.org"^^xsd:string ;
+    edu:estEncadrePar edu:Mme_Jebali ;
+    edu:estInscritA edu:Formation_Angular ;
+    edu:estInscritAuModule edu:Module_Angular ;
+    edu:maitriseTechnologie edu:Tech_Angular,
+        edu:Tech_React ;
+    edu:niveauEtudes "Master"^^xsd:string ;
+    edu:nom "Mansour"^^xsd:string ;
+    edu:passeEvaluation edu:Quiz_Angular ;
+    edu:possedeCompetence edu:Comp_Angular,
+        edu:Comp_CSS,
+        edu:Comp_HTML,
+        edu:Comp_JavaScript,
+        edu:Comp_React ;
+    edu:prenom "Rim"^^xsd:string ;
+    edu:suitParcours edu:Parcours_Angular_Renforce .
+
+edu:Simulateur_Reseau a edu:SimulateurReseau,
+        owl:NamedIndividual ;
+    rdfs:label "Simulateur réseau"@fr ;
+    edu:langue "fr"^^xsd:string ;
+    edu:urlRessource "https://example.org/outils/reseau"^^xsd:string .
+
+edu:Tech_Vue a edu:FrameworkVue,
+        owl:NamedIndividual ;
+    rdfs:label "Vue.js"@fr .
+
+edu:aPourSuivantDirect a owl:AsymmetricProperty,
+        owl:FunctionalProperty,
+        owl:InverseFunctionalProperty,
+        owl:IrreflexiveProperty,
+        owl:ObjectProperty ;
+    rdfs:label "a pour suivant direct"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Module ;
+    rdfs:subPropertyOf edu:relationProgramme ;
+    owl:inverseOf edu:aPourPrecedentDirect .
+
+edu:administreFormation a owl:ObjectProperty ;
+    rdfs:label "administre formation"@fr ;
+    rdfs:domain edu:ResponsableFormation ;
+    rdfs:range edu:Formation ;
+    rdfs:subPropertyOf edu:relationInstitutionnelle ;
+    owl:inverseOf edu:estAdministreePar .
+
+edu:ageActuel a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "âge actuel"@fr ;
+    rdfs:comment "Propriété dérivée : à calculer à partir de edu:dateNaissance (non stockée)."@fr ;
+    rdfs:domain edu:Personne ;
+    rdfs:range xsd:integer .
+
+edu:animeParcours a owl:ObjectProperty ;
+    rdfs:label "anime parcours"@fr ;
+    rdfs:domain edu:Formateur ;
+    rdfs:range edu:Parcours ;
+    rdfs:subPropertyOf edu:relationInstitutionnelle ;
+    owl:inverseOf edu:estAnimePar .
+
+edu:certificationRequiertModule a owl:ObjectProperty ;
+    rdfs:label "certification requiert module"@fr ;
+    rdfs:domain edu:Certification ;
+    rdfs:range edu:Module ;
+    rdfs:subPropertyOf edu:relationProgramme ;
+    owl:inverseOf edu:estRequisPourCertification .
+
+edu:coefficient a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "coefficient"@fr ;
+    rdfs:domain edu:Evaluation ;
+    rdfs:range xsd:decimal .
+
+edu:competenceSurTechnologie a owl:ObjectProperty ;
+    rdfs:label "compétence sur technologie"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Technologie ;
+    rdfs:subPropertyOf edu:relationCompetence ;
+    owl:inverseOf edu:estMobiliseePar .
+
+edu:coutFormation a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "coût de la formation"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range xsd:decimal .
+
+edu:creditsECTS a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "crédits ECTS"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range xsd:integer .
+
+edu:dateDebut a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "date de début"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range xsd:dateTime .
+
+edu:dateEvaluation a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "date de l'évaluation"@fr ;
+    rdfs:domain edu:Evaluation ;
+    rdfs:range xsd:dateTime .
+
+edu:dateFin a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "date de fin"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range xsd:dateTime .
+
+edu:dateInscription a owl:DatatypeProperty ;
+    rdfs:label "date d'inscription"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range xsd:dateTime .
+
+edu:dateNaissance a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "date de naissance"@fr ;
+    rdfs:domain edu:Personne ;
+    rdfs:range xsd:dateTime .
+
+edu:descriptionCourte a owl:DatatypeProperty ;
+    rdfs:label "description courte"@fr ;
+    rdfs:range xsd:string .
+
+edu:dureeHeures a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "durée en heures"@fr ;
+    rdfs:domain edu:EntitePedagogique ;
+    rdfs:range xsd:integer .
+
+edu:dureeMinutes a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "durée en minutes"@fr ;
+    rdfs:domain edu:Video ;
+    rdfs:range xsd:integer .
+
+edu:dureeValiditeAns a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "durée de validité (ans)"@fr ;
+    rdfs:domain edu:Certification ;
+    rdfs:range xsd:integer .
+
+edu:email a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "email"@fr ;
+    rdfs:domain edu:Personne ;
+    rdfs:range xsd:string .
+
+edu:estActif a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "est actif"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range xsd:boolean .
+
+edu:estCoequipierDe a owl:IrreflexiveProperty,
+        owl:ObjectProperty,
+        owl:SymmetricProperty ;
+    rdfs:label "est coéquipier de"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Apprenant ;
+    rdfs:subPropertyOf edu:relationApprenant .
+
+edu:estEncadrePar a owl:ObjectProperty ;
+    rdfs:label "est encadré par"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Formateur ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:encadre .
+
+edu:estEquivalenteA a owl:ObjectProperty,
+        owl:SymmetricProperty ;
+    rdfs:label "est équivalente à"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Competence ;
+    rdfs:subPropertyOf edu:relationCompetence .
+
+edu:estEvaluePar a owl:ObjectProperty ;
+    rdfs:label "est évalué par"@fr ;
+    rdfs:domain edu:Cours ;
+    rdfs:range edu:Evaluation ;
+    rdfs:subPropertyOf edu:relationRessource ;
+    owl:inverseOf edu:evalue .
+
+edu:estInscritAuModule a owl:ObjectProperty ;
+    rdfs:label "est inscrit au module"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Module ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:accueilleInscrit ;
+    owl:propertyChainAxiom ( edu:estInscritA edu:composeDe ) .
+
+edu:estSousCompetenceDe a owl:ObjectProperty,
+        owl:TransitiveProperty ;
+    rdfs:label "est sous-compétence de"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Competence ;
+    rdfs:subPropertyOf edu:relationCompetence ;
+    owl:inverseOf edu:aPourSousCompetence .
+
+edu:evaluationDuModule a owl:ObjectProperty ;
+    rdfs:label "évaluation du module"@fr ;
+    rdfs:domain edu:Evaluation ;
+    rdfs:range edu:Module ;
+    rdfs:subPropertyOf edu:relationRessource ;
+    owl:inverseOf edu:estEvalueParEvaluation .
+
+edu:intitule a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "intitulé"@fr ;
+    rdfs:range xsd:string .
+
+edu:langue a owl:DatatypeProperty ;
+    rdfs:label "langue"@fr ;
+    rdfs:domain edu:RessourcePedagogique ;
+    rdfs:range xsd:string .
+
+edu:maitriseTechnologie a owl:ObjectProperty ;
+    rdfs:label "maîtrise technologie"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Technologie ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:estMaitriseePar .
+
+edu:niveauEtudes a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "niveau d'études"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range xsd:string .
+
+edu:nombrePages a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "nombre de pages"@fr ;
+    rdfs:domain edu:Document ;
+    rdfs:range xsd:integer .
+
+edu:nombrePlaces a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "nombre de places"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range xsd:integer .
+
+edu:noteMinimale a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "note minimale"@fr ;
+    rdfs:domain edu:Evaluation ;
+    rdfs:range xsd:decimal .
+
+edu:obtientCertification a owl:ObjectProperty ;
+    rdfs:label "obtient certification"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Certification ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:estObtenuePar .
+
+edu:ordreDansModule a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "ordre dans le module"@fr ;
+    rdfs:domain edu:Cours ;
+    rdfs:range xsd:integer .
+
+edu:passeEvaluation a owl:ObjectProperty ;
+    rdfs:label "passe évaluation"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Evaluation ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:estPasseePar .
+
+edu:peutSuivre a owl:ObjectProperty ;
+    rdfs:label "peut suivre"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Module ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:estAccessiblePar .
+
+edu:prenom a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "prénom"@fr ;
+    rdfs:domain edu:Personne ;
+    rdfs:range xsd:string .
+
+edu:proposeFormation a owl:ObjectProperty ;
+    rdfs:label "propose formation"@fr ;
+    rdfs:domain edu:Organisme ;
+    rdfs:range edu:Formation ;
+    rdfs:subPropertyOf edu:relationInstitutionnelle ;
+    owl:inverseOf edu:estProposeePar .
+
+edu:requiertIndirectementCompetence a owl:ObjectProperty ;
+    rdfs:label "requiert indirectement compétence"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Competence ;
+    rdfs:subPropertyOf edu:relationCompetence ;
+    owl:inverseOf edu:estRequiseIndirectementPar ;
+    owl:propertyChainAxiom ( edu:aPourPrerequis edu:requiertCompetence ) .
+
+edu:ressourceCibleCompetence a owl:ObjectProperty ;
+    rdfs:label "ressource cible compétence"@fr ;
+    rdfs:domain edu:RessourcePedagogique ;
+    rdfs:range edu:Competence ;
+    rdfs:subPropertyOf edu:relationCompetence ;
+    owl:inverseOf edu:estCibleePar .
+
+edu:scoreMaturite a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "score de maturité"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range xsd:integer .
+
+edu:specialiteFormateur a owl:DatatypeProperty ;
+    rdfs:label "spécialité du formateur"@fr ;
+    rdfs:domain edu:Formateur ;
+    rdfs:range xsd:string .
+
+edu:suitParcours a owl:ObjectProperty ;
+    rdfs:label "suit parcours"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Parcours ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:estSuiviPar .
+
+edu:telephone a owl:DatatypeProperty ;
+    rdfs:label "téléphone"@fr ;
+    rdfs:domain edu:Personne ;
+    rdfs:range xsd:string .
+
+edu:urlRessource a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "URL de la ressource"@fr ;
+    rdfs:domain edu:RessourcePedagogique ;
+    rdfs:range xsd:string .
+
+edu:utiliseRessource a owl:ObjectProperty ;
+    rdfs:label "utilise ressource"@fr ;
+    rdfs:domain edu:Cours ;
+    rdfs:range edu:RessourcePedagogique ;
+    rdfs:subPropertyOf edu:relationRessource ;
+    owl:inverseOf edu:estUtiliseeDans .
+
+edu:AgentScolarite a owl:Class ;
+    rdfs:label "Agent scolarité"@fr ;
+    rdfs:subClassOf edu:ServiceScolarite .
+
+edu:Ahmed a edu:EtudiantLicence,
+        owl:NamedIndividual ;
+    rdfs:label "Ahmed"@fr ;
+    edu:dateInscription "2026-09-15T00:00:00"^^xsd:dateTime ;
+    edu:dateNaissance "2003-05-14T00:00:00"^^xsd:dateTime ;
+    edu:email "ahmed@eduparcours.org"^^xsd:string ;
+    edu:estCoequipierDe edu:Sarra ;
+    edu:estEncadrePar edu:Dr_Benali ;
+    edu:estInscritA edu:Formation_FullStack ;
+    edu:maitriseTechnologie edu:Tech_CSS3,
+        edu:Tech_HTML5 ;
+    edu:niveauEtudes "Licence"^^xsd:string ;
+    edu:nom "Ahmed"^^xsd:string ;
+    edu:passeEvaluation edu:Quiz_HTML ;
+    edu:possedeCompetence edu:Comp_CSS,
+        edu:Comp_HTML ;
+    edu:prenom "Ahmed"^^xsd:string ;
+    edu:suitParcours edu:Parcours_Ahmed .
+
+edu:Analyse_Donnees a edu:AnalyseDeDonnees,
+        owl:NamedIndividual ;
+    rdfs:label "Analyse de données"@fr ;
+    edu:intitule "Analyse de données"^^xsd:string .
+
+edu:ApprentissageAutomatique a owl:Class ;
+    rdfs:label "Apprentissage automatique"@fr ;
+    rdfs:subClassOf edu:DonneesEtIA .
+
+edu:AttestationModule a owl:Class ;
+    rdfs:label "Attestation module"@fr ;
+    rdfs:subClassOf edu:AttestationDeReussite .
+
+edu:Certificat_Backend a edu:CertificationWeb,
+        owl:NamedIndividual ;
+    rdfs:label "Certificat Développeur Back-end"@fr ;
+    edu:certificationRequiertModule edu:Module_BaseDeDonnees,
+        edu:Module_Deploiement,
+        edu:Module_NodeJS ;
+    edu:delivreeParOrganisme edu:Editeur_Cloud ;
+    edu:dureeValiditeAns 4 .
+
+edu:Comp_GestionTemps a edu:CompetenceGestionDuTemps,
+        owl:NamedIndividual ;
+    rdfs:label "Gestion du temps"@fr ;
+    edu:intitule "Gestion du temps"^^xsd:string ;
+    edu:scoreMaturite 70 .
+
+edu:Comp_PenseeCritique a edu:CompetencePenseeCritique,
+        owl:NamedIndividual ;
+    rdfs:label "Pensée critique"@fr ;
+    edu:intitule "Pensée critique"^^xsd:string ;
+    edu:scoreMaturite 72 .
+
+edu:CompetenceAsynchrone a owl:Class ;
+    rdfs:label "Compétence asynchrone"@fr ;
+    rdfs:subClassOf edu:CompetenceJavaScript .
+
+edu:CompetenceAutonomie a owl:Class ;
+    rdfs:label "Compétence autonomie"@fr ;
+    rdfs:subClassOf edu:CompetenceOrganisationnelle .
+
+edu:CompetenceExpress a owl:Class ;
+    rdfs:label "Compétence Express"@fr ;
+    rdfs:subClassOf edu:CompetenceNodeJS .
+
+edu:CompetenceFlexboxGrid a owl:Class ;
+    rdfs:label "Compétence flexbox grid"@fr ;
+    rdfs:subClassOf edu:CompetenceCSS .
+
+edu:CompetenceGraphQL a owl:Class ;
+    rdfs:label "Compétence GraphQL"@fr ;
+    rdfs:subClassOf edu:CompetenceAPI .
+
+edu:Cours_Agile a edu:CoursMethodeAgile,
+        owl:NamedIndividual ;
+    rdfs:label "Méthodes agiles"@fr ;
+    edu:developpeCompetence edu:Comp_Communication,
+        edu:Comp_GestionTemps ;
+    edu:dureeHeures 12 ;
+    edu:enseignePar edu:Mme_Ayari ;
+    edu:intitule "Méthodes agiles"^^xsd:string ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:Slides_Agile .
+
+edu:Cours_CI_CD a edu:CoursBackend,
+        owl:NamedIndividual ;
+    rdfs:label "Intégration continue"@fr ;
+    edu:developpeCompetence edu:Comp_Deploiement,
+        edu:Comp_Git ;
+    edu:dureeHeures 10 ;
+    edu:enseignePar edu:Mr_Cherif ;
+    edu:intitule "Intégration continue"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:ordreDansModule 2 ;
+    edu:utiliseTechnologie edu:Tech_Git .
+
+edu:Cours_Express a edu:CoursNodeJS,
+        owl:NamedIndividual ;
+    rdfs:label "Express et API REST"@fr ;
+    edu:developpeCompetence edu:Comp_Express,
+        edu:Comp_REST ;
+    edu:dureeHeures 25 ;
+    edu:enseignePar edu:Dr_Benali ;
+    edu:intitule "Express et API REST"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:ordreDansModule 2 ;
+    edu:utiliseTechnologie edu:Tech_NodeJS .
+
+edu:Cours_Git a edu:CoursGit,
+        owl:NamedIndividual ;
+    rdfs:label "Git et collaboration"@fr ;
+    edu:developpeCompetence edu:Comp_Git,
+        edu:Comp_TravailEquipe ;
+    edu:dureeHeures 10 ;
+    edu:enseignePar edu:Mr_Gharbi ;
+    edu:intitule "Git et collaboration"^^xsd:string ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseTechnologie edu:Tech_Git .
+
+edu:Cours_Git_Collab a edu:CoursGit,
+        owl:NamedIndividual ;
+    rdfs:label "Git en équipe"@fr ;
+    edu:developpeCompetence edu:Comp_Git,
+        edu:Comp_TravailEquipe ;
+    edu:dureeHeures 15 ;
+    edu:enseignePar edu:Mr_Hamdi ;
+    edu:intitule "Git en équipe"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:Guide_Git ;
+    edu:utiliseTechnologie edu:Tech_Git .
+
+edu:Cours_MongoDB a edu:CoursBackend,
+        owl:NamedIndividual ;
+    rdfs:label "MongoDB et bases NoSQL"@fr ;
+    edu:developpeCompetence edu:Comp_NoSQL ;
+    edu:dureeHeures 20 ;
+    edu:enseignePar edu:Mme_Trabelsi ;
+    edu:intitule "MongoDB et bases NoSQL"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:ordreDansModule 2 ;
+    edu:utiliseTechnologie edu:Tech_MongoDB .
+
+edu:DeveloppementFullStack a owl:Class ;
+    rdfs:label "Développement Full-Stack"@fr ;
+    rdfs:subClassOf edu:DeveloppementWeb .
+
+edu:Domaine_Frontend a edu:DeveloppementFrontend,
+        owl:NamedIndividual ;
+    rdfs:label "Développement front-end"@fr ;
+    edu:intitule "Développement front-end"^^xsd:string .
+
+edu:EditeurEnLigne a owl:Class ;
+    rdfs:label "Éditeur en ligne"@fr ;
+    rdfs:subClassOf edu:EditeurDeCode .
+
+edu:EditeurTechnologique a owl:Class ;
+    rdfs:label "Éditeur technologique"@fr ;
+    rdfs:subClassOf edu:CertificateurPrive .
+
+edu:Editeur_Cloud a edu:EditeurTechnologique,
+        owl:NamedIndividual ;
+    rdfs:label "Éditeur technologique cloud"@fr .
+
+edu:Editeur_CodePen a edu:EditeurEnLigne,
+        owl:NamedIndividual ;
+    rdfs:label "Éditeur en ligne CodePen"@fr ;
+    edu:langue "en"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_JavaScript ;
+    edu:urlRessource "https://codepen.io"^^xsd:string .
+
+edu:EnvironnementNodeJS a owl:Class ;
+    rdfs:label "Environnement NodeJS"@fr ;
+    rdfs:subClassOf edu:EnvironnementBackend .
+
+edu:Examen_Final_FullStack a edu:ExamenFinal,
+        owl:NamedIndividual ;
+    rdfs:label "Examen final Full-Stack"@fr ;
+    edu:coefficient 3.0 ;
+    edu:dateEvaluation "2027-02-15T00:00:00"^^xsd:dateTime ;
+    edu:noteMinimale 10.0 ;
+    edu:porteSurCompetence edu:Comp_JavaScript,
+        edu:Comp_NodeJS,
+        edu:Comp_React .
+
+edu:ExerciceQuestionOuverte a owl:Class ;
+    rdfs:label "Exercice question ouverte"@fr ;
+    rdfs:subClassOf edu:ExerciceTheorique .
+
+edu:FormationLicence a owl:Class ;
+    rdfs:label "Formation licence"@fr ;
+    rdfs:subClassOf edu:FormationDiplomante .
+
+edu:Formation_Angular a edu:FormationCourte,
+        owl:NamedIndividual ;
+    rdfs:label "Spécialisation Angular"@fr ;
+    edu:appartientAuDomaine edu:Domaine_Frontend ;
+    edu:composeDe edu:Module_Angular ;
+    edu:coutFormation 350.0 ;
+    edu:creditsECTS 4 ;
+    edu:dateDebut "2026-11-16T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2026-12-18T00:00:00"^^xsd:dateTime ;
+    edu:dureeHeures 35 ;
+    edu:estActif true ;
+    edu:estAdministreePar edu:Mme_Salhi ;
+    edu:estProposeePar edu:MOOC_WebDev ;
+    edu:intitule "Spécialisation Angular"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:nombrePlaces 20 .
+
+edu:Formation_Debutant_Web a edu:AtelierIntensif,
+        owl:NamedIndividual ;
+    rdfs:label "Initiation au web"@fr ;
+    edu:appartientAuDomaine edu:Developpement_Web ;
+    edu:composeDe edu:Module_Agile,
+        edu:Module_CSS,
+        edu:Module_HTML ;
+    edu:coutFormation 0.0 ;
+    edu:creditsECTS 5 ;
+    edu:dateDebut "2026-11-09T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2026-11-27T00:00:00"^^xsd:dateTime ;
+    edu:dureeHeures 50 ;
+    edu:estActif true ;
+    edu:estAdministreePar edu:Mr_Dridi ;
+    edu:estProposeePar edu:Universite_Tunis ;
+    edu:intitule "Initiation au web"^^xsd:string ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:nombrePlaces 40 .
+
+edu:Formation_Git_Collab a edu:BootCamp,
+        owl:NamedIndividual ;
+    rdfs:label "Bootcamp Git et agilité"@fr ;
+    edu:appartientAuDomaine edu:Domaine_Backend ;
+    edu:composeDe edu:Module_Agile,
+        edu:Module_Git ;
+    edu:coutFormation 200.0 ;
+    edu:creditsECTS 3 ;
+    edu:dateDebut "2026-12-01T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2026-12-12T00:00:00"^^xsd:dateTime ;
+    edu:dureeHeures 27 ;
+    edu:estActif false ;
+    edu:estAdministreePar edu:Mme_Salhi ;
+    edu:estProposeePar edu:EduParcours_Academie ;
+    edu:intitule "Bootcamp Git et agilité"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:nombrePlaces 30 .
+
+edu:Formation_Master_Web a edu:FormationMaster,
+        owl:NamedIndividual ;
+    rdfs:label "Master spécialisé web"@fr ;
+    edu:appartientAuDomaine edu:Developpement_Web ;
+    edu:composeDe edu:Module_Angular,
+        edu:Module_Deploiement,
+        edu:Module_JavaScript,
+        edu:Module_React ;
+    edu:coutFormation 4500.0 ;
+    edu:creditsECTS 120 ;
+    edu:dateDebut "2026-09-20T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2028-06-30T00:00:00"^^xsd:dateTime ;
+    edu:dureeHeures 400 ;
+    edu:estActif true ;
+    edu:estAdministreePar edu:Mr_Dridi ;
+    edu:estProposeePar edu:Ecole_Esprit ;
+    edu:intitule "Master spécialisé web"^^xsd:string ;
+    edu:meneA edu:Master_Informatique ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:nombrePlaces 18 .
+
+edu:Guide_Git a edu:GuideRapide,
+        owl:NamedIndividual ;
+    rdfs:label "Guide rapide Git"@fr ;
+    edu:langue "en"^^xsd:string ;
+    edu:nombrePages 12 ;
+    edu:ressourceCibleCompetence edu:Comp_Git ;
+    edu:urlRessource "https://git-scm.com/docs"^^xsd:string .
+
+edu:Karim a edu:AutodidacteConfirme,
+        owl:NamedIndividual ;
+    rdfs:label "Karim"@fr ;
+    edu:dateInscription "2026-10-05T00:00:00"^^xsd:dateTime ;
+    edu:dateNaissance "1998-04-22T00:00:00"^^xsd:dateTime ;
+    edu:email "karim@eduparcours.org"^^xsd:string ;
+    edu:estCoequipierDe edu:Mariem ;
+    edu:estEncadrePar edu:Mr_Hamdi ;
+    edu:estInscritA edu:Formation_Git_Collab ;
+    edu:maitriseTechnologie edu:Tech_Git,
+        edu:Tech_JavaScript ;
+    edu:niveauEtudes "Baccalauréat"^^xsd:string ;
+    edu:nom "Chaabane"^^xsd:string ;
+    edu:possedeCompetence edu:Comp_Git,
+        edu:Comp_HTML,
+        edu:Comp_JavaScript ;
+    edu:prenom "Karim"^^xsd:string ;
+    edu:suitParcours edu:Parcours_Debutant .
+
+edu:Licence_Informatique a edu:Licence,
+        owl:NamedIndividual ;
+    rdfs:label "Licence en Informatique"@fr ;
+    edu:delivreeParOrganisme edu:Ministere_Enseignement,
+        edu:Universite_Tunis ;
+    edu:dureeValiditeAns 99 .
+
+edu:Lina_Master a edu:EtudiantMaster,
+        owl:NamedIndividual ;
+    rdfs:label "Lina"@fr ;
+    edu:dateInscription "2026-09-10T00:00:00"^^xsd:dateTime ;
+    edu:email "lina@eduparcours.org"^^xsd:string ;
+    edu:estInscritA edu:Formation_Frontend ;
+    edu:niveauEtudes "Master"^^xsd:string ;
+    edu:nom "Lina"^^xsd:string ;
+    edu:obtientCertification edu:Attestation_Module_React ;
+    edu:possedeCompetence edu:Comp_CSS,
+        edu:Comp_HTML,
+        edu:Comp_JavaScript,
+        edu:Comp_NodeJS,
+        edu:Comp_React ;
+    edu:prenom "Lina"^^xsd:string ;
+    edu:suitParcours edu:Parcours_Frontend_Accelere .
+
+edu:MOOC_WebDev a edu:MOOC,
+        owl:NamedIndividual ;
+    rdfs:label "MOOC Web Dev"@fr .
+
+edu:Mariem a edu:EtudiantLicence,
+        owl:NamedIndividual ;
+    rdfs:label "Mariem"@fr ;
+    edu:dateInscription "2026-09-12T00:00:00"^^xsd:dateTime ;
+    edu:dateNaissance "2004-02-18T00:00:00"^^xsd:dateTime ;
+    edu:email "mariem@eduparcours.org"^^xsd:string ;
+    edu:estCoequipierDe edu:Karim ;
+    edu:estEncadrePar edu:Mme_Ayari ;
+    edu:estInscritA edu:Formation_Debutant_Web ;
+    edu:estInscritAuModule edu:Module_CSS,
+        edu:Module_HTML ;
+    edu:maitriseTechnologie edu:Tech_CSS3,
+        edu:Tech_Git,
+        edu:Tech_HTML5 ;
+    edu:niveauEtudes "Licence"^^xsd:string ;
+    edu:nom "Ben Ali"^^xsd:string ;
+    edu:passeEvaluation edu:Quiz_HTML ;
+    edu:possedeCompetence edu:Comp_CSS,
+        edu:Comp_Git,
+        edu:Comp_HTML ;
+    edu:prenom "Mariem"^^xsd:string ;
+    edu:suitParcours edu:Parcours_Debutant .
+
+edu:Master_Informatique a edu:Master,
+        owl:NamedIndividual ;
+    rdfs:label "Master en informatique"@fr ;
+    edu:delivreeParOrganisme edu:Ecole_Esprit,
+        edu:Ministere_Enseignement ;
+    edu:dureeValiditeAns 99 .
+
+edu:MinistereFormation a owl:Class ;
+    rdfs:label "Ministère formation"@fr ;
+    rdfs:subClassOf edu:CertificateurPublic .
+
+edu:Module_Git a edu:ModuleIntermediaire,
+        owl:NamedIndividual ;
+    rdfs:label "Module Git et travail collaboratif"@fr ;
+    edu:contientCours edu:Cours_Git_Collab ;
+    edu:dureeHeures 15 ;
+    edu:intitule "Module Git et travail collaboratif"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string .
+
+edu:Nour a edu:EtudiantDoctorat,
+        owl:NamedIndividual ;
+    rdfs:label "Nour"@fr ;
+    edu:dateInscription "2026-09-10T00:00:00"^^xsd:dateTime ;
+    edu:dateNaissance "1999-09-09T00:00:00"^^xsd:dateTime ;
+    edu:email "nour@eduparcours.org"^^xsd:string ;
+    edu:estCoequipierDe edu:Omar ;
+    edu:estEncadrePar edu:Dr_Benali ;
+    edu:estInscritA edu:Formation_Backend ;
+    edu:maitriseTechnologie edu:Tech_MongoDB,
+        edu:Tech_MySQL ;
+    edu:niveauEtudes "Doctorat"^^xsd:string ;
+    edu:nom "Khelifi"^^xsd:string ;
+    edu:passeEvaluation edu:Soutenance_Backend ;
+    edu:possedeCompetence edu:Comp_JavaScript,
+        edu:Comp_NoSQL,
+        edu:Comp_PenseeCritique,
+        edu:Comp_ResolutionProbleme,
+        edu:Comp_SQL ;
+    edu:prenom "Nour"^^xsd:string ;
+    edu:suitParcours edu:Parcours_Backend .
+
+edu:Omar a edu:EtudiantMaster,
+        owl:NamedIndividual ;
+    rdfs:label "Omar"@fr ;
+    edu:dateInscription "2026-09-20T00:00:00"^^xsd:dateTime ;
+    edu:dateNaissance "2001-07-30T00:00:00"^^xsd:dateTime ;
+    edu:email "omar@eduparcours.org"^^xsd:string ;
+    edu:estCoequipierDe edu:Nour ;
+    edu:estEncadrePar edu:Dr_Benali ;
+    edu:estInscritA edu:Formation_Backend,
+        edu:Formation_Master_Web ;
+    edu:estInscritAuModule edu:Module_Deploiement,
+        edu:Module_NodeJS ;
+    edu:maitriseTechnologie edu:Tech_JavaScript,
+        edu:Tech_MySQL,
+        edu:Tech_NodeJS ;
+    edu:niveauEtudes "Master"^^xsd:string ;
+    edu:nom "Gharbi"^^xsd:string ;
+    edu:passeEvaluation edu:Quiz_NodeJS ;
+    edu:possedeCompetence edu:Comp_Express,
+        edu:Comp_JavaScript,
+        edu:Comp_NodeJS,
+        edu:Comp_SQL ;
+    edu:prenom "Omar"^^xsd:string ;
+    edu:suitParcours edu:Parcours_Backend .
+
+edu:OutilDocker a owl:Class ;
+    rdfs:label "Outil Docker"@fr ;
+    rdfs:subClassOf edu:OutilDeploiement .
+
+edu:OutilGit a owl:Class ;
+    rdfs:label "Outil Git"@fr ;
+    rdfs:subClassOf edu:OutilVersionning .
+
+edu:PDF_SQL a edu:SupportPDF,
+        owl:NamedIndividual ;
+    rdfs:label "Support PDF SQL"@fr ;
+    edu:langue "fr"^^xsd:string ;
+    edu:nombrePages 40 ;
+    edu:ressourceCibleCompetence edu:Comp_SQL ;
+    edu:urlRessource "https://example.org/supports/sql.pdf"^^xsd:string .
+
+edu:ParcoursFrontend a owl:Class ;
+    rdfs:label "Parcours front-end"@fr ;
+    rdfs:subClassOf edu:ParcoursWeb .
+
+edu:ParcoursInfereParCompetence a owl:Class ;
+    rdfs:label "Parcours inféré par compétence"@fr ;
+    rdfs:subClassOf edu:ParcoursInfere .
+
+edu:Parcours_Angular_Renforce a edu:ParcoursRenforce,
+        owl:NamedIndividual ;
+    rdfs:label "Parcours Angular renforcé"@fr ;
+    edu:estAnimePar edu:Mme_Jebali ;
+    edu:parcoursComprend edu:Module_Angular,
+        edu:Module_JavaScript .
+
+edu:Projet_Final_Web a edu:ProjetFinal,
+        owl:NamedIndividual ;
+    rdfs:label "Projet final web"@fr ;
+    edu:coefficient 2.0 ;
+    edu:dateEvaluation "2027-02-20T00:00:00"^^xsd:dateTime ;
+    edu:noteMinimale 10.0 ;
+    edu:porteSurCompetence edu:Comp_Git,
+        edu:Comp_NodeJS,
+        edu:Comp_React .
+
+edu:QuestionnaireDeNiveau a owl:Class ;
+    rdfs:label "Questionnaire de niveau"@fr ;
+    rdfs:subClassOf edu:AutoEvaluation .
+
+edu:Quiz_Angular a edu:QuizEnLigne,
+        owl:NamedIndividual ;
+    rdfs:label "Quiz Angular"@fr ;
+    edu:coefficient 1.0 ;
+    edu:dateEvaluation "2026-12-10T00:00:00"^^xsd:dateTime ;
+    edu:evaluationDuModule edu:Module_Angular ;
+    edu:evalue edu:Cours_Angular ;
+    edu:noteMinimale 10.0 ;
+    edu:porteSurCompetence edu:Comp_Angular .
+
+edu:Quiz_Banque_QCM a edu:ExerciceQCM,
+        owl:NamedIndividual ;
+    rdfs:label "Banque de QCM SQL"@fr ;
+    edu:langue "fr"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_SQL ;
+    edu:urlRessource "https://example.org/exercices/qcm-sql"^^xsd:string .
+
+edu:Quiz_NodeJS a edu:QuizEnLigne,
+        owl:NamedIndividual ;
+    rdfs:label "Quiz Node.js"@fr ;
+    edu:coefficient 1.0 ;
+    edu:dateEvaluation "2026-11-20T00:00:00"^^xsd:dateTime ;
+    edu:evaluationDuModule edu:Module_NodeJS ;
+    edu:evalue edu:Cours_NodeJS ;
+    edu:noteMinimale 10.0 ;
+    edu:porteSurCompetence edu:Comp_NodeJS .
+
+edu:SimulateurReseau a owl:Class ;
+    rdfs:label "Simulateur réseau"@fr ;
+    rdfs:subClassOf edu:Simulateur .
+
+edu:Slides_Agile a edu:Diapositives,
+        owl:NamedIndividual ;
+    rdfs:label "Diapositives méthodes agiles"@fr ;
+    edu:langue "fr"^^xsd:string ;
+    edu:nombrePages 30 ;
+    edu:ressourceCibleCompetence edu:Comp_Communication ;
+    edu:urlRessource "https://example.org/supports/agile"^^xsd:string .
+
+edu:Soutenance_Backend a edu:SoutenanceProjet,
+        owl:NamedIndividual ;
+    rdfs:label "Soutenance projet back-end"@fr ;
+    edu:coefficient 3.0 ;
+    edu:dateEvaluation "2027-03-10T00:00:00"^^xsd:dateTime ;
+    edu:evaluationDuModule edu:Module_BaseDeDonnees ;
+    edu:noteMinimale 12.0 ;
+    edu:porteSurCompetence edu:Comp_Express,
+        edu:Comp_SQL .
+
+edu:Tuto_Docker a edu:TutorielComplet,
+        owl:NamedIndividual ;
+    rdfs:label "Tutoriel Docker complet"@fr ;
+    edu:dureeMinutes 90 ;
+    edu:langue "fr"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_Deploiement ;
+    edu:urlRessource "https://example.org/videos/docker"^^xsd:string .
+
+edu:UIDesign a owl:Class ;
+    rdfs:label "UI design"@fr ;
+    rdfs:subClassOf edu:DesignInterface .
+
+edu:Webinaire a owl:Class ;
+    rdfs:label "Webinaire"@fr ;
+    rdfs:subClassOf edu:VideoConference .
+
+edu:Yassine a edu:AutodidacteDebutant,
+        owl:NamedIndividual ;
+    rdfs:label "Yassine"@fr ;
+    edu:dateInscription "2026-09-20T00:00:00"^^xsd:dateTime ;
+    edu:email "yassine@eduparcours.org"^^xsd:string ;
+    edu:estInscritA edu:BootCamp_Web ;
+    edu:niveauEtudes "Baccalauréat"^^xsd:string ;
+    edu:nom "Yassine"^^xsd:string ;
+    edu:passeEvaluation edu:Autoeval_Niveau ;
+    edu:possedeCompetence edu:Comp_HTML ;
+    edu:prenom "Yassine"^^xsd:string .
+
+edu:aPourPrecedentDirect a owl:ObjectProperty ;
+    rdfs:label "a pour précédent direct"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Module .
+
+edu:aPourSousCompetence a owl:ObjectProperty ;
+    rdfs:label "a pour sous-compétence"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Competence .
+
+edu:accueilleApprenant a owl:ObjectProperty ;
+    rdfs:label "accueille apprenant"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range edu:Apprenant .
+
+edu:accueilleInscrit a owl:ObjectProperty ;
+    rdfs:label "accueille inscrit"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Apprenant .
+
+edu:anneesExperience a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "années d'expérience"@fr ;
+    rdfs:domain edu:Formateur ;
+    rdfs:range xsd:integer .
+
+edu:appartientAuDomaine a owl:ObjectProperty ;
+    rdfs:label "appartient au domaine"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range edu:Domaine ;
+    rdfs:subPropertyOf edu:relationInstitutionnelle ;
+    owl:inverseOf edu:regroupeFormation .
+
+edu:appartientAuModule a owl:ObjectProperty ;
+    rdfs:label "appartient au module"@fr ;
+    rdfs:domain edu:Cours ;
+    rdfs:range edu:Module .
+
+edu:contientCours a owl:ObjectProperty ;
+    rdfs:label "contient cours"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Cours ;
+    rdfs:subPropertyOf edu:relationProgramme ;
+    owl:inverseOf edu:appartientAuModule .
+
+edu:delivreCertification a owl:ObjectProperty ;
+    rdfs:label "délivre certification"@fr ;
+    rdfs:domain edu:Organisme ;
+    rdfs:range edu:Certification .
+
+edu:delivreeParOrganisme a owl:ObjectProperty ;
+    rdfs:label "délivrée par organisme"@fr ;
+    rdfs:domain edu:Certification ;
+    rdfs:range edu:Organisme ;
+    rdfs:subPropertyOf edu:relationInstitutionnelle ;
+    owl:inverseOf edu:delivreCertification .
+
+edu:developpeCompetence a owl:ObjectProperty ;
+    rdfs:label "développe compétence"@fr ;
+    rdfs:domain edu:Cours ;
+    rdfs:range edu:Competence ;
+    rdfs:subPropertyOf edu:relationCompetence ;
+    owl:inverseOf edu:estDeveloppeePar .
+
+edu:encadre a owl:ObjectProperty ;
+    rdfs:label "encadre"@fr ;
+    rdfs:domain edu:Formateur ;
+    rdfs:range edu:Apprenant .
+
+edu:enseignePar a owl:ObjectProperty ;
+    rdfs:label "enseigné par"@fr ;
+    rdfs:domain edu:Cours ;
+    rdfs:range edu:Formateur ;
+    rdfs:subPropertyOf edu:relationInstitutionnelle ;
+    owl:inverseOf edu:enseigne .
+
+edu:estAccessiblePar a owl:ObjectProperty ;
+    rdfs:label "est accessible par"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Apprenant .
+
+edu:estAdministreePar a owl:ObjectProperty ;
+    rdfs:label "est administrée par"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range edu:ResponsableFormation .
+
+edu:estAnimePar a owl:ObjectProperty ;
+    rdfs:label "est animé par"@fr ;
+    rdfs:domain edu:Parcours ;
+    rdfs:range edu:Formateur .
+
+edu:estCibleePar a owl:ObjectProperty ;
+    rdfs:label "est ciblée par"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:RessourcePedagogique .
+
+edu:estDeveloppeePar a owl:ObjectProperty ;
+    rdfs:label "est développée par"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Cours .
+
+edu:estEnseigneeDans a owl:ObjectProperty ;
+    rdfs:label "est enseignée dans"@fr ;
+    rdfs:domain edu:Technologie ;
+    rdfs:range edu:Cours .
+
+edu:estEtapeDuParcours a owl:ObjectProperty ;
+    rdfs:label "est étape du parcours"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Parcours .
+
+edu:estEvalueParEvaluation a owl:ObjectProperty ;
+    rdfs:label "est évalué par évaluation"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Evaluation .
+
+edu:estMaitriseePar a owl:ObjectProperty ;
+    rdfs:label "est maîtrisée par"@fr ;
+    rdfs:domain edu:Technologie ;
+    rdfs:range edu:Apprenant .
+
+edu:estMesureePar a owl:ObjectProperty ;
+    rdfs:label "est mesurée par"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Evaluation .
+
+edu:estMobiliseePar a owl:ObjectProperty ;
+    rdfs:label "est mobilisée par"@fr ;
+    rdfs:domain edu:Technologie ;
+    rdfs:range edu:Competence .
+
+edu:estObtenueApres a owl:ObjectProperty ;
+    rdfs:label "est obtenue après"@fr ;
+    rdfs:domain edu:Certification ;
+    rdfs:range edu:Formation .
+
+edu:estObtenuePar a owl:ObjectProperty ;
+    rdfs:label "est obtenue par"@fr ;
+    rdfs:domain edu:Certification ;
+    rdfs:range edu:Apprenant .
+
+edu:estPasseePar a owl:ObjectProperty ;
+    rdfs:label "est passée par"@fr ;
+    rdfs:domain edu:Evaluation ;
+    rdfs:range edu:Apprenant .
+
+edu:estPossedeePar a owl:ObjectProperty ;
+    rdfs:label "est possédée par"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Apprenant .
+
+edu:estPrerequisDe a owl:ObjectProperty ;
+    rdfs:label "est prérequis de"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Module .
+
+edu:estProposeePar a owl:ObjectProperty ;
+    rdfs:label "est proposée par"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range edu:Organisme .
+
+edu:estRequisPourCertification a owl:ObjectProperty ;
+    rdfs:label "est requis pour certification"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Certification .
+
+edu:estRequiseIndirectementPar a owl:ObjectProperty ;
+    rdfs:label "est requise indirectement par"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Module .
+
+edu:estRequisePar a owl:ObjectProperty ;
+    rdfs:label "est requise par"@fr ;
+    rdfs:domain edu:Competence ;
+    rdfs:range edu:Module .
+
+edu:estSuiviPar a owl:ObjectProperty ;
+    rdfs:label "est suivi par"@fr ;
+    rdfs:domain edu:Parcours ;
+    rdfs:range edu:Apprenant .
+
+edu:estUtiliseeDans a owl:ObjectProperty ;
+    rdfs:label "est utilisée dans"@fr ;
+    rdfs:domain edu:RessourcePedagogique ;
+    rdfs:range edu:Cours .
+
+edu:evalue a owl:ObjectProperty ;
+    rdfs:label "évalue"@fr ;
+    rdfs:domain edu:Evaluation ;
+    rdfs:range edu:Cours .
+
+edu:faitPartieDeFormation a owl:ObjectProperty ;
+    rdfs:label "fait partie de la formation"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Formation .
+
+edu:meneA a owl:ObjectProperty ;
+    rdfs:label "mène à"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range edu:Certification ;
+    rdfs:subPropertyOf edu:relationInstitutionnelle ;
+    owl:inverseOf edu:estObtenueApres .
+
+edu:niveauDifficulte a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "niveau de difficulté"@fr ;
+    rdfs:domain edu:EntitePedagogique ;
+    rdfs:range xsd:string .
+
+edu:nom a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "nom"@fr ;
+    rdfs:domain edu:Personne ;
+    rdfs:range xsd:string .
+
+edu:parcoursComprend a owl:ObjectProperty ;
+    rdfs:label "parcours comprend"@fr ;
+    rdfs:domain edu:Parcours ;
+    rdfs:range edu:Module ;
+    rdfs:subPropertyOf edu:relationProgramme ;
+    owl:inverseOf edu:estEtapeDuParcours .
+
+edu:porteSurCompetence a owl:ObjectProperty ;
+    rdfs:label "porte sur compétence"@fr ;
+    rdfs:domain edu:Evaluation ;
+    rdfs:range edu:Competence ;
+    rdfs:subPropertyOf edu:relationCompetence ;
+    owl:inverseOf edu:estMesureePar .
+
+edu:regroupeFormation a owl:ObjectProperty ;
+    rdfs:label "regroupe formation"@fr ;
+    rdfs:domain edu:Domaine ;
+    rdfs:range edu:Formation .
+
+edu:requiertCompetence a owl:ObjectProperty ;
+    rdfs:label "requiert compétence"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Competence ;
+    rdfs:subPropertyOf edu:relationCompetence ;
+    owl:inverseOf edu:estRequisePar .
+
+edu:utiliseTechnologie a owl:ObjectProperty ;
+    rdfs:label "utilise technologie"@fr ;
+    rdfs:domain edu:Cours ;
+    rdfs:range edu:Technologie ;
+    rdfs:subPropertyOf edu:relationRessource ;
+    owl:inverseOf edu:estEnseigneeDans .
+
+edu:AcademieEnLigne a owl:Class ;
+    rdfs:label "Académie en ligne"@fr ;
+    rdfs:subClassOf edu:PlateformeEnLigne .
+
+edu:AnalyseDeDonnees a owl:Class ;
+    rdfs:label "Analyse de données"@fr ;
+    rdfs:subClassOf edu:DonneesEtIA .
+
+edu:Atelier_HTML_CSS a [ a owl:Restriction ;
+            owl:allValuesFrom [ a owl:Class ;
+                    owl:oneOf ( edu:Module_HTML edu:Module_CSS ) ] ;
+            owl:onProperty edu:composeDe ],
+        edu:AtelierIntensif,
+        owl:NamedIndividual ;
+    rdfs:label "Atelier HTML/CSS"@fr ;
+    edu:appartientAuDomaine edu:Developpement_Web ;
+    edu:composeDe edu:Module_CSS,
+        edu:Module_HTML ;
+    edu:coutFormation 150.00 ;
+    edu:dureeHeures 45 ;
+    edu:estActif true ;
+    edu:intitule "Atelier HTML/CSS"^^xsd:string ;
+    edu:nombrePlaces 15 .
+
+edu:AttestationDeReussite a owl:Class ;
+    rdfs:label "Attestation de réussite"@fr ;
+    rdfs:subClassOf edu:CertificationAcademique .
+
+edu:AutoEvaluation a owl:Class ;
+    rdfs:label "Auto évaluation"@fr ;
+    rdfs:subClassOf edu:EvaluationFormative .
+
+edu:AutodidacteConfirme a owl:Class ;
+    rdfs:label "Autodidacte confirme"@fr ;
+    rdfs:subClassOf edu:ApprenantAutodidacte .
+
+edu:AutodidacteDebutant a owl:Class ;
+    rdfs:label "Autodidacte débutant"@fr ;
+    rdfs:subClassOf edu:ApprenantAutodidacte .
+
+edu:Autoeval_Niveau a edu:QuestionnaireDeNiveau,
+        owl:NamedIndividual ;
+    rdfs:label "Auto-évaluation de niveau"@fr ;
+    edu:coefficient 0.0 ;
+    edu:noteMinimale 0.0 ;
+    edu:porteSurCompetence edu:Comp_CSS,
+        edu:Comp_HTML .
+
+edu:BaseNoSQL a owl:Class ;
+    rdfs:label "Base NoSQL"@fr ;
+    rdfs:subClassOf edu:SystemeBaseDeDonnees .
+
+edu:BaseSQL a owl:Class ;
+    rdfs:label "Base SQL"@fr ;
+    rdfs:subClassOf edu:SystemeBaseDeDonnees .
+
+edu:Certificat_DeveloppeurWeb a edu:CertificationFullStack,
+        owl:NamedIndividual ;
+    rdfs:label "Certificat Développeur Web"@fr ;
+    edu:certificationRequiertModule edu:Module_CSS,
+        edu:Module_HTML,
+        edu:Module_JavaScript,
+        edu:Module_NodeJS,
+        edu:Module_React ;
+    edu:delivreeParOrganisme edu:EduParcours_Academie ;
+    edu:dureeValiditeAns 5 .
+
+edu:CertificateurPrive a owl:Class ;
+    rdfs:label "Certificateur prive"@fr ;
+    rdfs:subClassOf edu:OrganismeCertificateur .
+
+edu:CertificateurPublic a owl:Class ;
+    rdfs:label "Certificateur public"@fr ;
+    rdfs:subClassOf edu:OrganismeCertificateur .
+
+edu:CertificationDonnees a owl:Class ;
+    rdfs:label "Certification données"@fr ;
+    rdfs:subClassOf edu:CertificationProfessionnelle .
+
+edu:CertificationFrontend a owl:Class ;
+    rdfs:label "Certification front-end"@fr ;
+    rdfs:subClassOf edu:CertificationWeb .
+
+edu:CertificationFullStack a owl:Class ;
+    rdfs:label "Certification Full-Stack"@fr ;
+    rdfs:subClassOf edu:CertificationWeb .
+
+edu:Comp_Communication a edu:CompetenceCommunication,
+        owl:NamedIndividual ;
+    rdfs:label "Communication"@fr ;
+    edu:intitule "Communication"^^xsd:string ;
+    edu:scoreMaturite 80 .
+
+edu:Comp_NoSQL a edu:CompetenceNoSQL,
+        owl:NamedIndividual ;
+    rdfs:label "NoSQL"@fr ;
+    edu:competenceSurTechnologie edu:Tech_MongoDB ;
+    edu:intitule "NoSQL"^^xsd:string ;
+    edu:scoreMaturite 45 .
+
+edu:Comp_ResolutionProbleme a edu:CompetenceResolutionProbleme,
+        owl:NamedIndividual ;
+    rdfs:label "Résolution de problèmes"@fr ;
+    edu:intitule "Résolution de problèmes"^^xsd:string ;
+    edu:scoreMaturite 75 .
+
+edu:CompetenceAngular a owl:Class ;
+    rdfs:label "Compétence Angular"@fr ;
+    rdfs:subClassOf edu:CompetenceFramework .
+
+edu:CompetenceCommunication a owl:Class ;
+    rdfs:label "Compétence communication"@fr ;
+    rdfs:subClassOf edu:CompetenceRelationnelle .
+
+edu:CompetenceDeploiement a owl:Class ;
+    rdfs:label "Compétence déploiement"@fr ;
+    rdfs:subClassOf edu:CompetenceOutillage .
+
+edu:CompetenceGestionDuTemps a owl:Class ;
+    rdfs:label "Compétence gestion du temps"@fr ;
+    rdfs:subClassOf edu:CompetenceOrganisationnelle .
+
+edu:CompetenceGit a owl:Class ;
+    rdfs:label "Compétence Git"@fr ;
+    rdfs:subClassOf edu:CompetenceOutillage .
+
+edu:CompetenceHTML a owl:Class ;
+    rdfs:label "Compétence HTML"@fr ;
+    rdfs:subClassOf edu:CompetenceFrontend .
+
+edu:CompetenceNoSQL a owl:Class ;
+    rdfs:label "Compétence NoSQL"@fr ;
+    rdfs:subClassOf edu:CompetenceBaseDeDonnees .
+
+edu:CompetencePOOJavaScript a owl:Class ;
+    rdfs:label "Compétence POO JavaScript"@fr ;
+    rdfs:subClassOf edu:CompetenceJavaScript .
+
+edu:CompetencePenseeCritique a owl:Class ;
+    rdfs:label "Compétence pensée critique"@fr ;
+    rdfs:subClassOf edu:CompetenceCognitive .
+
+edu:CompetenceREST a owl:Class ;
+    rdfs:label "Compétence REST"@fr ;
+    rdfs:subClassOf edu:CompetenceAPI .
+
+edu:CompetenceResolutionProbleme a owl:Class ;
+    rdfs:label "Compétence résolution probleme"@fr ;
+    rdfs:subClassOf edu:CompetenceCognitive .
+
+edu:CompetenceResponsiveDesign a owl:Class ;
+    rdfs:label "Compétence responsive design"@fr ;
+    rdfs:subClassOf edu:CompetenceCSS .
+
+edu:CompetenceSQL a owl:Class ;
+    rdfs:label "Compétence SQL"@fr ;
+    rdfs:subClassOf edu:CompetenceBaseDeDonnees .
+
+edu:CompetenceTravailEquipe a owl:Class ;
+    rdfs:label "Compétence travail equipe"@fr ;
+    rdfs:subClassOf edu:CompetenceRelationnelle .
+
+edu:CoursBaseDeDonnees a owl:Class ;
+    rdfs:label "Cours base de données"@fr ;
+    rdfs:subClassOf edu:CoursBackend .
+
+edu:CoursCSS a owl:Class ;
+    rdfs:label "Cours CSS"@fr ;
+    rdfs:subClassOf edu:CoursFrontend .
+
+edu:CoursHTML a owl:Class ;
+    rdfs:label "Cours HTML"@fr ;
+    rdfs:subClassOf edu:CoursFrontend .
+
+edu:CoursJavaScript a owl:Class ;
+    rdfs:label "Cours JavaScript"@fr ;
+    rdfs:subClassOf edu:CoursFrontend .
+
+edu:CoursMethodeAgile a owl:Class ;
+    rdfs:label "Cours methode agile"@fr ;
+    rdfs:subClassOf edu:CoursTransversal .
+
+edu:CoursReact a owl:Class ;
+    rdfs:label "Cours React"@fr ;
+    rdfs:subClassOf edu:CoursFrontend .
+
+edu:Cours_Angular a edu:CoursFrontend,
+        owl:NamedIndividual ;
+    rdfs:label "Angular"@fr ;
+    edu:developpeCompetence edu:Comp_Angular ;
+    edu:dureeHeures 35 ;
+    edu:enseignePar edu:Mme_Jebali ;
+    edu:intitule "Angular"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseTechnologie edu:Tech_Angular .
+
+edu:Cours_CSS_Avance a edu:CoursCSS,
+        owl:NamedIndividual ;
+    rdfs:label "CSS Avancé"@fr ;
+    edu:developpeCompetence edu:Comp_CSS,
+        edu:Comp_ResponsiveDesign ;
+    edu:dureeHeures 25 ;
+    edu:enseignePar edu:Dr_Benali ;
+    edu:intitule "CSS Avancé"^^xsd:string ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:Slides_CSS,
+        edu:TP_Responsive ;
+    edu:utiliseTechnologie edu:Tech_CSS3 .
+
+edu:Cours_Docker a edu:CoursBackend,
+        owl:NamedIndividual ;
+    rdfs:label "Docker et conteneurs"@fr ;
+    edu:developpeCompetence edu:Comp_Deploiement ;
+    edu:dureeHeures 20 ;
+    edu:enseignePar edu:Mr_Cherif ;
+    edu:intitule "Docker et conteneurs"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:Tuto_Docker ;
+    edu:utiliseTechnologie edu:Tech_Docker .
+
+edu:Cours_Intro_HTML a edu:CoursHTML,
+        owl:NamedIndividual ;
+    rdfs:label "Introduction HTML"@fr ;
+    edu:developpeCompetence edu:Comp_HTML ;
+    edu:dureeHeures 20 ;
+    edu:enseignePar edu:Dr_Benali ;
+    edu:estEvaluePar edu:Quiz_HTML ;
+    edu:intitule "Introduction HTML"^^xsd:string ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:Video_Intro_HTML ;
+    edu:utiliseTechnologie edu:Tech_HTML5 .
+
+edu:Cours_React a edu:CoursReact,
+        owl:NamedIndividual ;
+    rdfs:label "React"@fr ;
+    edu:developpeCompetence edu:Comp_React ;
+    edu:dureeHeures 35 ;
+    edu:enseignePar edu:Dr_Benali ;
+    edu:intitule "React"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:Webinaire_React ;
+    edu:utiliseTechnologie edu:Tech_React .
+
+edu:Cours_SQL a edu:CoursBaseDeDonnees,
+        owl:NamedIndividual ;
+    rdfs:label "Bases de données SQL"@fr ;
+    edu:developpeCompetence edu:Comp_SQL ;
+    edu:dureeHeures 30 ;
+    edu:enseignePar edu:Mme_Trabelsi ;
+    edu:intitule "Bases de données SQL"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:PDF_SQL,
+        edu:Quiz_Banque_QCM ;
+    edu:utiliseTechnologie edu:Tech_MySQL .
+
+edu:DesignInterface a owl:Class ;
+    rdfs:label "Design interface"@fr ;
+    rdfs:subClassOf edu:DomaineDesign .
+
+edu:DeveloppementBackend a owl:Class ;
+    rdfs:label "Développement back-end"@fr ;
+    rdfs:subClassOf edu:DeveloppementWeb .
+
+edu:DeveloppementFrontend a owl:Class ;
+    rdfs:label "Développement front-end"@fr ;
+    rdfs:subClassOf edu:DeveloppementWeb .
+
+edu:Doc_MDN_JS a edu:DocumentationOfficielle,
+        owl:NamedIndividual ;
+    rdfs:label "Documentation MDN JavaScript"@fr ;
+    edu:langue "en"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_JavaScript ;
+    edu:urlRessource "https://developer.mozilla.org/fr/docs/Web/JavaScript"^^xsd:string .
+
+edu:DocumentationOfficielle a owl:Class ;
+    rdfs:label "Documentation officielle"@fr ;
+    rdfs:subClassOf edu:DocumentReference .
+
+edu:DomaineDesign a owl:Class ;
+    rdfs:label "Domaine design"@fr ;
+    rdfs:subClassOf edu:Domaine .
+
+edu:Domaine_Backend a edu:DeveloppementBackend,
+        owl:NamedIndividual ;
+    rdfs:label "Développement back-end"@fr ;
+    edu:intitule "Développement back-end"^^xsd:string .
+
+edu:EcoleSuperieure a owl:Class ;
+    rdfs:label "École supérieure"@fr ;
+    rdfs:subClassOf edu:EtablissementAcademique .
+
+edu:Ecole_Esprit a edu:EcoleSuperieure,
+        owl:NamedIndividual ;
+    rdfs:label "École supérieure d'ingénieurs"@fr .
+
+edu:EditeurDeCode a owl:Class ;
+    rdfs:label "Éditeur de code"@fr ;
+    rdfs:subClassOf edu:OutilEnLigne .
+
+edu:EnvironnementBackend a owl:Class ;
+    rdfs:label "Environnement back-end"@fr ;
+    rdfs:subClassOf edu:TechnologieBackend .
+
+edu:EtudiantDoctorat a owl:Class ;
+    rdfs:label "Étudiant doctorat"@fr ;
+    rdfs:subClassOf edu:ApprenantEtudiant .
+
+edu:ExamenFinal a owl:Class ;
+    rdfs:label "Examen final"@fr ;
+    rdfs:subClassOf edu:Examen .
+
+edu:ExamenRattrapage a owl:Class ;
+    rdfs:label "Examen rattrapage"@fr ;
+    rdfs:subClassOf edu:Examen .
+
+edu:ExerciceProjet a owl:Class ;
+    rdfs:label "Exercice projet"@fr ;
+    rdfs:subClassOf edu:ExercicePratique .
+
+edu:ExerciceQCM a owl:Class ;
+    rdfs:label "Exercice QCM"@fr ;
+    rdfs:subClassOf edu:ExerciceTheorique .
+
+edu:ExerciceTP a owl:Class ;
+    rdfs:label "Exercice TP"@fr ;
+    rdfs:subClassOf edu:ExercicePratique .
+
+edu:FormateurExpertIndustrie a owl:Class ;
+    rdfs:label "Formateur expert industrie"@fr ;
+    rdfs:subClassOf edu:FormateurVacataire .
+
+edu:FormateurInvite a owl:Class ;
+    rdfs:label "Formateur invité"@fr ;
+    rdfs:subClassOf edu:FormateurVacataire .
+
+edu:FormateurJunior a owl:Class ;
+    rdfs:label "Formateur junior"@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty edu:anneesExperience ;
+            owl:someValuesFrom [ a rdfs:Datatype ;
+                    owl:onDatatype xsd:integer ;
+                    owl:withRestrictions ( [ xsd:maxInclusive 3 ] ) ] ],
+        edu:FormateurPermanent .
+
+edu:FormationBackend a owl:Class ;
+    rdfs:label "Formation back-end"@fr ;
+    rdfs:subClassOf edu:FormationCertifiante .
+
+edu:FormationFrontend a owl:Class ;
+    rdfs:label "Formation front-end"@fr ;
+    rdfs:subClassOf edu:FormationCertifiante .
+
+edu:FormationFullStack a owl:Class ;
+    rdfs:label "Formation Full-Stack"@fr ;
+    rdfs:subClassOf edu:FormationCertifiante .
+
+edu:FormationMaster a owl:Class ;
+    rdfs:label "Formation master"@fr ;
+    rdfs:subClassOf edu:FormationDiplomante .
+
+edu:Formation_Backend a edu:FormationBackend,
+        owl:NamedIndividual ;
+    rdfs:label "Développement back-end"@fr ;
+    edu:appartientAuDomaine edu:Domaine_Backend ;
+    edu:composeDe edu:Module_BaseDeDonnees,
+        edu:Module_Deploiement,
+        edu:Module_JavaScript,
+        edu:Module_NodeJS ;
+    edu:coutFormation 980.0 ;
+    edu:creditsECTS 12 ;
+    edu:dateDebut "2026-11-02T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2027-03-15T00:00:00"^^xsd:dateTime ;
+    edu:dureeHeures 110 ;
+    edu:estActif true ;
+    edu:estAdministreePar edu:Mr_Dridi ;
+    edu:estProposeePar edu:EduParcours_Academie ;
+    edu:intitule "Développement back-end"^^xsd:string ;
+    edu:meneA edu:Certificat_Backend ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:nombrePlaces 25 .
+
+edu:FrameworkAngular a owl:Class ;
+    rdfs:label "Framework Angular"@fr ;
+    rdfs:subClassOf edu:FrameworkFrontend .
+
+edu:FrameworkReact a owl:Class ;
+    rdfs:label "Framework React"@fr ;
+    rdfs:subClassOf edu:FrameworkFrontend .
+
+edu:FrameworkVue a owl:Class ;
+    rdfs:label "Framework Vue"@fr ;
+    rdfs:subClassOf edu:FrameworkFrontend .
+
+edu:GestionnaireInscription a owl:Class ;
+    rdfs:label "Gestionnaire inscription"@fr ;
+    rdfs:subClassOf edu:ServiceScolarite .
+
+edu:GuideRapide a owl:Class ;
+    rdfs:label "Guide rapide"@fr ;
+    rdfs:subClassOf edu:DocumentReference .
+
+edu:LangageCSS a owl:Class ;
+    rdfs:label "Langage CSS"@fr ;
+    rdfs:subClassOf edu:LangageFrontend .
+
+edu:LangageHTML a owl:Class ;
+    rdfs:label "Langage HTML"@fr ;
+    rdfs:subClassOf edu:LangageFrontend .
+
+edu:LangageJavaScript a owl:Class ;
+    rdfs:label "Langage JavaScript"@fr ;
+    rdfs:subClassOf edu:LangageFrontend .
+
+edu:Licence a owl:Class ;
+    rdfs:label "Licence"@fr ;
+    rdfs:subClassOf edu:Diplome .
+
+edu:MOOC a owl:Class ;
+    rdfs:label "MOOC"@fr ;
+    rdfs:subClassOf edu:PlateformeEnLigne .
+
+edu:Master a owl:Class ;
+    rdfs:label "Master"@fr ;
+    rdfs:subClassOf edu:Diplome .
+
+edu:ModuleBaseDeDonnees a owl:Class ;
+    rdfs:label "Module base de données"@fr ;
+    rdfs:subClassOf edu:ModuleIntermediaire .
+
+edu:ModuleCSS a owl:Class ;
+    rdfs:label "Module CSS"@fr ;
+    rdfs:subClassOf edu:ModuleFondamental .
+
+edu:ModuleDeploiement a owl:Class ;
+    rdfs:label "Module déploiement"@fr ;
+    rdfs:subClassOf edu:ModuleAvance .
+
+edu:ModuleHTML a owl:Class ;
+    rdfs:label "Module HTML"@fr ;
+    rdfs:subClassOf edu:ModuleFondamental .
+
+edu:ModuleJavaScript a owl:Class ;
+    rdfs:label "Module JavaScript"@fr ;
+    rdfs:subClassOf edu:ModuleIntermediaire .
+
+edu:ModuleNodeJS a owl:Class ;
+    rdfs:label "Module NodeJS"@fr ;
+    rdfs:subClassOf edu:ModuleAvance .
+
+edu:ModuleReact a owl:Class ;
+    rdfs:label "Module React"@fr ;
+    rdfs:subClassOf edu:ModuleAvance .
+
+edu:Mr_Cherif a edu:FormateurInvite,
+        owl:NamedIndividual ;
+    rdfs:label "Mr Cherif"@fr ;
+    edu:anneesExperience 5 ;
+    edu:email "walid.cherif@eduparcours.org"^^xsd:string ;
+    edu:nom "Cherif"^^xsd:string ;
+    edu:prenom "Walid"^^xsd:string ;
+    edu:specialiteFormateur "DevOps"^^xsd:string .
+
+edu:Mr_Gharbi a edu:FormateurExpertIndustrie,
+        owl:NamedIndividual ;
+    rdfs:label "M. Gharbi"@fr ;
+    edu:anneesExperience 10 ;
+    edu:nom "Gharbi"^^xsd:string ;
+    edu:specialiteFormateur "DevOps"^^xsd:string .
+
+edu:OutilDeploiement a owl:Class ;
+    rdfs:label "Outil déploiement"@fr ;
+    rdfs:subClassOf edu:TechnologieOutil .
+
+edu:OutilVersionning a owl:Class ;
+    rdfs:label "Outil versionning"@fr ;
+    rdfs:subClassOf edu:TechnologieOutil .
+
+edu:ParcoursAccelere a owl:Class ;
+    rdfs:label "Parcours accéléré"@fr ;
+    rdfs:subClassOf edu:ParcoursAdapte .
+
+edu:ParcoursBackend a owl:Class ;
+    rdfs:label "Parcours back-end"@fr ;
+    rdfs:subClassOf edu:ParcoursWeb .
+
+edu:ParcoursFullStack a owl:Class ;
+    rdfs:label "Parcours Full-Stack"@fr ;
+    rdfs:subClassOf edu:ParcoursWeb .
+
+edu:ParcoursInfereParPrerequis a owl:Class ;
+    rdfs:label "Parcours inféré par prerequis"@fr ;
+    rdfs:subClassOf edu:ParcoursInfere .
+
+edu:ParcoursRenforce a owl:Class ;
+    rdfs:label "Parcours renforcé"@fr ;
+    rdfs:subClassOf edu:ParcoursAdapte .
+
+edu:Parcours_Backend a edu:ParcoursBackend,
+        owl:NamedIndividual ;
+    rdfs:label "Parcours back-end"@fr ;
+    edu:estAnimePar edu:Dr_Benali ;
+    edu:parcoursComprend edu:Module_BaseDeDonnees,
+        edu:Module_Deploiement,
+        edu:Module_JavaScript,
+        edu:Module_NodeJS .
+
+edu:Parcours_Debutant a edu:ParcoursStandard,
+        owl:NamedIndividual ;
+    rdfs:label "Parcours débutant web"@fr ;
+    edu:estAnimePar edu:Mme_Ayari ;
+    edu:parcoursComprend edu:Module_Agile,
+        edu:Module_CSS,
+        edu:Module_HTML .
+
+edu:Parcours_Frontend_Accelere a edu:ParcoursAccelere,
+        owl:NamedIndividual ;
+    rdfs:label "Parcours Front-end accéléré"@fr ;
+    edu:parcoursComprend edu:Module_JavaScript,
+        edu:Module_React .
+
+edu:ProfessionnelEnMiseANiveau a owl:Class ;
+    rdfs:label "Professionnel en mise niveau"@fr ;
+    rdfs:subClassOf edu:ApprenantProfessionnel .
+
+edu:ProfessionnelEnReconversion a owl:Class ;
+    rdfs:label "Professionnel en reconversion"@fr ;
+    rdfs:subClassOf edu:ApprenantProfessionnel .
+
+edu:ProjetFinal a owl:Class ;
+    rdfs:label "Projet final"@fr ;
+    rdfs:subClassOf edu:ProjetNote .
+
+edu:Projet_Portfolio a edu:ExerciceProjet,
+        owl:NamedIndividual ;
+    rdfs:label "Projet Portfolio"@fr ;
+    edu:langue "fr"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_NodeJS,
+        edu:Comp_React ;
+    edu:urlRessource "https://example.org/projets/portfolio"^^xsd:string .
+
+edu:QuizEnPresentiel a owl:Class ;
+    rdfs:label "Quiz en présentiel"@fr ;
+    rdfs:subClassOf edu:Quiz .
+
+edu:Quiz_JavaScript a edu:QuizEnLigne,
+        owl:NamedIndividual ;
+    rdfs:label "Quiz JavaScript"@fr ;
+    edu:coefficient 1.0 ;
+    edu:dateEvaluation "2026-11-05T00:00:00"^^xsd:dateTime ;
+    edu:evaluationDuModule edu:Module_JavaScript ;
+    edu:noteMinimale 10.0 ;
+    edu:porteSurCompetence edu:Comp_JavaScript .
+
+edu:ResponsableDeFormation a owl:Class ;
+    rdfs:label "Responsable de formation"@fr ;
+    rdfs:subClassOf edu:ResponsableFormation .
+
+edu:ResponsablePedagogique a owl:Class ;
+    rdfs:label "Responsable pédagogique"@fr ;
+    rdfs:subClassOf edu:ResponsableFormation .
+
+edu:Sarra a edu:ProfessionnelEnReconversion,
+        owl:NamedIndividual ;
+    rdfs:label "Sarra"@fr ;
+    edu:dateInscription "2026-09-15T00:00:00"^^xsd:dateTime ;
+    edu:dateNaissance "1996-11-02T00:00:00"^^xsd:dateTime ;
+    edu:email "sarra@eduparcours.org"^^xsd:string ;
+    edu:estEncadrePar edu:Dr_Benali ;
+    edu:estInscritA edu:Formation_FullStack ;
+    edu:maitriseTechnologie edu:Tech_CSS3,
+        edu:Tech_HTML5,
+        edu:Tech_JavaScript ;
+    edu:niveauEtudes "Master"^^xsd:string ;
+    edu:nom "Sarra"^^xsd:string ;
+    edu:possedeCompetence edu:Comp_CSS,
+        edu:Comp_HTML,
+        edu:Comp_JavaScript ;
+    edu:prenom "Sarra"^^xsd:string ;
+    edu:suitParcours edu:Parcours_Standard_FullStack .
+
+edu:Simulateur a owl:Class ;
+    rdfs:label "Simulateur"@fr ;
+    rdfs:subClassOf edu:OutilEnLigne .
+
+edu:Slides_CSS a edu:Diapositives,
+        owl:NamedIndividual ;
+    rdfs:label "Diapositives CSS"@fr ;
+    edu:langue "fr"^^xsd:string ;
+    edu:nombrePages 42 ;
+    edu:ressourceCibleCompetence edu:Comp_CSS ;
+    edu:urlRessource "https://example.org/slides/css"^^xsd:string .
+
+edu:SoutenanceProjet a owl:Class ;
+    rdfs:label "Soutenance projet"@fr ;
+    rdfs:subClassOf edu:ProjetNote .
+
+edu:SupportPDF a owl:Class ;
+    rdfs:label "Support PDF"@fr ;
+    rdfs:subClassOf edu:SupportDeCours .
+
+edu:TP_Responsive a edu:ExerciceTP,
+        owl:NamedIndividual ;
+    rdfs:label "TP Responsive Design"@fr ;
+    edu:langue "fr"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_ResponsiveDesign ;
+    edu:urlRessource "https://example.org/tp/responsive"^^xsd:string .
+
+edu:TutorielComplet a owl:Class ;
+    rdfs:label "Tutoriel complet"@fr ;
+    rdfs:subClassOf edu:VideoTutoriel .
+
+edu:TutorielCourt a owl:Class ;
+    rdfs:label "Tutoriel court"@fr ;
+    rdfs:subClassOf edu:VideoTutoriel .
+
+edu:UXDesign a owl:Class ;
+    rdfs:label "UX design"@fr ;
+    rdfs:subClassOf edu:DesignInterface .
+
+edu:Universite a owl:Class ;
+    rdfs:label "Université"@fr ;
+    rdfs:subClassOf edu:EtablissementAcademique .
+
+edu:VideoConference a owl:Class ;
+    rdfs:label "Video conference"@fr ;
+    rdfs:subClassOf edu:Video .
+
+edu:Video_Intro_HTML a edu:TutorielCourt,
+        owl:NamedIndividual ;
+    rdfs:label "Vidéo Intro HTML"@fr ;
+    edu:dureeMinutes 15 ;
+    edu:langue "fr"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_HTML ;
+    edu:urlRessource "https://example.org/videos/intro-html"^^xsd:string .
+
+edu:Webinaire_React a edu:Webinaire,
+        owl:NamedIndividual ;
+    rdfs:label "Webinaire React"@fr ;
+    edu:dureeMinutes 60 ;
+    edu:langue "fr"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_React ;
+    edu:urlRessource "https://example.org/webinaires/react"^^xsd:string .
+
+edu:aPourPrerequis a owl:ObjectProperty,
+        owl:TransitiveProperty ;
+    rdfs:label "a pour prérequis"@fr ;
+    rdfs:domain edu:Module ;
+    rdfs:range edu:Module ;
+    rdfs:subPropertyOf edu:relationProgramme ;
+    owl:inverseOf edu:estPrerequisDe .
+
+edu:enseigne a owl:ObjectProperty ;
+    rdfs:label "enseigne"@fr ;
+    rdfs:domain edu:Formateur ;
+    rdfs:range edu:Cours .
+
+edu:estInscritA a owl:ObjectProperty ;
+    rdfs:label "est inscrit à"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Formation ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:accueilleApprenant .
+
+edu:ApprenantAutodidacte a owl:Class ;
+    rdfs:label "Apprenant autodidacte"@fr ;
+    rdfs:subClassOf edu:Apprenant .
+
+edu:ApprenantProfessionnel a owl:Class ;
+    rdfs:label "Apprenant professionnel"@fr ;
+    rdfs:subClassOf edu:Apprenant .
+
+edu:AtelierIntensif a owl:Class ;
+    rdfs:label "Atelier intensif"@fr ;
+    rdfs:subClassOf edu:FormationCourte .
+
+edu:Attestation_Module_React a edu:AttestationModule,
+        owl:NamedIndividual ;
+    rdfs:label "Attestation module React"@fr ;
+    edu:certificationRequiertModule edu:Module_React ;
+    edu:delivreeParOrganisme edu:EduParcours_Academie ;
+    edu:dureeValiditeAns 3 .
+
+edu:BootCamp a owl:Class ;
+    rdfs:label "Bootcamp"@fr ;
+    rdfs:subClassOf edu:FormationCourte .
+
+edu:BootCamp_Web a edu:BootCamp,
+        owl:NamedIndividual ;
+    rdfs:label "Bootcamp Web"@fr ;
+    edu:appartientAuDomaine edu:Developpement_Web ;
+    edu:composeDe edu:Module_BaseDeDonnees,
+        edu:Module_CSS,
+        edu:Module_HTML,
+        edu:Module_JavaScript ;
+    edu:coutFormation 600.00 ;
+    edu:dateDebut "2026-10-01T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2026-12-20T00:00:00"^^xsd:dateTime ;
+    edu:dureeHeures 115 ;
+    edu:estActif true ;
+    edu:intitule "Bootcamp Web"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:nombrePlaces 20 .
+
+edu:CertificationAcademique a owl:Class ;
+    rdfs:label "Certification academique"@fr ;
+    rdfs:subClassOf edu:Certification .
+
+edu:CertificationProfessionnelle a owl:Class ;
+    rdfs:label "Certification professionnelle"@fr ;
+    rdfs:subClassOf edu:Certification .
+
+edu:Comp_Angular a edu:CompetenceAngular,
+        owl:NamedIndividual ;
+    rdfs:label "Angular"@fr ;
+    edu:competenceSurTechnologie edu:Tech_Angular ;
+    edu:estEquivalenteA edu:Comp_React ;
+    edu:estSousCompetenceDe edu:Comp_ProgrammationWeb ;
+    edu:intitule "Angular"^^xsd:string ;
+    edu:scoreMaturite 55 .
+
+edu:Comp_Express a edu:CompetenceExpress,
+        owl:NamedIndividual ;
+    rdfs:label "Express.js"@fr ;
+    edu:competenceSurTechnologie edu:Tech_NodeJS ;
+    edu:estSousCompetenceDe edu:Comp_NodeJS ;
+    edu:intitule "Express.js"^^xsd:string ;
+    edu:scoreMaturite 58 .
+
+edu:Comp_POO_JavaScript a edu:CompetencePOOJavaScript,
+        owl:NamedIndividual ;
+    rdfs:label "POO JavaScript"@fr ;
+    edu:estSousCompetenceDe edu:Comp_JavaScript ;
+    edu:intitule "POO JavaScript"^^xsd:string ;
+    edu:scoreMaturite 60 .
+
+edu:Comp_REST a edu:CompetenceREST,
+        owl:NamedIndividual ;
+    rdfs:label "API REST"@fr ;
+    edu:intitule "API REST"^^xsd:string ;
+    edu:scoreMaturite 55 .
+
+edu:Comp_ResponsiveDesign a edu:CompetenceResponsiveDesign,
+        owl:NamedIndividual ;
+    rdfs:label "Responsive Design"@fr ;
+    edu:estSousCompetenceDe edu:Comp_CSS ;
+    edu:intitule "Responsive Design"^^xsd:string ;
+    edu:scoreMaturite 70 .
+
+edu:Comp_TravailEquipe a edu:CompetenceTravailEquipe,
+        owl:NamedIndividual ;
+    rdfs:label "Travail en équipe"@fr ;
+    edu:intitule "Travail en équipe"^^xsd:string ;
+    edu:scoreMaturite 80 .
+
+edu:CompetenceAPI a owl:Class ;
+    rdfs:label "Compétence API"@fr ;
+    rdfs:subClassOf edu:CompetenceBackend .
+
+edu:CompetenceBaseDeDonnees a owl:Class ;
+    rdfs:label "Compétence base de données"@fr ;
+    rdfs:subClassOf edu:CompetenceBackend .
+
+edu:CompetenceCognitive a owl:Class ;
+    rdfs:label "Compétence cognitive"@fr ;
+    rdfs:subClassOf edu:CompetenceTransversale .
+
+edu:CompetenceFramework a owl:Class ;
+    rdfs:label "Compétence framework"@fr ;
+    rdfs:subClassOf edu:CompetenceFrontend .
+
+edu:CompetenceOrganisationnelle a owl:Class ;
+    rdfs:label "Compétence organisationnelle"@fr ;
+    rdfs:subClassOf edu:CompetenceTransversale .
+
+edu:CompetenceOutillage a owl:Class ;
+    rdfs:label "Compétence outillage"@fr ;
+    rdfs:subClassOf edu:CompetenceTechnique .
+
+edu:CompetenceReact a owl:Class ;
+    rdfs:label "Compétence React"@fr ;
+    rdfs:subClassOf edu:CompetenceFramework .
+
+edu:CompetenceRelationnelle a owl:Class ;
+    rdfs:label "Compétence relationnelle"@fr ;
+    rdfs:subClassOf edu:CompetenceTransversale .
+
+edu:CoursGit a owl:Class ;
+    rdfs:label "Cours Git"@fr ;
+    rdfs:subClassOf edu:CoursTransversal .
+
+edu:CoursNodeJS a owl:Class ;
+    rdfs:label "Cours NodeJS"@fr ;
+    rdfs:subClassOf edu:CoursBackend .
+
+edu:CoursTransversal a owl:Class ;
+    rdfs:label "Cours transversal"@fr ;
+    rdfs:subClassOf edu:Cours .
+
+edu:Cours_JavaScript a edu:CoursJavaScript,
+        owl:NamedIndividual ;
+    rdfs:label "JavaScript"@fr ;
+    edu:developpeCompetence edu:Comp_JavaScript,
+        edu:Comp_POO_JavaScript ;
+    edu:dureeHeures 40 ;
+    edu:enseignePar edu:Dr_Benali ;
+    edu:estEvaluePar edu:Quiz_JavaScript ;
+    edu:intitule "JavaScript"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:Doc_MDN_JS,
+        edu:Editeur_CodePen ;
+    edu:utiliseTechnologie edu:Tech_JavaScript .
+
+edu:Cours_NodeJS a edu:CoursNodeJS,
+        owl:NamedIndividual ;
+    rdfs:label "Node.js"@fr ;
+    edu:developpeCompetence edu:Comp_NodeJS,
+        edu:Comp_REST ;
+    edu:dureeHeures 35 ;
+    edu:enseignePar edu:Dr_Benali ;
+    edu:intitule "Node.js"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:utiliseRessource edu:Projet_Portfolio ;
+    edu:utiliseTechnologie edu:Tech_NodeJS .
+
+edu:Diapositives a owl:Class ;
+    rdfs:label "Diapositives"@fr ;
+    rdfs:subClassOf edu:SupportDeCours .
+
+edu:Diplome a owl:Class ;
+    rdfs:label "Diplôme"@fr ;
+    rdfs:subClassOf edu:CertificationAcademique .
+
+edu:DocumentReference a owl:Class ;
+    rdfs:label "Document référence"@fr ;
+    rdfs:subClassOf edu:Document .
+
+edu:DomaineInformatique a owl:Class ;
+    rdfs:label "Domaine informatique"@fr ;
+    rdfs:subClassOf edu:Domaine .
+
+edu:DonneesEtIA a owl:Class ;
+    rdfs:label "Données et IA"@fr ;
+    rdfs:subClassOf edu:DomaineInformatique .
+
+edu:EtablissementAcademique a owl:Class ;
+    rdfs:label "Etablissement academique"@fr ;
+    rdfs:subClassOf edu:OrganismeDeFormation .
+
+edu:EtudiantLicence a owl:Class ;
+    rdfs:label "Étudiant licence"@fr ;
+    rdfs:subClassOf edu:ApprenantEtudiant .
+
+edu:EtudiantMaster a owl:Class ;
+    rdfs:label "Étudiant master"@fr ;
+    rdfs:subClassOf edu:ApprenantEtudiant .
+
+edu:EvaluationFormative a owl:Class ;
+    rdfs:label "Évaluation formative"@fr ;
+    rdfs:subClassOf edu:Evaluation .
+
+edu:EvaluationSommative a owl:Class ;
+    rdfs:label "Évaluation sommative"@fr ;
+    rdfs:subClassOf edu:Evaluation .
+
+edu:Examen a owl:Class ;
+    rdfs:label "Examen"@fr ;
+    rdfs:subClassOf edu:EvaluationSommative .
+
+edu:Exercice a owl:Class ;
+    rdfs:label "Exercice"@fr ;
+    rdfs:subClassOf edu:RessourcePedagogique .
+
+edu:ExercicePratique a owl:Class ;
+    rdfs:label "Exercice pratique"@fr ;
+    rdfs:subClassOf edu:Exercice .
+
+edu:ExerciceTheorique a owl:Class ;
+    rdfs:label "Exercice théorique"@fr ;
+    rdfs:subClassOf edu:Exercice .
+
+edu:FormateurSenior a owl:Class ;
+    rdfs:label "Formateur senior"@fr ;
+    rdfs:subClassOf edu:FormateurPermanent .
+
+edu:FormationDiplomante a owl:Class ;
+    rdfs:label "Formation diplomante"@fr ;
+    rdfs:subClassOf edu:Formation .
+
+edu:Ministere_Enseignement a edu:MinistereFormation,
+        owl:NamedIndividual ;
+    rdfs:label "Ministère de l'Enseignement"@fr .
+
+edu:Mme_Ayari a edu:FormateurPermanent,
+        owl:NamedIndividual ;
+    rdfs:label "Mme Ayari"@fr ;
+    edu:anneesExperience 8 ;
+    edu:email "ines.ayari@eduparcours.org"^^xsd:string ;
+    edu:nom "Ayari"^^xsd:string ;
+    edu:prenom "Ines"^^xsd:string ;
+    edu:specialiteFormateur "Génie logiciel et agilité"^^xsd:string .
+
+edu:Mme_Jebali a edu:FormateurSenior,
+        owl:NamedIndividual ;
+    rdfs:label "Mme Jebali"@fr ;
+    edu:anneesExperience 11 ;
+    edu:email "hela.jebali@eduparcours.org"^^xsd:string ;
+    edu:nom "Jebali"^^xsd:string ;
+    edu:prenom "Hela"^^xsd:string ;
+    edu:specialiteFormateur "Front-end"^^xsd:string .
+
+edu:Mme_Salhi a edu:ResponsableDeFormation,
+        owl:NamedIndividual ;
+    rdfs:label "Mme Salhi"@fr ;
+    edu:administreFormation edu:Formation_Frontend,
+        edu:Formation_FullStack ;
+    edu:nom "Salhi"^^xsd:string .
+
+edu:Mme_Trabelsi a edu:FormateurVacataire,
+        owl:NamedIndividual ;
+    rdfs:label "Mme Trabelsi"@fr ;
+    edu:anneesExperience 6 ;
+    edu:nom "Trabelsi"^^xsd:string ;
+    edu:specialiteFormateur "Bases de données"^^xsd:string .
+
+edu:Module_Agile a edu:ModuleFondamental,
+        owl:NamedIndividual ;
+    rdfs:label "Module Méthodes agiles"@fr ;
+    edu:contientCours edu:Cours_Agile ;
+    edu:dureeHeures 12 ;
+    edu:intitule "Module Méthodes agiles"^^xsd:string ;
+    edu:niveauDifficulte "Débutant"^^xsd:string .
+
+edu:Mr_Dridi a edu:ResponsablePedagogique,
+        owl:NamedIndividual ;
+    rdfs:label "Mr Dridi"@fr ;
+    edu:email "sami.dridi@eduparcours.org"^^xsd:string ;
+    edu:nom "Dridi"^^xsd:string ;
+    edu:prenom "Sami"^^xsd:string .
+
+edu:Mr_Hamdi a edu:FormateurJunior,
+        owl:NamedIndividual ;
+    rdfs:label "M. Hamdi"@fr ;
+    edu:anneesExperience 2 ;
+    edu:nom "Hamdi"^^xsd:string ;
+    edu:specialiteFormateur "Front-end"^^xsd:string .
+
+edu:OrganismeCertificateur a owl:Class ;
+    rdfs:label "Organisme certificateur"@fr ;
+    rdfs:subClassOf edu:Organisme .
+
+edu:OrganismeDeFormation a owl:Class ;
+    rdfs:label "Organisme de formation"@fr ;
+    rdfs:subClassOf edu:Organisme .
+
+edu:OutilEnLigne a owl:Class ;
+    rdfs:label "Outil en ligne"@fr ;
+    rdfs:subClassOf edu:RessourcePedagogique .
+
+edu:ParcoursAdapte a owl:Class ;
+    rdfs:label "Parcours adapté"@fr ;
+    rdfs:subClassOf edu:ParcoursPersonnalise .
+
+edu:ParcoursInfere a owl:Class ;
+    rdfs:label "Parcours inféré"@fr ;
+    rdfs:subClassOf edu:ParcoursPersonnalise .
+
+edu:ParcoursPersonnalise a owl:Class ;
+    rdfs:label "Parcours personnalise"@fr ;
+    rdfs:subClassOf edu:Parcours .
+
+edu:ParcoursStandard a owl:Class ;
+    rdfs:label "Parcours standard"@fr ;
+    rdfs:subClassOf edu:Parcours .
+
+edu:ParcoursWeb a owl:Class ;
+    rdfs:label "Parcours web"@fr ;
+    rdfs:subClassOf edu:ParcoursStandard .
+
+edu:Parcours_Ahmed a edu:ParcoursInfereParPrerequis,
+        owl:NamedIndividual ;
+    rdfs:label "Parcours d'Ahmed (inféré)"@fr ;
+    edu:parcoursComprend edu:Module_JavaScript,
+        edu:Module_NodeJS,
+        edu:Module_React .
+
+edu:Parcours_Standard_FullStack a edu:ParcoursFullStack,
+        owl:NamedIndividual ;
+    rdfs:label "Parcours standard Full-Stack"@fr ;
+    edu:parcoursComprend edu:Module_CSS,
+        edu:Module_HTML,
+        edu:Module_JavaScript,
+        edu:Module_NodeJS,
+        edu:Module_React .
+
+edu:PersonnelAdministratif a owl:Class ;
+    rdfs:label "Personnel administratif"@fr ;
+    rdfs:subClassOf edu:Personne .
+
+edu:PlateformeEnLigne a owl:Class ;
+    rdfs:label "Plateforme en ligne"@fr ;
+    rdfs:subClassOf edu:OrganismeDeFormation .
+
+edu:ProjetNote a owl:Class ;
+    rdfs:label "Projet note"@fr ;
+    rdfs:subClassOf edu:EvaluationSommative .
+
+edu:Quiz a owl:Class ;
+    rdfs:label "Quiz"@fr ;
+    rdfs:subClassOf edu:EvaluationFormative .
+
+edu:ServiceScolarite a owl:Class ;
+    rdfs:label "Service scolarité"@fr ;
+    rdfs:subClassOf edu:PersonnelAdministratif .
+
+edu:SupportDeCours a owl:Class ;
+    rdfs:label "Support de cours"@fr ;
+    rdfs:subClassOf edu:Document .
+
+edu:SystemeBaseDeDonnees a owl:Class ;
+    rdfs:label "Systeme base de données"@fr ;
+    rdfs:subClassOf edu:TechnologieBackend .
+
+edu:Tech_Angular a edu:FrameworkAngular,
+        owl:NamedIndividual ;
+    rdfs:label "Angular"@fr .
+
+edu:Tech_Docker a edu:OutilDocker,
+        owl:NamedIndividual ;
+    rdfs:label "Docker"@fr .
+
+edu:Tech_MongoDB a edu:BaseNoSQL,
+        owl:NamedIndividual ;
+    rdfs:label "MongoDB"@fr .
+
+edu:TechnologieBackend a owl:Class ;
+    rdfs:label "Technologie back-end"@fr ;
+    rdfs:subClassOf edu:Technologie .
+
+edu:TechnologieFrontend a owl:Class ;
+    rdfs:label "Technologie front-end"@fr ;
+    rdfs:subClassOf edu:Technologie .
+
+edu:TechnologieOutil a owl:Class ;
+    rdfs:label "Technologie outil"@fr ;
+    rdfs:subClassOf edu:Technologie .
+
+edu:Universite_Tunis a edu:Universite,
+        owl:NamedIndividual ;
+    rdfs:label "Université de Tunis"@fr ;
+    edu:proposeFormation edu:Atelier_HTML_CSS .
+
+edu:VideoTutoriel a owl:Class ;
+    rdfs:label "Video tutoriel"@fr ;
+    rdfs:subClassOf edu:Video .
+
+edu:ApprenantEtudiant a owl:Class ;
+    rdfs:label "Apprenant étudiant"@fr ;
+    rdfs:subClassOf edu:Apprenant .
+
+edu:CertificationWeb a owl:Class ;
+    rdfs:label "Certification web"@fr ;
+    rdfs:subClassOf edu:CertificationProfessionnelle .
+
+edu:Comp_Deploiement a edu:CompetenceDeploiement,
+        owl:NamedIndividual ;
+    rdfs:label "Déploiement"@fr ;
+    edu:competenceSurTechnologie edu:Tech_Docker ;
+    edu:intitule "Déploiement"^^xsd:string ;
+    edu:scoreMaturite 50 .
+
+edu:CompetenceBackend a owl:Class ;
+    rdfs:label "Compétence back-end"@fr ;
+    rdfs:subClassOf edu:CompetenceTechnique .
+
+edu:CompetenceCSS a owl:Class ;
+    rdfs:label "Compétence CSS"@fr ;
+    rdfs:subClassOf edu:CompetenceFrontend .
+
+edu:CompetenceJavaScript a owl:Class ;
+    rdfs:label "Compétence JavaScript"@fr ;
+    rdfs:subClassOf edu:CompetenceFrontend .
+
+edu:CompetenceNodeJS a owl:Class ;
+    rdfs:label "Compétence NodeJS"@fr ;
+    rdfs:subClassOf edu:CompetenceBackend .
+
+edu:CompetenceTransversale a owl:Class ;
+    rdfs:label "Compétence transversale"@fr ;
+    rdfs:subClassOf edu:Competence .
+
+edu:Document a owl:Class ;
+    rdfs:label "Document"@fr ;
+    rdfs:subClassOf edu:RessourcePedagogique .
+
+edu:FormateurPermanent a owl:Class ;
+    rdfs:label "Formateur permanent"@fr ;
+    rdfs:subClassOf edu:Formateur .
+
+edu:FormateurVacataire a owl:Class ;
+    rdfs:label "Formateur vacataire"@fr ;
+    rdfs:subClassOf edu:Formateur .
+
+edu:FormationCertifiante a owl:Class ;
+    rdfs:label "Formation certifiante"@fr ;
+    rdfs:subClassOf edu:Formation .
+
+edu:FormationCourte a owl:Class ;
+    rdfs:label "Formation courte"@fr ;
+    rdfs:subClassOf edu:Formation .
+
+edu:Formation_Frontend a edu:FormationFrontend,
+        owl:NamedIndividual ;
+    rdfs:label "Formation Front-end"@fr ;
+    edu:appartientAuDomaine edu:Developpement_Web ;
+    edu:composeDe edu:Module_CSS,
+        edu:Module_HTML,
+        edu:Module_JavaScript,
+        edu:Module_React ;
+    edu:coutFormation 900.00 ;
+    edu:creditsECTS 12 ;
+    edu:dateDebut "2026-09-10T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2027-01-30T00:00:00"^^xsd:dateTime ;
+    edu:dureeHeures 120 ;
+    edu:estActif true ;
+    edu:intitule "Formation Front-end"^^xsd:string ;
+    edu:meneA edu:Attestation_Module_React ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:nombrePlaces 25 .
+
+edu:FrameworkFrontend a owl:Class ;
+    rdfs:label "Framework front-end"@fr ;
+    rdfs:subClassOf edu:TechnologieFrontend .
+
+edu:LangageFrontend a owl:Class ;
+    rdfs:label "Langage front-end"@fr ;
+    rdfs:subClassOf edu:TechnologieFrontend .
+
+edu:ModuleFondamental a owl:Class ;
+    rdfs:label "Module fondamental"@fr ;
+    rdfs:subClassOf edu:Module .
+
+edu:ModuleIntermediaire a owl:Class ;
+    rdfs:label "Module intermédiaire"@fr ;
+    rdfs:subClassOf edu:Module .
+
+edu:Quiz_HTML a edu:QuizEnLigne,
+        owl:NamedIndividual ;
+    rdfs:label "Quiz HTML"@fr ;
+    edu:coefficient 1.0 ;
+    edu:dateEvaluation "2026-10-10T00:00:00"^^xsd:dateTime ;
+    edu:evaluationDuModule edu:Module_HTML ;
+    edu:noteMinimale 10.0 ;
+    edu:porteSurCompetence edu:Comp_HTML .
+
+edu:Tech_React a edu:FrameworkReact,
+        owl:NamedIndividual ;
+    rdfs:label "React"@fr .
+
+edu:Video a owl:Class ;
+    rdfs:label "Video"@fr ;
+    rdfs:subClassOf edu:RessourcePedagogique .
+
+edu:composeDe a owl:ObjectProperty ;
+    rdfs:label "composé de"@fr ;
+    rdfs:domain edu:Formation ;
+    rdfs:range edu:Module ;
+    rdfs:subPropertyOf edu:relationProgramme ;
+    owl:inverseOf edu:faitPartieDeFormation .
+
+edu:possedeCompetence a owl:ObjectProperty ;
+    rdfs:label "possède compétence"@fr ;
+    rdfs:domain edu:Apprenant ;
+    rdfs:range edu:Competence ;
+    rdfs:subPropertyOf edu:relationApprenant ;
+    owl:inverseOf edu:estPossedeePar .
+
+edu:relationRessource a owl:ObjectProperty ;
+    rdfs:label "relation ressource"@fr ;
+    rdfs:subPropertyOf edu:relationPedagogique .
+
+edu:Comp_ProgrammationWeb a edu:CompetenceTechnique,
+        owl:NamedIndividual ;
+    rdfs:label "Programmation Web"@fr ;
+    edu:intitule "Programmation Web"^^xsd:string ;
+    edu:scoreMaturite 80 .
+
+edu:CompetenceFrontend a owl:Class ;
+    rdfs:label "Compétence front-end"@fr ;
+    rdfs:subClassOf edu:CompetenceTechnique .
+
+edu:CompetenceTechnique a owl:Class ;
+    rdfs:label "Compétence technique"@fr ;
+    rdfs:subClassOf edu:Competence .
+
+edu:DeveloppementWeb a owl:Class ;
+    rdfs:label "Développement web"@fr ;
+    rdfs:subClassOf edu:DomaineInformatique .
+
+edu:Formation_FullStack a edu:FormationFullStack,
+        owl:NamedIndividual ;
+    rdfs:label "Développement Full-Stack"@fr ;
+    edu:appartientAuDomaine edu:Developpement_Web ;
+    edu:composeDe edu:Module_CSS,
+        edu:Module_HTML,
+        edu:Module_JavaScript,
+        edu:Module_NodeJS,
+        edu:Module_React ;
+    edu:coutFormation 1200.00 ;
+    edu:creditsECTS 15 ;
+    edu:dateDebut "2026-09-15T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2027-02-28T00:00:00"^^xsd:dateTime ;
+    edu:dureeHeures 155 ;
+    edu:estActif true ;
+    edu:intitule "Développement Full-Stack"^^xsd:string ;
+    edu:meneA edu:Certificat_DeveloppeurWeb ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:nombrePlaces 30 .
+
+edu:ModuleAvance a owl:Class ;
+    rdfs:label "Module avancé"@fr ;
+    rdfs:subClassOf edu:Module .
+
+edu:Module_Angular a edu:ModuleAvance,
+        owl:NamedIndividual ;
+    rdfs:label "Module Angular"@fr ;
+    edu:aPourPrerequis edu:Module_JavaScript ;
+    edu:contientCours edu:Cours_Angular ;
+    edu:dureeHeures 35 ;
+    edu:intitule "Module Angular"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_JavaScript .
+
+edu:QuizEnLigne a owl:Class ;
+    rdfs:label "Quiz en ligne"@fr ;
+    rdfs:subClassOf edu:Quiz .
+
+edu:ResponsableFormation a owl:Class ;
+    rdfs:label "Responsable formation"@fr ;
+    rdfs:subClassOf edu:PersonnelAdministratif .
+
+edu:Tech_MySQL a edu:BaseSQL,
+        owl:NamedIndividual ;
+    rdfs:label "MySQL"@fr .
+
+edu:relationPedagogique a owl:ObjectProperty ;
+    rdfs:label "relation pédagogique"@fr .
+
+edu:CoursBackend a owl:Class ;
+    rdfs:label "Cours back-end"@fr ;
+    rdfs:subClassOf edu:Cours .
+
+edu:CoursFrontend a owl:Class ;
+    rdfs:label "Cours front-end"@fr ;
+    rdfs:subClassOf edu:Cours .
+
+edu:Domaine a owl:Class ;
+    rdfs:label "Domaine"@fr ;
+    rdfs:comment "Domaine de connaissance auquel se rattache une formation."@fr .
+
+edu:EduParcours_Academie a edu:AcademieEnLigne,
+        owl:NamedIndividual ;
+    rdfs:label "EduParcours Académie"@fr ;
+    edu:proposeFormation edu:BootCamp_Web,
+        edu:Formation_Frontend,
+        edu:Formation_FullStack .
+
+edu:EntitePedagogique a owl:Class ;
+    rdfs:label "Entité pédagogique"@fr ;
+    rdfs:comment "Unité structurée de programme : formation, module ou cours."@fr .
+
+edu:Module_BaseDeDonnees a edu:ModuleBaseDeDonnees,
+        owl:NamedIndividual ;
+    rdfs:label "Module BaseDeDonnees"@fr ;
+    edu:aPourPrerequis edu:Module_JavaScript ;
+    edu:contientCours edu:Cours_MongoDB,
+        edu:Cours_SQL ;
+    edu:dureeHeures 30 ;
+    edu:intitule "Module base de données"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_JavaScript .
+
+edu:Module_Deploiement a edu:ModuleDeploiement,
+        owl:NamedIndividual ;
+    rdfs:label "Module Déploiement"@fr ;
+    edu:aPourPrerequis edu:Module_NodeJS ;
+    edu:contientCours edu:Cours_CI_CD,
+        edu:Cours_Docker ;
+    edu:dureeHeures 30 ;
+    edu:intitule "Module Déploiement"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_Git .
+
+edu:Tech_CSS3 a edu:LangageCSS,
+        owl:NamedIndividual ;
+    rdfs:label "CSS3"@fr .
+
+edu:Tech_HTML5 a edu:LangageHTML,
+        owl:NamedIndividual ;
+    rdfs:label "HTML5"@fr .
+
+edu:Tech_JavaScript a edu:LangageJavaScript,
+        owl:NamedIndividual ;
+    rdfs:label "JavaScript (ES6)"@fr .
+
+edu:Tech_NodeJS a edu:EnvironnementNodeJS,
+        owl:NamedIndividual ;
+    rdfs:label "Node.js"@fr .
+
+edu:relationProgramme a owl:ObjectProperty ;
+    rdfs:label "relation programme"@fr ;
+    rdfs:subPropertyOf edu:relationPedagogique .
+
+edu:Comp_SQL a edu:CompetenceSQL,
+        owl:NamedIndividual ;
+    rdfs:label "SQL"@fr ;
+    edu:competenceSurTechnologie edu:Tech_MySQL ;
+    edu:intitule "SQL"^^xsd:string ;
+    edu:scoreMaturite 70 .
+
+edu:Developpement_Web a edu:DeveloppementWeb,
+        owl:NamedIndividual ;
+    rdfs:label "Développement web"@fr ;
+    edu:intitule "Développement web"^^xsd:string .
+
+edu:Tech_Git a edu:OutilGit,
+        owl:NamedIndividual ;
+    rdfs:label "Git"@fr .
+
+edu:relationInstitutionnelle a owl:ObjectProperty ;
+    rdfs:label "relation institutionnelle"@fr ;
+    rdfs:subPropertyOf edu:relationPedagogique .
+
+edu:Organisme a owl:Class ;
+    rdfs:label "Organisme"@fr ;
+    rdfs:comment "Institution qui propose ou certifie des formations."@fr .
+
+edu:relationCompetence a owl:ObjectProperty ;
+    rdfs:label "relation compétence"@fr ;
+    rdfs:subPropertyOf edu:relationPedagogique .
+
+edu:Comp_Git a edu:CompetenceGit,
+        owl:NamedIndividual ;
+    rdfs:label "Git"@fr ;
+    edu:competenceSurTechnologie edu:Tech_Git ;
+    edu:intitule "Git"^^xsd:string ;
+    edu:scoreMaturite 75 .
+
+edu:Comp_NodeJS a edu:CompetenceNodeJS,
+        owl:NamedIndividual ;
+    rdfs:label "Node.js"@fr ;
+    edu:competenceSurTechnologie edu:Tech_NodeJS ;
+    edu:intitule "Node.js"^^xsd:string ;
+    edu:scoreMaturite 60 .
+
+edu:Comp_React a edu:CompetenceReact,
+        owl:NamedIndividual ;
+    rdfs:label "React"@fr ;
+    edu:competenceSurTechnologie edu:Tech_React ;
+    edu:estSousCompetenceDe edu:Comp_JavaScript ;
+    edu:intitule "React"^^xsd:string ;
+    edu:scoreMaturite 65 .
+
+edu:Parcours a owl:Class ;
+    rdfs:label "Parcours"@fr ;
+    rdfs:comment "Chemin d'apprentissage suivi jusqu'à une certification."@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty edu:parcoursComprend ;
+            owl:someValuesFrom edu:Module ] .
+
+edu:Personne a owl:Class ;
+    rdfs:label "Personne"@fr ;
+    rdfs:comment "Toute personne intervenant dans le système de formation."@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onProperty edu:nom ] .
+
+edu:relationApprenant a owl:ObjectProperty ;
+    rdfs:label "relation apprenant"@fr ;
+    rdfs:subPropertyOf edu:relationPedagogique .
+
+edu:Comp_CSS a edu:CompetenceCSS,
+        owl:NamedIndividual ;
+    rdfs:label "CSS"@fr ;
+    edu:competenceSurTechnologie edu:Tech_CSS3 ;
+    edu:estSousCompetenceDe edu:Comp_ProgrammationWeb ;
+    edu:intitule "CSS"^^xsd:string ;
+    edu:scoreMaturite 85 .
+
+edu:Module_React a edu:ModuleReact,
+        owl:NamedIndividual ;
+    rdfs:label "Module React"@fr ;
+    edu:aPourPrerequis edu:Module_JavaScript ;
+    edu:aPourSuivantDirect edu:Module_NodeJS ;
+    edu:contientCours edu:Cours_React ;
+    edu:dureeHeures 35 ;
+    edu:intitule "Module React"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_POO_JavaScript .
+
+edu:RessourcePedagogique a owl:Class ;
+    rdfs:label "Ressource pédagogique"@fr ;
+    rdfs:comment "Support utilisé pour apprendre."@fr .
+
+edu:Technologie a owl:Class ;
+    rdfs:label "Technologie"@fr ;
+    rdfs:comment "Langage, framework ou outil enseigné."@fr .
+
+edu:Certification a owl:Class ;
+    rdfs:label "Certification"@fr ;
+    rdfs:comment "Titre, diplôme ou attestation visé par une formation."@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty edu:delivreeParOrganisme ;
+            owl:someValuesFrom edu:Organisme ] .
+
+edu:Dr_Benali a edu:FormateurSenior,
+        owl:NamedIndividual ;
+    rdfs:label "Dr. Benali"@fr ;
+    edu:animeParcours edu:Parcours_Ahmed,
+        edu:Parcours_Standard_FullStack ;
+    edu:anneesExperience 12 ;
+    edu:email "benali@eduparcours.org"^^xsd:string ;
+    edu:nom "Benali"^^xsd:string ;
+    edu:prenom "Dr."^^xsd:string ;
+    edu:specialiteFormateur "Développement web"^^xsd:string .
+
+edu:Module_NodeJS a edu:ModuleNodeJS,
+        owl:NamedIndividual ;
+    rdfs:label "Module NodeJS"@fr ;
+    edu:aPourPrerequis edu:Module_JavaScript ;
+    edu:contientCours edu:Cours_Express,
+        edu:Cours_NodeJS ;
+    edu:dureeHeures 35 ;
+    edu:intitule "Module NodeJS"^^xsd:string ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_JavaScript .
+
+edu:Formateur a owl:Class ;
+    rdfs:label "Formateur"@fr ;
+    rdfs:subClassOf edu:Personne .
+
+edu:Module_CSS a edu:ModuleCSS,
+        owl:NamedIndividual ;
+    rdfs:label "Module CSS"@fr ;
+    edu:aPourSuivantDirect edu:Module_JavaScript ;
+    edu:contientCours edu:Cours_CSS_Avance ;
+    edu:dureeHeures 25 ;
+    edu:intitule "Module CSS"^^xsd:string ;
+    edu:niveauDifficulte "Débutant"^^xsd:string .
+
+edu:Comp_HTML a edu:CompetenceHTML,
+        owl:NamedIndividual ;
+    rdfs:label "HTML"@fr ;
+    edu:competenceSurTechnologie edu:Tech_HTML5 ;
+    edu:estSousCompetenceDe edu:Comp_ProgrammationWeb ;
+    edu:intitule "HTML"^^xsd:string ;
+    edu:scoreMaturite 90 .
+
+edu:Evaluation a owl:Class ;
+    rdfs:label "Évaluation"@fr ;
+    rdfs:comment "Épreuve mesurant l'acquisition de compétences."@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty edu:porteSurCompetence ;
+            owl:someValuesFrom edu:Competence ] .
+
+edu:Module_HTML a edu:ModuleHTML,
+        owl:NamedIndividual ;
+    rdfs:label "Module HTML"@fr ;
+    edu:aPourSuivantDirect edu:Module_CSS ;
+    edu:contientCours edu:Cours_Intro_HTML ;
+    edu:dureeHeures 20 ;
+    edu:intitule "Module HTML"^^xsd:string ;
+    edu:niveauDifficulte "Débutant"^^xsd:string .
+
+edu:Comp_JavaScript a edu:CompetenceJavaScript,
+        owl:NamedIndividual ;
+    rdfs:label "JavaScript"@fr ;
+    edu:competenceSurTechnologie edu:Tech_JavaScript ;
+    edu:estSousCompetenceDe edu:Comp_ProgrammationWeb ;
+    edu:intitule "JavaScript"^^xsd:string ;
+    edu:scoreMaturite 75 .
+
+edu:Cours a owl:Class ;
+    rdfs:label "Cours"@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty edu:enseignePar ;
+            owl:someValuesFrom edu:Formateur ],
+        [ a owl:Restriction ;
+            owl:onProperty edu:utiliseTechnologie ;
+            owl:someValuesFrom edu:Technologie ],
+        [ a owl:Restriction ;
+            owl:onProperty edu:developpeCompetence ;
+            owl:someValuesFrom edu:Competence ],
+        edu:EntitePedagogique .
+
+edu:Module_JavaScript a edu:ModuleJavaScript,
+        owl:NamedIndividual ;
+    rdfs:label "Module JavaScript"@fr ;
+    edu:aPourPrerequis edu:Module_HTML ;
+    edu:aPourSuivantDirect edu:Module_React ;
+    edu:contientCours edu:Cours_JavaScript ;
+    edu:dureeHeures 40 ;
+    edu:intitule "Module JavaScript"^^xsd:string ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_HTML .
+
+edu:Formation a owl:Class ;
+    rdfs:label "Formation"@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty edu:composeDe ;
+            owl:someValuesFrom edu:Module ],
+        [ a owl:Restriction ;
+            owl:onProperty edu:appartientAuDomaine ;
+            owl:someValuesFrom edu:Domaine ],
+        [ a owl:Restriction ;
+            owl:maxCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onProperty edu:meneA ],
+        edu:EntitePedagogique .
+
+edu:Competence a owl:Class ;
+    rdfs:label "Compétence"@fr ;
+    rdfs:comment "Ce qu'un apprenant sait faire."@fr .
+
+edu:Apprenant a owl:Class ;
+    rdfs:label "Apprenant"@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality "3"^^xsd:nonNegativeInteger ;
+            owl:onProperty edu:estInscritA ],
+        edu:Personne .
+
+edu:Module a owl:Class ;
+    rdfs:label "Module"@fr ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onProperty edu:contientCours ],
+        edu:EntitePedagogique .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceCommunication edu:CompetenceTravailEquipe ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CoursNodeJS edu:CoursBaseDeDonnees ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CoursFrontend edu:CoursBackend edu:CoursTransversal ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceSQL edu:CompetenceNoSQL ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ExerciceTP edu:ExerciceProjet ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ResponsableFormation edu:ServiceScolarite ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ModuleFondamental edu:ModuleIntermediaire edu:ModuleAvance ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Apprenant edu:Formateur edu:PersonnelAdministratif ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceNodeJS edu:CompetenceAPI edu:CompetenceBaseDeDonnees ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceHTML edu:CompetenceCSS edu:CompetenceJavaScript edu:CompetenceFramework ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ParcoursStandard edu:ParcoursPersonnalise ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Quiz edu:AutoEvaluation ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:VideoTutoriel edu:VideoConference ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ExamenFinal edu:ExamenRattrapage ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceRelationnelle edu:CompetenceOrganisationnelle edu:CompetenceCognitive ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:MOOC edu:AcademieEnLigne ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CertificationWeb edu:CertificationDonnees ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceResponsiveDesign edu:CompetenceFlexboxGrid ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:AutodidacteDebutant edu:AutodidacteConfirme ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ProfessionnelEnReconversion edu:ProfessionnelEnMiseANiveau ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:LangageFrontend edu:FrameworkFrontend ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Personne edu:Competence edu:EntitePedagogique edu:RessourcePedagogique edu:Parcours edu:Evaluation edu:Certification edu:Domaine edu:Organisme edu:Technologie ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:FormationFullStack edu:FormationFrontend edu:FormationBackend ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CoursGit edu:CoursMethodeAgile ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceGestionDuTemps edu:CompetenceAutonomie ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:OutilVersionning edu:OutilDeploiement ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:TutorielCourt edu:TutorielComplet ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:FormationDiplomante edu:FormationCertifiante edu:FormationCourte ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:DomaineInformatique edu:DomaineDesign ) .
+
+[] a owl:AllDifferent ;
+    owl:distinctMembers ( edu:Developpement_Web edu:Analyse_Donnees edu:EduParcours_Academie edu:Universite_Tunis edu:Ministere_Enseignement edu:Tech_HTML5 edu:Tech_CSS3 edu:Tech_JavaScript edu:Tech_React edu:Tech_NodeJS edu:Tech_MySQL edu:Tech_Git edu:Tech_Docker edu:Comp_ProgrammationWeb edu:Comp_HTML edu:Comp_CSS edu:Comp_ResponsiveDesign edu:Comp_JavaScript edu:Comp_POO_JavaScript edu:Comp_React edu:Comp_NodeJS edu:Comp_SQL edu:Comp_REST edu:Comp_Git edu:Comp_TravailEquipe edu:Comp_ResolutionProbleme edu:Dr_Benali edu:Mme_Trabelsi edu:Mr_Gharbi edu:Mr_Hamdi edu:Mme_Salhi edu:Ahmed edu:Sarra edu:Yassine edu:Lina_Master edu:Module_HTML edu:Module_CSS edu:Module_JavaScript edu:Module_React edu:Module_NodeJS edu:Module_BaseDeDonnees edu:Cours_Intro_HTML edu:Cours_CSS_Avance edu:Cours_JavaScript edu:Cours_React edu:Cours_NodeJS edu:Cours_SQL edu:Cours_Git edu:Video_Intro_HTML edu:Webinaire_React edu:Slides_CSS edu:Doc_MDN_JS edu:TP_Responsive edu:Projet_Portfolio edu:Quiz_HTML edu:Quiz_JavaScript edu:Examen_Final_FullStack edu:Projet_Final_Web edu:Autoeval_Niveau edu:Certificat_DeveloppeurWeb edu:Licence_Informatique edu:Attestation_Module_React edu:Formation_FullStack edu:Formation_Frontend edu:BootCamp_Web edu:Atelier_HTML_CSS edu:Parcours_Ahmed edu:Parcours_Standard_FullStack edu:Parcours_Frontend_Accelere ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Licence edu:Master ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CertificationProfessionnelle edu:CertificationAcademique ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Video edu:Document edu:Exercice edu:OutilEnLigne ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:FormateurSenior edu:FormateurJunior ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CertificateurPublic edu:CertificateurPrive ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:DocumentationOfficielle edu:GuideRapide ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ParcoursFullStack edu:ParcoursFrontend edu:ParcoursBackend ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ParcoursAccelere edu:ParcoursRenforce ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:EnvironnementBackend edu:SystemeBaseDeDonnees ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ExerciceQCM edu:ExerciceQuestionOuverte ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:DeveloppementFrontend edu:DeveloppementBackend edu:DeveloppementFullStack ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Formation edu:Module edu:Cours ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:FormateurExpertIndustrie edu:FormateurInvite ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:QuizEnLigne edu:QuizEnPresentiel ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceFrontend edu:CompetenceBackend edu:CompetenceOutillage ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ModuleReact edu:ModuleNodeJS edu:ModuleDeploiement ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:OrganismeDeFormation edu:OrganismeCertificateur ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:EtablissementAcademique edu:PlateformeEnLigne ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceResolutionProbleme edu:CompetencePenseeCritique ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetencePOOJavaScript edu:CompetenceAsynchrone ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ApprentissageAutomatique edu:AnalyseDeDonnees ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Examen edu:ProjetNote ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:EditeurDeCode edu:Simulateur ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:EvaluationFormative edu:EvaluationSommative ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:SupportDeCours edu:DocumentReference ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ApprenantEtudiant edu:ApprenantProfessionnel edu:ApprenantAutodidacte ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:EtudiantLicence edu:EtudiantMaster edu:EtudiantDoctorat ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:FrameworkReact edu:FrameworkAngular edu:FrameworkVue ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:DeveloppementWeb edu:DonneesEtIA ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:AgentScolarite edu:GestionnaireInscription ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceGit edu:CompetenceDeploiement ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceTechnique edu:CompetenceTransversale ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CertificationFullStack edu:CertificationFrontend ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceREST edu:CompetenceGraphQL ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:TechnologieFrontend edu:TechnologieBackend edu:TechnologieOutil ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ResponsableDeFormation edu:ResponsablePedagogique ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ProjetFinal edu:SoutenanceProjet ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:BaseSQL edu:BaseNoSQL ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Diplome edu:AttestationDeReussite ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:LangageHTML edu:LangageCSS edu:LangageJavaScript ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:UXDesign edu:UIDesign ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CoursHTML edu:CoursCSS edu:CoursJavaScript edu:CoursReact ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ModuleJavaScript edu:ModuleBaseDeDonnees ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:SupportPDF edu:Diapositives ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ParcoursInfereParPrerequis edu:ParcoursInfereParCompetence ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:Universite edu:EcoleSuperieure ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:FormateurPermanent edu:FormateurVacataire ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ParcoursInfere edu:ParcoursAdapte ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ExerciceTheorique edu:ExercicePratique ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:FormationLicence edu:FormationMaster ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:BootCamp edu:AtelierIntensif ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:ModuleHTML edu:ModuleCSS ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( edu:CompetenceReact edu:CompetenceAngular ) .
+
