@@ -68,3 +68,15 @@ def update(query: str) -> None:
     s.setMethod(POST)
     s.setQuery(PREFIXES + query)
     s.query()
+
+
+# Outils de Zahra (routeurs modules, cours, ressources) : sp.uri_locale(sp.valeur(r, "m"))
+def valeur(ligne: dict, cle: str, defaut: str = "") -> str:
+    """Valeur d'une colonne, que la ligne vienne de select() (texte) ou de select_brut() ({"value": ...})."""
+    v = ligne.get(cle, defaut)
+    return v.get("value", defaut) if isinstance(v, dict) else v
+
+
+def uri_locale(uri: str) -> str:
+    """Nom local d'une URI (après le # ou le dernier /) ; un identifiant déjà court est rendu tel quel."""
+    return uri.split("#")[-1] if "#" in uri else uri.split("/")[-1]

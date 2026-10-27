@@ -36,3 +36,11 @@ Linda,Quelles sont les compétences les plus répandues ?,COMPETENCES_REPANDUES,
 Linda,Quelles compétences sont équivalentes à React ?,EQUIVALENTES,competence: Comp_React,SELECT DISTINCT ?equivalente ?intitule WHERE { edu:Comp_React edu:estEquivalenteA|^edu:estEquivalenteA ?equivalente . ?equivalente edu:intitule ?intitule . FILTER(?equivalente != edu:Comp_React) }
 Linda,Quelles sont les compétences équivalentes à Reakt ?,EQUIVALENTES,competence: Comp_React (faute de frappe),SELECT DISTINCT ?equivalente ?intitule WHERE { edu:Comp_React edu:estEquivalenteA|^edu:estEquivalenteA ?equivalente . ?equivalente edu:intitule ?intitule . FILTER(?equivalente != edu:Comp_React) }
 Linda,Quelles évaluations pour le module bdd ?,EVALUATIONS_MODULE,module: Module_BaseDeDonnees (synonyme bdd),SELECT DISTINCT ?evaluation ?label ?date WHERE { ?evaluation edu:evaluationDuModule|^edu:estEvalueParEvaluation edu:Module_BaseDeDonnees ; rdfs:label ?label . OPTIONAL { ?evaluation edu:dateEvaluation ?date } }
+Zahra,Quels sont les prérequis du module Interactivité et dynamisme ?,PREREQUIS,,
+Zahra,Quels cours sont dans le Module HTML ?,COURS_MODULE,,
+Zahra,Quelles compétences faut-il pour suivre le module Mise en production ?,COMPETENCES_MODULE,,
+Zahra,Quel est le module qui suit Interactivité et dynamisme ?,SUIVANT_MODULE,,
+Zahra,Quelles technologies sont utilisées dans le cours HTML5 sémantique et accessibilité ?,TECHNO_COURS,,
+Zahra,Quelles ressources existent pour la compétence HTML ?,RESSOURCES_COMPETENCE,,
+Zahra,Quelles vidéos sont disponibles sur HTML ?,VIDEOS,,
+Zahra,Quel est le niveau du cours Introduction HTML ?,NIVEAU_COURS,,

@@ -31,6 +31,16 @@ import TechnologieForm from './pages/linda/TechnologieForm'
 import EvaluationsListe from './pages/linda/EvaluationsListe'
 import EvaluationFiche from './pages/linda/EvaluationFiche'
 import EvaluationForm from './pages/linda/EvaluationForm'
+import ModulesListe from './pages/zahra/ModulesListe'
+import ModuleFiche from './pages/zahra/ModuleFiche'
+import ModuleForm from './pages/zahra/ModuleForm'
+import CoursListe from './pages/zahra/CoursListe'
+import CoursFiche from './pages/zahra/CoursFiche'
+import CoursForm from './pages/zahra/CoursForm'
+import RessourcesListe from './pages/zahra/RessourcesListe'
+import RessourceFiche from './pages/zahra/RessourceFiche'
+import RessourceForm from './pages/zahra/RessourceForm'
+import Questions from './pages/zahra/Questions'
 import QuestionBar from './components/QuestionBar'
 import './App.css'
 
@@ -68,6 +78,15 @@ const MENU = [
       { to: '/competences', texte: 'Compétences' },
       { to: '/technologies', texte: 'Technologies' },
       { to: '/evaluations', texte: 'Évaluations' },
+    ],
+  },
+  {
+    membre: 'Zahra',
+    liens: [
+      { to: '/modules', texte: 'Modules' },
+      { to: '/cours', texte: 'Cours' },
+      { to: '/ressources', texte: 'Ressources' },
+      { to: '/questions', texte: 'Questions' },
     ],
   },
 ]
@@ -147,6 +166,19 @@ export default function App() {
             <Route path="/evaluations/nouvelle" element={<EvaluationForm />} />
             <Route path="/evaluations/:id" element={<EvaluationFiche />} />
             <Route path="/evaluations/:id/modifier" element={<EvaluationForm />} />
+            <Route path="/modules" element={<ModulesListe />} />
+            <Route path="/modules/nouveau" element={<ModuleForm />} />
+            <Route path="/modules/:id" element={<ModuleFiche />} />
+            <Route path="/modules/:id/modifier" element={<ModuleForm />} />
+            <Route path="/cours" element={<CoursListe />} />
+            <Route path="/cours/nouveau" element={<CoursForm />} />
+            <Route path="/cours/:id" element={<CoursFiche />} />
+            <Route path="/cours/:id/modifier" element={<CoursForm />} />
+            <Route path="/ressources" element={<RessourcesListe />} />
+            <Route path="/ressources/nouveau" element={<RessourceForm />} />
+            <Route path="/ressources/:id" element={<RessourceFiche />} />
+            <Route path="/ressources/:id/modifier" element={<RessourceForm />} />
+            <Route path="/questions" element={<Questions />} />
             <Route path="*" element={<NonDisponible />} />
           </Routes>
         </main>

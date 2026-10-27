@@ -1,10 +1,23 @@
-apache-jena-fuseki-*/
-jena-*/
-venv/
-node_modules/
+# Fichiers de données sémantiques (ne pas pousser)
+*.ttl
+*.rdf
+*.owl
+*.n3
+*.nt
+*.jsonld
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+venv/
 .env
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Bases de données Fuseki
 databases/
 backend/venv/
 frontend/dist/
@@ -13,3 +26,8 @@ frontend/dist/
 
 # sauvegardes de export_data.py (en versionner une : git add -f backups/<fichier>.ttl)
 backups/*.ttl
+
+# Divers
+*.log
+.DS_Store
+Thumbs.db
