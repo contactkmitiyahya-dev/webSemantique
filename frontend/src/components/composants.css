@@ -1,8 +1,9 @@
 /* TEMPORAIRE (Ala) – styles des composants communs, à remplacer avec les versions d'Imem, Zahra et Linda */
 
-/* ---------- DataTable ---------- */
+/* ---------- DataTable (Imem) ---------- */
 .dt { width: 100%; border-collapse: collapse; background: var(--surface); }
 .dt th, .dt td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--bordure); }
+.dt th.droite, .dt td.droite { text-align: right; font-variant-numeric: tabular-nums; }
 .dt th { font-size: 0.85rem; color: var(--texte-doux); font-weight: 600; white-space: nowrap; user-select: none; }
 .dt th.triable { cursor: pointer; }
 .dt th.triable:hover { color: var(--accent); }

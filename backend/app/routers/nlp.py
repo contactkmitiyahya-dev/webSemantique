@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from rapidfuzz import fuzz
 
 from app.ala_commun import motif_type
-from app.nlp import ala
+from app.nlp import ala, imem
 from app.nlp.intents import detecter_intention
 from app.nlp.normalisation import normaliser
 from app.sparql_client import select
@@ -20,7 +20,15 @@ from app.sparql_client import select
 router = APIRouter(prefix="/api/nlp", tags=["NLP (TEMPORAIRE)"])
 
 SEUIL_FLOU = 85  # rapidfuzz : tolère une petite faute de frappe (« Mansoury » -> « Mansouri »)
-CLASSES = ["Formateur", "Organisme", "Domaine", "Cours", "Formation"]
+CLASSES = ["Formateur", "Organisme", "Domaine", "Cours", "Formation", "Apprenant"]
+
+# Intentions de chaque membre (même contrat : GABARITS, ENTITE_ATTENDUE, EXEMPLES)
+MODULES = (ala, imem)
+GABARITS = {i: g for m in MODULES for i, g in m.GABARITS.items()}
+ENTITE_ATTENDUE = {i: c for m in MODULES for i, c in m.ENTITE_ATTENDUE.items()}
+EXEMPLES = {i: q for m in MODULES for i, q in m.EXEMPLES.items()}
+# Les gabarits d'Imem lisent aussi la question (montant, niveau) : gabarit(entite, question)
+AVEC_QUESTION = set(imem.GABARITS)
 
 
 class Question(BaseModel):
@@ -100,7 +108,7 @@ def reconnaitre(question: str, classe: str) -> dict | None:
 # --------------------------------------------------------------------------- route
 
 def aide(message: str) -> str:
-    exemples = " ; ".join(f"« {q} »" for q in ala.EXEMPLES.values())
+    exemples = " ; ".join(f"« {q} »" for q in EXEMPLES.values())
     return f"{message} Exemples de questions : {exemples}"
 
 
@@ -113,20 +121,24 @@ def question(q: Question):
 
     intention = detecter_intention(q.question)
     reponse["intention"] = intention
-    if intention not in ala.GABARITS:
+    if intention not in GABARITS:
         return {**reponse, "message": aide("Je n'ai pas compris la question.")}
 
-    classe = ala.ENTITE_ATTENDUE[intention]
+    classe = ENTITE_ATTENDUE[intention]
     entite = None
     if classe:
         entite = reconnaitre(q.question, classe)
         if not entite:
             return {**reponse, "message": aide(
                 f"Intention {intention} reconnue, mais aucun élément de type « {classe} » trouvé dans la question. "
-                f"Exemple pour cette intention : « {ala.EXEMPLES[intention]} ».")}
+                f"Exemple pour cette intention : « {EXEMPLES[intention]} ».")}
         reponse["entites"] = [entite]
 
-    sparql = ala.GABARITS[intention](entite["uri"] if entite else None)
+    uri = entite["uri"] if entite else None
+    try:
+        sparql = GABARITS[intention](uri, q.question) if intention in AVEC_QUESTION else GABARITS[intention](uri)
+    except ValueError as e:  # gabarit incomplet (ex. montant absent) : on explique quoi préciser
+        return {**reponse, "message": f"{e} Exemple : « {EXEMPLES[intention]} »."}
     reponse["sparql"] = sparql
     reponse["resultats"] = select(sparql)
     if not reponse["resultats"]:

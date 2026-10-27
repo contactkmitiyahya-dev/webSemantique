@@ -7,6 +7,13 @@ import PersonnelListe from './pages/ala/PersonnelListe'
 import OrganismesListe from './pages/ala/OrganismesListe'
 import OrganismeFiche from './pages/ala/OrganismeFiche'
 import DomainesListe from './pages/ala/DomainesListe'
+import FormationsCatalogue from './pages/imem/FormationsCatalogue'
+import FormationFiche from './pages/imem/FormationFiche'
+import FormationForm from './pages/imem/FormationForm'
+import ParcoursListe from './pages/imem/ParcoursListe'
+import ParcoursFiche from './pages/imem/ParcoursFiche'
+import ParcoursForm from './pages/imem/ParcoursForm'
+import RechercheGlobale from './pages/imem/RechercheGlobale'
 import './App.css'
 
 // Menu : une entrée par membre
@@ -18,6 +25,14 @@ const MENU = [
       { to: '/personnel', texte: 'Personnel' },
       { to: '/organismes', texte: 'Organismes' },
       { to: '/domaines', texte: 'Domaines' },
+    ],
+  },
+  {
+    membre: 'Imem',
+    liens: [
+      { to: '/formations', texte: 'Formations' },
+      { to: '/parcours', texte: 'Parcours' },
+      { to: '/recherche', texte: 'Recherche globale' },
     ],
   },
 ]
@@ -66,6 +81,15 @@ export default function App() {
             <Route path="/organismes" element={<OrganismesListe />} />
             <Route path="/organismes/:id" element={<OrganismeFiche />} />
             <Route path="/domaines" element={<DomainesListe />} />
+            <Route path="/formations" element={<FormationsCatalogue />} />
+            <Route path="/formations/nouvelle" element={<FormationForm />} />
+            <Route path="/formations/:id" element={<FormationFiche />} />
+            <Route path="/formations/:id/modifier" element={<FormationForm />} />
+            <Route path="/parcours" element={<ParcoursListe />} />
+            <Route path="/parcours/nouveau" element={<ParcoursForm />} />
+            <Route path="/parcours/:id" element={<ParcoursFiche />} />
+            <Route path="/parcours/:id/modifier" element={<ParcoursForm />} />
+            <Route path="/recherche" element={<RechercheGlobale />} />
             <Route path="*" element={<NonDisponible />} />
           </Routes>
         </main>

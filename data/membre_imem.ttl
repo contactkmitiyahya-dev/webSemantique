@@ -1,0 +1,119 @@
+@prefix edu: <http://www.eduparcours.org/ontologie#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ============================================================================
+# Tranche d'Imem : Formation et Parcours
+# 5 formations de types différents (courte, bootcamp, licence, master, full-stack)
+#   - une gratuite (Formation_Initiation_SQL), une inactive (BootCamp_NodeJS)
+#   - une future (Formation_Master_Cloud, début septembre 2027)
+#   - chacune : au moins un module (composeDe), au moins un domaine, au plus une certification (meneA)
+# 3 parcours de types différents (front-end, accéléré, inféré par compétence)
+# Ne référence que des individus déjà présents dans l'ontologie.
+# ============================================================================
+
+# ---------- Formations ----------
+
+edu:Formation_Initiation_SQL a owl:NamedIndividual , edu:FormationCourte ;
+    rdfs:label "Initiation aux bases de données SQL"@fr ;
+    edu:intitule "Initiation aux bases de données SQL"^^xsd:string ;
+    edu:dureeHeures 20 ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:creditsECTS 2 ;
+    edu:coutFormation 0.0 ;
+    edu:dateDebut "2026-11-23T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2026-12-04T00:00:00"^^xsd:dateTime ;
+    edu:nombrePlaces 35 ;
+    edu:estActif true ;
+    edu:composeDe edu:Module_BaseDeDonnees ;
+    edu:appartientAuDomaine edu:Analyse_Donnees ;
+    edu:estProposeePar edu:MOOC_WebDev ;
+    edu:estAdministreePar edu:Mme_Salhi .
+
+edu:BootCamp_NodeJS a owl:NamedIndividual , edu:BootCamp ;
+    rdfs:label "Bootcamp Node.js et API REST"@fr ;
+    edu:intitule "Bootcamp Node.js et API REST"^^xsd:string ;
+    edu:dureeHeures 80 ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:creditsECTS 6 ;
+    edu:coutFormation 750.0 ;
+    edu:dateDebut "2027-01-11T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2027-02-19T00:00:00"^^xsd:dateTime ;
+    edu:nombrePlaces 20 ;
+    edu:estActif false ;
+    edu:composeDe edu:Module_JavaScript , edu:Module_NodeJS , edu:Module_BaseDeDonnees ;
+    edu:appartientAuDomaine edu:Domaine_Backend ;
+    edu:estProposeePar edu:EduParcours_Academie ;
+    edu:estAdministreePar edu:Mr_Dridi .
+
+edu:Formation_Licence_Info a owl:NamedIndividual , edu:FormationLicence ;
+    rdfs:label "Licence en informatique, parcours web"@fr ;
+    edu:intitule "Licence en informatique, parcours web"^^xsd:string ;
+    edu:dureeHeures 900 ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:creditsECTS 180 ;
+    edu:coutFormation 1800.0 ;
+    edu:dateDebut "2026-09-14T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2029-06-30T00:00:00"^^xsd:dateTime ;
+    edu:nombrePlaces 60 ;
+    edu:estActif true ;
+    edu:composeDe edu:Module_HTML , edu:Module_CSS , edu:Module_JavaScript ,
+        edu:Module_BaseDeDonnees , edu:Module_Git ;
+    edu:appartientAuDomaine edu:Developpement_Web ;
+    edu:estProposeePar edu:Universite_Tunis ;
+    edu:estAdministreePar edu:Mr_Dridi ;
+    edu:meneA edu:Licence_Informatique .
+
+edu:Formation_Master_Cloud a owl:NamedIndividual , edu:FormationMaster ;
+    rdfs:label "Master DevOps et cloud"@fr ;
+    edu:intitule "Master DevOps et cloud"^^xsd:string ;
+    edu:dureeHeures 450 ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:creditsECTS 120 ;
+    edu:coutFormation 5200.0 ;
+    edu:dateDebut "2027-09-15T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2029-06-30T00:00:00"^^xsd:dateTime ;
+    edu:nombrePlaces 15 ;
+    edu:estActif true ;
+    edu:composeDe edu:Module_NodeJS , edu:Module_Deploiement , edu:Module_Git , edu:Module_BaseDeDonnees ;
+    edu:appartientAuDomaine edu:Domaine_Backend ;
+    edu:estProposeePar edu:Ecole_Esprit ;
+    edu:estAdministreePar edu:Mme_Salhi ;
+    edu:meneA edu:Master_Informatique .
+
+edu:Formation_FullStack_JS a owl:NamedIndividual , edu:FormationFullStack ;
+    rdfs:label "Full-Stack JavaScript React et Node.js"@fr ;
+    edu:intitule "Full-Stack JavaScript React et Node.js"^^xsd:string ;
+    edu:dureeHeures 180 ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:creditsECTS 18 ;
+    edu:coutFormation 1450.0 ;
+    edu:dateDebut "2027-02-01T00:00:00"^^xsd:dateTime ;
+    edu:dateFin "2027-07-15T00:00:00"^^xsd:dateTime ;
+    edu:nombrePlaces 24 ;
+    edu:estActif true ;
+    edu:composeDe edu:Module_HTML , edu:Module_CSS , edu:Module_JavaScript ,
+        edu:Module_React , edu:Module_NodeJS , edu:Module_Deploiement ;
+    edu:appartientAuDomaine edu:Developpement_Web , edu:Domaine_Frontend ;
+    edu:estProposeePar edu:EduParcours_Academie ;
+    edu:estAdministreePar edu:Mme_Salhi ;
+    edu:meneA edu:Certificat_DeveloppeurWeb .
+
+# ---------- Parcours ----------
+
+edu:Parcours_Frontend_Complet a owl:NamedIndividual , edu:ParcoursFrontend ;
+    rdfs:label "Parcours front-end complet"@fr ;
+    edu:parcoursComprend edu:Module_HTML , edu:Module_CSS , edu:Module_JavaScript , edu:Module_React ;
+    edu:estAnimePar edu:Mme_Jebali .
+
+edu:Parcours_DevOps_Accelere a owl:NamedIndividual , edu:ParcoursAccelere ;
+    rdfs:label "Parcours DevOps accéléré"@fr ;
+    edu:parcoursComprend edu:Module_Git , edu:Module_NodeJS , edu:Module_Deploiement ;
+    edu:estAnimePar edu:Mr_Hamdi .
+
+edu:Parcours_Donnees_Competence a owl:NamedIndividual , edu:ParcoursInfereParCompetence ;
+    rdfs:label "Parcours données (inféré par compétence)"@fr ;
+    edu:parcoursComprend edu:Module_JavaScript , edu:Module_BaseDeDonnees ;
+    edu:estAnimePar edu:Dr_Benali .

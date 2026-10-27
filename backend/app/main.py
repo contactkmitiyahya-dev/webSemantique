@@ -8,7 +8,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.routers import domaines, formateurs, nlp, organismes, responsables
+from app.routers import domaines, formateurs, formations, nlp, organismes, parcours, recherche, responsables
 
 # Niveau INFO : chaque requête SPARQL exécutée s'affiche dans le terminal (logger "sparql")
 logging.basicConfig(level=logging.INFO, format="%(levelname)s [%(name)s] %(message)s")
@@ -46,5 +46,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for module in (formateurs, responsables, organismes, domaines, nlp):
+for module in (formateurs, responsables, organismes, domaines, formations, parcours, recherche, nlp):
     app.include_router(module.router)

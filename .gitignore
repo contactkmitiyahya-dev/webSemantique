@@ -10,3 +10,6 @@ backend/venv/
 frontend/dist/
 .pytest_cache/
 .claude/
+
+# sauvegardes de export_data.py (en versionner une : git add -f backups/<fichier>.ttl)
+backups/*.ttl
