@@ -8,6 +8,13 @@ from pydantic import BaseModel
 from typing import Dict, Any
 from ..sparql_client import select
 
+# Tranche Linda (competences, technologies, evaluations) : spaCy + rapidfuzz
+try:
+    from ..nlp.linda import analyser as analyser_linda
+except ImportError:
+    def analyser_linda(texte):
+        return None
+
 router = APIRouter()
 
 class QuestionRequest(BaseModel):
@@ -33,8 +40,12 @@ CERTIFICATIONS = {
 # 2. Fonction principale de détection
 # ==========================================
 def analyser_question(texte: str) -> Dict[str, Any]:
+    modele_linda = analyser_linda(texte)
+    if modele_linda:
+        return modele_linda
+
     txt = texte.lower().strip()
-    
+
     # ----------------------------------------
     # A. FORMATEURS (Nouveau !)
     # ----------------------------------------

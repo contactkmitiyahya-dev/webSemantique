@@ -1,0 +1,167 @@
+@prefix edu: <http://www.eduparcours.org/ontologie#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Tranche Linda : Competence, Technologie, Evaluation
+# Chargé après l'ontologie (ontologie/EduParcours_final.rdf), qui n'est pas modifiée.
+# Règles respectées :
+#   - un seul type « feuille » par individu (disjonctions de l'ontologie) ;
+#   - estEquivalenteA écrite dans les deux sens (propriété symétrique) ;
+#   - chaque évaluation porte sur au moins une compétence et un module ;
+#   - scoreMaturite entre 0 et 100, noteMinimale entre 0 et 20, coefficient > 0.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# 1. Compétences (9) - arbre sur 3 niveaux et plus :
+#    Programmation Web > Programmation back-end > Conception d'API > GraphQL
+#    Programmation Web > Programmation back-end > Bases de données > PostgreSQL
+# -----------------------------------------------------------------------------
+
+edu:Comp_DeveloppementBackend a owl:NamedIndividual, edu:CompetenceBackend ;
+    rdfs:label "Programmation back-end"@fr ;
+    edu:intitule "Programmation back-end"^^xsd:string ;
+    edu:scoreMaturite 70 ;
+    edu:estSousCompetenceDe edu:Comp_ProgrammationWeb .
+
+edu:Comp_ConceptionAPI a owl:NamedIndividual, edu:CompetenceAPI ;
+    rdfs:label "Conception d'API"@fr ;
+    edu:intitule "Conception d'API"^^xsd:string ;
+    edu:scoreMaturite 60 ;
+    edu:estSousCompetenceDe edu:Comp_DeveloppementBackend .
+
+edu:Comp_GraphQL a owl:NamedIndividual, edu:CompetenceGraphQL ;
+    rdfs:label "GraphQL"@fr ;
+    edu:intitule "GraphQL"^^xsd:string ;
+    edu:scoreMaturite 40 ;
+    edu:estSousCompetenceDe edu:Comp_ConceptionAPI ;
+    edu:competenceSurTechnologie edu:Tech_Apollo .
+
+edu:Comp_BasesDeDonnees a owl:NamedIndividual, edu:CompetenceBaseDeDonnees ;
+    rdfs:label "Bases de données"@fr ;
+    edu:intitule "Bases de données"^^xsd:string ;
+    edu:scoreMaturite 65 ;
+    edu:estSousCompetenceDe edu:Comp_DeveloppementBackend .
+
+edu:Comp_PostgreSQL a owl:NamedIndividual, edu:CompetenceSQL ;
+    rdfs:label "PostgreSQL"@fr ;
+    edu:intitule "PostgreSQL"^^xsd:string ;
+    edu:scoreMaturite 62 ;
+    edu:estSousCompetenceDe edu:Comp_BasesDeDonnees ;
+    edu:competenceSurTechnologie edu:Tech_PostgreSQL ;
+    edu:estEquivalenteA edu:Comp_SQL .
+
+edu:Comp_FlexboxGrid a owl:NamedIndividual, edu:CompetenceFlexboxGrid ;
+    rdfs:label "Flexbox et Grid"@fr ;
+    edu:intitule "Flexbox et Grid"^^xsd:string ;
+    edu:scoreMaturite 68 ;
+    edu:estSousCompetenceDe edu:Comp_CSS ;
+    edu:competenceSurTechnologie edu:Tech_Bootstrap .
+
+edu:Comp_JS_Asynchrone a owl:NamedIndividual, edu:CompetenceAsynchrone ;
+    rdfs:label "JavaScript asynchrone"@fr ;
+    edu:intitule "JavaScript asynchrone"^^xsd:string ;
+    edu:scoreMaturite 52 ;
+    edu:estSousCompetenceDe edu:Comp_JavaScript ;
+    edu:competenceSurTechnologie edu:Tech_JavaScript .
+
+edu:Comp_Vue a owl:NamedIndividual, edu:CompetenceFramework ;
+    rdfs:label "Vue.js"@fr ;
+    edu:intitule "Vue.js"^^xsd:string ;
+    edu:scoreMaturite 45 ;
+    edu:estSousCompetenceDe edu:Comp_JavaScript ;
+    edu:competenceSurTechnologie edu:Tech_Vue ;
+    edu:estEquivalenteA edu:Comp_React .
+
+edu:Comp_Autonomie a owl:NamedIndividual, edu:CompetenceAutonomie ;
+    rdfs:label "Autonomie"@fr ;
+    edu:intitule "Autonomie"^^xsd:string ;
+    edu:scoreMaturite 78 .
+
+# Équivalences : sens inverse (estEquivalenteA est symétrique, Fuseki ne le déduit pas)
+edu:Comp_SQL edu:estEquivalenteA edu:Comp_PostgreSQL .
+edu:Comp_React edu:estEquivalenteA edu:Comp_Vue , edu:Comp_Angular .
+
+# Rattachement des compétences existantes qui n'avaient pas de parent
+edu:Comp_NodeJS edu:estSousCompetenceDe edu:Comp_DeveloppementBackend .
+edu:Comp_REST edu:estSousCompetenceDe edu:Comp_ConceptionAPI .
+edu:Comp_SQL edu:estSousCompetenceDe edu:Comp_BasesDeDonnees .
+edu:Comp_NoSQL edu:estSousCompetenceDe edu:Comp_BasesDeDonnees .
+
+
+# -----------------------------------------------------------------------------
+# 2. Technologies (4, de types différents), chacune liée à une compétence
+# -----------------------------------------------------------------------------
+
+edu:Tech_PostgreSQL a owl:NamedIndividual, edu:BaseSQL ;
+    rdfs:label "PostgreSQL"@fr .
+
+edu:Tech_Bootstrap a owl:NamedIndividual, edu:FrameworkFrontend ;
+    rdfs:label "Bootstrap"@fr .
+
+edu:Tech_GitHubActions a owl:NamedIndividual, edu:OutilDeploiement ;
+    rdfs:label "GitHub Actions"@fr .
+
+edu:Tech_Apollo a owl:NamedIndividual, edu:EnvironnementBackend ;
+    rdfs:label "Apollo GraphQL"@fr .
+
+edu:Comp_Deploiement edu:competenceSurTechnologie edu:Tech_GitHubActions .
+
+
+# -----------------------------------------------------------------------------
+# 3. Évaluations (5, de types différents) : compétence + module + cours
+# -----------------------------------------------------------------------------
+
+edu:Quiz_Flexbox a owl:NamedIndividual, edu:QuizEnPresentiel ;
+    rdfs:label "Quiz Flexbox et Grid"@fr ;
+    edu:dateEvaluation "2026-11-12T00:00:00"^^xsd:dateTime ;
+    edu:noteMinimale 10.0 ;
+    edu:coefficient 1.0 ;
+    edu:porteSurCompetence edu:Comp_FlexboxGrid ;
+    edu:evaluationDuModule edu:Module_CSS ;
+    edu:evalue edu:Cours_CSS_Avance .
+
+edu:Examen_Final_Backend a owl:NamedIndividual, edu:ExamenFinal ;
+    rdfs:label "Examen final back-end"@fr ;
+    edu:dateEvaluation "2027-01-20T00:00:00"^^xsd:dateTime ;
+    edu:noteMinimale 10.0 ;
+    edu:coefficient 3.0 ;
+    edu:porteSurCompetence edu:Comp_ConceptionAPI , edu:Comp_REST ;
+    edu:evaluationDuModule edu:Module_NodeJS ;
+    edu:evalue edu:Cours_Express .
+
+edu:Projet_API_GraphQL a owl:NamedIndividual, edu:ProjetFinal ;
+    rdfs:label "Projet API GraphQL"@fr ;
+    edu:dateEvaluation "2027-02-05T00:00:00"^^xsd:dateTime ;
+    edu:noteMinimale 12.0 ;
+    edu:coefficient 2.0 ;
+    edu:porteSurCompetence edu:Comp_GraphQL ;
+    edu:evaluationDuModule edu:Module_NodeJS ;
+    edu:evalue edu:Cours_NodeJS .
+
+edu:Soutenance_BDD a owl:NamedIndividual, edu:SoutenanceProjet ;
+    rdfs:label "Soutenance bases de données"@fr ;
+    edu:dateEvaluation "2027-03-01T00:00:00"^^xsd:dateTime ;
+    edu:noteMinimale 12.0 ;
+    edu:coefficient 3.0 ;
+    edu:porteSurCompetence edu:Comp_PostgreSQL , edu:Comp_BasesDeDonnees ;
+    edu:evaluationDuModule edu:Module_BaseDeDonnees ;
+    edu:evalue edu:Cours_SQL .
+
+edu:Autoeval_Autonomie a owl:NamedIndividual, edu:QuestionnaireDeNiveau ;
+    rdfs:label "Auto-évaluation autonomie"@fr ;
+    edu:dateEvaluation "2026-11-03T00:00:00"^^xsd:dateTime ;
+    edu:noteMinimale 0.0 ;
+    edu:coefficient 0.5 ;
+    edu:porteSurCompetence edu:Comp_Autonomie ;
+    edu:evaluationDuModule edu:Module_Agile ;
+    edu:evalue edu:Cours_Agile .
+
+# Compléments : évaluations de l'ontologie qui n'avaient ni module ni date
+edu:Examen_Final_FullStack edu:evaluationDuModule edu:Module_React , edu:Module_NodeJS .
+edu:Projet_Final_Web edu:evaluationDuModule edu:Module_NodeJS .
+edu:Autoeval_Niveau edu:evaluationDuModule edu:Module_HTML , edu:Module_CSS ;
+    edu:dateEvaluation "2026-09-15T00:00:00"^^xsd:dateTime .

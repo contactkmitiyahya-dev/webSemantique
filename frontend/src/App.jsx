@@ -7,6 +7,16 @@ import CertificationsListe from "./pages/yahya/CertificationsListe";
 import CertificationForm   from "./pages/yahya/CertificationForm";
 import CertificationFiche  from "./pages/yahya/CertificationFiche";
 import NlpTester           from "./pages/yahya/NlpTester";
+import CompetencesListe    from "./pages/linda/CompetencesListe";
+import CompetenceFiche     from "./pages/linda/CompetenceFiche";
+import CompetenceForm      from "./pages/linda/CompetenceForm";
+import TechnologiesListe   from "./pages/linda/TechnologiesListe";
+import TechnologieFiche    from "./pages/linda/TechnologieFiche";
+import TechnologieForm     from "./pages/linda/TechnologieForm";
+import EvaluationsListe    from "./pages/linda/EvaluationsListe";
+import EvaluationFiche     from "./pages/linda/EvaluationFiche";
+import EvaluationForm      from "./pages/linda/EvaluationForm";
+import QuestionBar         from "./components/QuestionBar";
 import "./App.css";
 
 function NavItem({ to, label }) {
@@ -30,9 +40,13 @@ function App() {
           <NavItem to="/apprenants"            label="Apprenants" />
           <NavItem to="/apprenants/stats"      label="Statistiques" />
           <NavItem to="/certifications"        label="Certifications" />
+          <NavItem to="/competences"           label="Compétences" />
+          <NavItem to="/technologies"          label="Technologies" />
+          <NavItem to="/evaluations"           label="Évaluations" />
           <NavItem to="/nlp"                   label="NLP" />
         </nav>
       </header>
+      <QuestionBar />
 
       <main className="main-content">
         <Routes>
@@ -45,6 +59,18 @@ function App() {
           <Route path="/certifications/nouvelle"    element={<CertificationForm />} />
           <Route path="/certifications/:id"         element={<CertificationFiche />} />
           <Route path="/nlp"                        element={<NlpTester />} />
+          <Route path="/competences"                element={<CompetencesListe />} />
+          <Route path="/competences/nouvelle"       element={<CompetenceForm />} />
+          <Route path="/competences/:id"            element={<CompetenceFiche />} />
+          <Route path="/competences/:id/modifier"   element={<CompetenceForm />} />
+          <Route path="/technologies"               element={<TechnologiesListe />} />
+          <Route path="/technologies/nouvelle"      element={<TechnologieForm />} />
+          <Route path="/technologies/:id"           element={<TechnologieFiche />} />
+          <Route path="/technologies/:id/modifier"  element={<TechnologieForm />} />
+          <Route path="/evaluations"                element={<EvaluationsListe />} />
+          <Route path="/evaluations/nouvelle"       element={<EvaluationForm />} />
+          <Route path="/evaluations/:id"            element={<EvaluationFiche />} />
+          <Route path="/evaluations/:id/modifier"   element={<EvaluationForm />} />
         </Routes>
       </main>
     </div>
