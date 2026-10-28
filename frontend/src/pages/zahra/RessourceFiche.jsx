@@ -4,20 +4,24 @@ import client from "../../api/client";
 
 function Liste({ titre, elements, lien }) {
   return (
-    <section>
-      <h2>{titre}</h2>
+    <div className="card">
+      <h2 className="card-title">{titre}</h2>
       {elements.length === 0 ? (
-        <p>Aucun.</p>
+        <p className="empty-text">Aucun.</p>
       ) : (
-        <ul>
+        <ul className="tag-list">
           {elements.map((e) => (
             <li key={e.id}>
-              {lien ? <Link to={`${lien}/${e.id}`}>{e.label}</Link> : e.label}
+              {lien ? (
+                <Link to={`${lien}/${e.id}`} className="tag tag-lien">{e.label}</Link>
+              ) : (
+                <span className="tag">{e.label}</span>
+              )}
             </li>
           ))}
         </ul>
       )}
-    </section>
+    </div>
   );
 }
 
@@ -50,44 +54,48 @@ export default function RessourceFiche() {
   }, [id]);
 
   if (chargement) {
-    return <main style={styles.page}><p>Chargement...</p></main>;
+    return <div className="loader-wrap"><div className="loader" /></div>;
   }
 
   if (erreur) {
     return (
       <main style={styles.page}>
-        <p style={styles.erreur}>{erreur}</p>
-        <Link to="/ressources">Retour à la liste</Link>
+        <p className="erreur">{erreur}</p>
+        <Link to="/ressources" className="retour">← Retour à la liste</Link>
       </main>
     );
   }
 
   return (
     <main style={styles.page}>
-      <Link to="/ressources">← Retour à la liste</Link>
-      <h1>{ressource.label}</h1>
-      <Link to={`/ressources/${ressource.id}/modifier`}>Modifier cette ressource</Link>
-      <button onClick={supprimer} style={{ marginLeft: "16px", color: "#e53e3e" }}>
-        Supprimer
-      </button>
-      {erreurSuppression && <p style={styles.erreur}>{erreurSuppression}</p>}
+      <Link to="/ressources" className="retour">← Retour à la liste</Link>
+      <div className="page-header">
+        <h1 className="page-title">{ressource.label}</h1>
+        <div className="actions">
+          <Link to={`/ressources/${ressource.id}/modifier`} className="btn">Modifier</Link>
+          <button onClick={supprimer} className="btn danger">Supprimer</button>
+        </div>
+      </div>
+      {erreurSuppression && <p className="erreur">{erreurSuppression}</p>}
 
-      <p>
-        Langue : {ressource.langue}
-        {ressource.dureeMinutes && ` · Durée : ${ressource.dureeMinutes} min`}
-        {ressource.nombrePages && ` · Pages : ${ressource.nombrePages}`}
-      </p>
-      <p>
-        Lien : <a href={ressource.urlRessource} target="_blank" rel="noreferrer">{ressource.urlRessource}</a>
-      </p>
+      <dl className="caracteristiques">
+        <div><dt>Langue</dt><dd>{ressource.langue ?? "—"}</dd></div>
+        {ressource.dureeMinutes && <div><dt>Durée</dt><dd>{ressource.dureeMinutes} min</dd></div>}
+        {ressource.nombrePages && <div><dt>Pages</dt><dd>{ressource.nombrePages}</dd></div>}
+        <div>
+          <dt>Lien</dt>
+          <dd><a href={ressource.urlRessource} target="_blank" rel="noreferrer">{ressource.urlRessource}</a></dd>
+        </div>
+      </dl>
 
-      <Liste titre="Compétences ciblées" elements={ressource.competencesCiblees} />
-      <Liste titre="Utilisée par les cours" elements={ressource.utiliseeParCours} lien="/cours" />
+      <div className="grille-relations">
+        <Liste titre="Compétences ciblées" elements={ressource.competencesCiblees} lien="/competences" />
+        <Liste titre="Utilisée par les cours" elements={ressource.utiliseeParCours} lien="/cours" />
+      </div>
     </main>
   );
 }
 
 const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
-  erreur: { color: "#e53e3e" },
+  page: {},
 };

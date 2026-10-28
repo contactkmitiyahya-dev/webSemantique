@@ -4,20 +4,24 @@ import client from "../../api/client";
 
 function Liste({ titre, elements, lien }) {
   return (
-    <section>
-      <h2>{titre}</h2>
+    <div className="card">
+      <h2 className="card-title">{titre}</h2>
       {elements.length === 0 ? (
-        <p>Aucun.</p>
+        <p className="empty-text">Aucun.</p>
       ) : (
-        <ul>
+        <ul className="tag-list">
           {elements.map((e) => (
             <li key={e.id}>
-              {lien ? <Link to={`${lien}/${e.id}`}>{e.label}</Link> : e.label}
+              {lien ? (
+                <Link to={`${lien}/${e.id}`} className="tag tag-lien">{e.label}</Link>
+              ) : (
+                <span className="tag">{e.label}</span>
+              )}
             </li>
           ))}
         </ul>
       )}
-    </section>
+    </div>
   );
 }
 
@@ -50,42 +54,47 @@ export default function CoursFiche() {
   }, [id]);
 
   if (chargement) {
-    return <main style={styles.page}><p>Chargement...</p></main>;
+    return <div className="loader-wrap"><div className="loader" /></div>;
   }
 
   if (erreur) {
     return (
       <main style={styles.page}>
-        <p style={styles.erreur}>{erreur}</p>
-        <Link to="/cours">Retour à la liste</Link>
+        <p className="erreur">{erreur}</p>
+        <Link to="/cours" className="retour">← Retour à la liste</Link>
       </main>
     );
   }
 
   return (
     <main style={styles.page}>
-      <Link to="/cours">← Retour à la liste</Link>
-      <h1>{cours.intitule}</h1>
-      <Link to={`/cours/${cours.id}/modifier`}>Modifier ce cours</Link>
-      <button onClick={supprimer} style={{ marginLeft: "16px", color: "#e53e3e" }}>
-        Supprimer
-      </button>
-      {erreurSuppression && <p style={styles.erreur}>{erreurSuppression}</p>}
-      <p>
-        Niveau : {cours.niveauDifficulte} · Durée : {cours.dureeHeures} h · Ordre dans le module :{" "}
-        {cours.ordreDansModule}
-      </p>
+      <Link to="/cours" className="retour">← Retour à la liste</Link>
+      <div className="page-header">
+        <h1 className="page-title">{cours.intitule}</h1>
+        <div className="actions">
+          <Link to={`/cours/${cours.id}/modifier`} className="btn">Modifier</Link>
+          <button onClick={supprimer} className="btn danger">Supprimer</button>
+        </div>
+      </div>
+      {erreurSuppression && <p className="erreur">{erreurSuppression}</p>}
 
-      <Liste titre="Module" elements={cours.module} lien="/modules" />
-      <Liste titre="Formateur" elements={cours.formateur} />
-      <Liste titre="Compétences" elements={cours.competences} />
-      <Liste titre="Technologies" elements={cours.technologies} />
-      <Liste titre="Ressources" elements={cours.ressources} />
+      <dl className="caracteristiques">
+        <div><dt>Niveau</dt><dd>{cours.niveauDifficulte ?? "—"}</dd></div>
+        <div><dt>Durée</dt><dd>{cours.dureeHeures != null ? `${cours.dureeHeures} h` : "—"}</dd></div>
+        <div><dt>Ordre dans le module</dt><dd>{cours.ordreDansModule ?? "—"}</dd></div>
+      </dl>
+
+      <div className="grille-relations">
+        <Liste titre="Module" elements={cours.module} lien="/modules" />
+        <Liste titre="Formateur" elements={cours.formateur} lien="/formateurs" />
+        <Liste titre="Compétences" elements={cours.competences} lien="/competences" />
+        <Liste titre="Technologies" elements={cours.technologies} lien="/technologies" />
+        <Liste titre="Ressources" elements={cours.ressources} lien="/ressources" />
+      </div>
     </main>
   );
 }
 
 const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
-  erreur: { color: "#e53e3e" },
+  page: {},
 };

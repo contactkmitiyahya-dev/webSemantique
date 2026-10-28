@@ -45,10 +45,9 @@ function RelationSelectSimple({
   }, [endpoint]);
 
   return (
-    <div style={styles.conteneur}>
-      {label && <label style={styles.label}>{label}</label>}
+    <div className="rs-simple">
+      {label && <label>{label}</label>}
       <select
-        style={styles.select}
         value={valeur}
         onChange={(e) => onChange(e.target.value)}
         disabled={chargement}
@@ -60,7 +59,7 @@ function RelationSelectSimple({
           </option>
         ))}
       </select>
-      {erreur && <span style={styles.erreur}>{erreur}</span>}
+      {erreur && <span className="rs-erreur">{erreur}</span>}
     </div>
   );
 }
@@ -114,31 +113,3 @@ function RelationSelectMultiple({ ressource, valeurs = [], onChange, desactive =
     </div>
   );
 }
-
-const styles = {
-  conteneur: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px",
-  },
-  label: {
-    fontSize: "12px",
-    fontWeight: "600",
-    color: "#555",
-    textTransform: "uppercase",
-    letterSpacing: "0.05em",
-  },
-  select: {
-    padding: "6px 10px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    fontSize: "14px",
-    background: "#fff",
-    cursor: "pointer",
-    minWidth: "180px",
-  },
-  erreur: {
-    fontSize: "12px",
-    color: "#e53e3e",
-  },
-};

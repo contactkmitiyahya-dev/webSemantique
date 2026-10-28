@@ -68,9 +68,15 @@ export default function RessourcesListe() {
   }
 
   return (
-    <main style={styles.page}>
-      <h1>Ressources pédagogiques</h1>
-      <Link to="/ressources/nouveau">+ Nouvelle ressource</Link>
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Ressources pédagogiques</h1>
+          <p className="page-subtitle">{total} {total > 1 ? "ressources" : "ressource"}</p>
+        </div>
+        <Link to="/ressources/nouveau" className="btn btn-primary">+ Nouvelle ressource</Link>
+      </div>
+
       <div style={styles.barre}>
         <SearchBox valeur={q} onChange={changerRecherche} placeholder="Rechercher une ressource..." />
       </div>
@@ -81,53 +87,46 @@ export default function RessourcesListe() {
         onReset={reinitialiser}
       />
 
-      {erreur && <p style={styles.erreur}>{erreur}</p>}
-      {chargement && <p>Chargement...</p>}
+      {erreur && <p className="erreur">{erreur}</p>}
 
-      {!chargement && !erreur && (
-        <>
-          <p>{total} ressource(s)</p>
-          {donnees.length === 0 && <p>Aucune ressource trouvée.</p>}
-          <ul style={styles.liste}>
-            {donnees.map((r) => (
-              <li key={r.id} style={styles.item}>
-                <Link to={`/ressources/${r.id}`}>{r.label}</Link>
-                <span>{r.langue}</span>
-              </li>
-            ))}
-          </ul>
-          <div style={styles.pagination}>
-            <button disabled={page <= 1} onClick={() => setPage(page - 1)}>
-              Précédent
+      {chargement ? (
+        <div className="loader-wrap"><div className="loader" /></div>
+      ) : erreur ? null : donnees.length === 0 ? (
+        <div className="empty-state"><p>Aucune ressource trouvée.</p></div>
+      ) : (
+        <div className="table-card">
+          <table className="data-table">
+            <thead>
+              <tr><th>Ressource</th><th>Langue</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              {donnees.map((x) => (
+                <tr key={x.id} className="table-row">
+                  <td className="font-medium"><Link to={`/ressources/${x.id}`}>{x.label}</Link></td>
+                  <td>{x.langue && <span className="pastille">{x.langue}</span>}</td>
+                  <td className="actions-cell">
+                    <Link to={`/ressources/${x.id}`} className="btn-sm btn-outline">Voir</Link>
+                    <Link to={`/ressources/${x.id}/modifier`} className="btn-sm btn-outline">Modifier</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <button className="btn-sm btn-outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              ← Précédent
             </button>
-            <span>
-              Page {page} / {pages}
-            </span>
-            <button disabled={page >= pages} onClick={() => setPage(page + 1)}>
-              Suivant
+            <span className="page-info">Page {page} / {pages}</span>
+            <button className="btn-sm btn-outline" disabled={page >= pages} onClick={() => setPage(page + 1)}>
+              Suivant →
             </button>
           </div>
-        </>
+        </div>
       )}
-    </main>
+    </div>
   );
 }
 
 const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
-  barre: { margin: "12px 0" },
-  erreur: { color: "#e53e3e" },
-  liste: { listStyle: "none", padding: 0 },
-  item: {
-    display: "flex",
-    gap: "16px",
-    padding: "10px 0",
-    borderBottom: "1px solid #eee",
-  },
-  pagination: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    marginTop: "16px",
-  },
+  barre: { marginBottom: "12px" },
 };

@@ -1,35 +1,5 @@
-/* Styles des pages d'Ala (formateurs, personnel, organismes, domaines) */
+/* Pages d'Ala (formateurs, personnel, organismes, domaines).
+   En-têtes, cartes, badges, listes de propriétés et formulaires : voir index.css (système commun). */
 
-.entete-page { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-.entete-page h1 { margin: 0 0 4px; }
-.entete-page h2 { margin: 0; font-size: 1.15rem; display: flex; gap: 8px; align-items: center; }
-.actions { display: flex; gap: 6px; }
-.retour { display: inline-block; margin-bottom: 8px; font-size: 0.9rem; }
-
-.badge { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--accent-fond); color: var(--accent); font-size: 0.8rem; font-weight: 600; }
-
-.carte { background: var(--surface); border: 1px solid var(--bordure); border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; }
-.carte h3 { margin: 0 0 8px; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
-.compteur { background: var(--survol); color: var(--texte-doux); border-radius: 999px; padding: 0 8px; font-size: 0.8rem; font-weight: 500; }
-
-.proprietes { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; }
-.proprietes dt { color: var(--texte-doux); font-size: 0.9rem; }
-.proprietes dd { margin: 0; }
-
-.grille-relations { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-.liens { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.liens li { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
-/* Mention discrète pour un lien écrit dans l'autre sens par un autre membre */
-.lecture-seule { font-size: 0.75rem; color: var(--texte-doux); font-style: italic; }
-
-.grille-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
-.grille-2 label, .modal-corps > label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--texte-doux); }
-.champ-relation { display: flex; flex-direction: column; gap: 4px; }
-.etiquette { font-size: 0.85rem; color: var(--texte-doux); }
-
-.detail-deplie { margin-top: 16px; }
-.doux { color: var(--texte-doux); font-size: 0.9rem; }
-
-@media (max-width: 600px) {
-  .grille-2 { grid-template-columns: 1fr; }
-}
+.entete-page h2 { margin: 0; font-size: var(--t-lg); display: flex; gap: 8px; align-items: center; }
+.detail-deplie { margin-top: 18px; }

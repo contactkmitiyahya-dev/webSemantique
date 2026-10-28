@@ -12,16 +12,16 @@ const EXEMPLES = [
 function afficherReponse(reponse) {
   if (reponse === null || reponse === undefined) return null;
   if (Array.isArray(reponse)) {
-    if (reponse.length === 0) return <p>Aucun résultat.</p>;
+    if (reponse.length === 0) return <p className="empty-text">Aucun résultat.</p>;
     return (
-      <ul>
+      <ul className="tag-list">
         {reponse.map((r) => (
-          <li key={r.id}>{r.label ?? r.id}</li>
+          <li key={r.id}><span className="tag" title={r.id}>{r.label ?? r.id}</span></li>
         ))}
       </ul>
     );
   }
-  return <p>{String(reponse)}</p>;
+  return <span className="badge badge-lg">{String(reponse)}</span>;
 }
 
 export default function Questions() {
@@ -47,71 +47,60 @@ export default function Questions() {
   }
 
   return (
-    <main style={styles.page}>
-      <h1>Poser une question</h1>
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Questions guidées</h1>
+          <p className="page-subtitle">Modules, cours et ressources : posez une question en français.</p>
+        </div>
+      </div>
 
-      <form onSubmit={poser} style={styles.form}>
+      <form onSubmit={poser} className="card search-bar" style={{ maxWidth: "760px" }}>
         <input
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ex. Quels sont les prérequis du module Interactivité ?"
-          style={styles.input}
+          style={{ flex: 1, minWidth: 0 }}
         />
-        <button type="submit" disabled={chargement}>
+        <button type="submit" className="btn btn-primary" disabled={chargement}>
           {chargement ? "Recherche..." : "Poser"}
         </button>
       </form>
 
-      <div style={styles.exemples}>
+      <div className="nlp-chips" style={{ margin: "0 0 18px", maxWidth: "760px" }}>
         {EXEMPLES.map((ex) => (
-          <button key={ex} type="button" onClick={() => setQuestion(ex)} style={styles.exemple}>
+          <button key={ex} type="button" className="nlp-chip" onClick={() => setQuestion(ex)}>
             {ex}
           </button>
         ))}
       </div>
 
-      {erreur && <p style={styles.erreur}>{erreur}</p>}
+      {erreur && <p className="erreur">{erreur}</p>}
 
       {resultat && (
-        <section style={styles.resultat}>
+        <div className="card" style={{ maxWidth: "760px" }}>
           {resultat.message ? (
-            <p>{resultat.message}</p>
+            <p className="doux" style={{ margin: 0 }}>{resultat.message}</p>
           ) : (
             <>
-              <p>
-                <strong>Intention :</strong> {resultat.intention}
-              </p>
-              <p>
-                <strong>Mots de base (spaCy) :</strong> {resultat.lemmes.join(", ")}
-              </p>
-              {resultat.entite && (
-                <p>
-                  <strong>Élément reconnu :</strong> {resultat.entite.label} ({resultat.entite.type})
-                </p>
-              )}
-              <h2>Réponse</h2>
+              <dl className="proprietes">
+                <dt>Intention</dt>
+                <dd><span className="badge">{resultat.intention}</span></dd>
+                <dt>Mots de base (spaCy)</dt>
+                <dd className="font-mono">{resultat.lemmes.join(", ")}</dd>
+                {resultat.entite && (
+                  <>
+                    <dt>Élément reconnu</dt>
+                    <dd>{resultat.entite.label} <span className="pastille">{resultat.entite.type}</span></dd>
+                  </>
+                )}
+              </dl>
+              <h2 className="card-title" style={{ marginTop: "18px" }}>Réponse</h2>
               {afficherReponse(resultat.reponse)}
             </>
           )}
-        </section>
+        </div>
       )}
-    </main>
+    </div>
   );
 }
-
-const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
-  form: { display: "flex", gap: "8px", maxWidth: "720px" },
-  input: { flex: 1, padding: "8px", fontSize: "14px", borderRadius: "6px", border: "1px solid #ccc" },
-  exemples: { display: "flex", flexWrap: "wrap", gap: "8px", margin: "16px 0" },
-  exemple: {
-    padding: "6px 10px",
-    fontSize: "13px",
-    borderRadius: "6px",
-    border: "1px solid #bbb",
-    background: "#fff",
-    cursor: "pointer",
-  },
-  resultat: { marginTop: "16px", padding: "16px", background: "#f5f7fa", borderRadius: "8px", maxWidth: "720px" },
-  erreur: { color: "#e53e3e" },
-};

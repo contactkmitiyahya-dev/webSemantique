@@ -76,120 +76,113 @@ export default function CoursForm() {
   }
 
   if (chargement) {
-    return <main style={styles.page}><p>Chargement...</p></main>;
+    return <div className="loader-wrap"><div className="loader" /></div>;
   }
 
   return (
-    <main style={styles.page}>
-      <Link to={modeEdition ? `/cours/${id}` : "/cours"}>← Retour</Link>
-      <h1>{modeEdition ? "Modifier le cours" : "Nouveau cours"}</h1>
+    <div className="page-container">
+      <Link to={modeEdition ? `/cours/${id}` : "/cours"} className="retour">← Retour</Link>
+      <div className="page-header">
+        <h1 className="page-title">{modeEdition ? "Modifier le cours" : "Nouveau cours"}</h1>
+      </div>
 
-      <form onSubmit={soumettre} style={styles.form}>
-        <label style={styles.champ}>
-          Intitulé
-          <input
-            required
-            value={valeurs.intitule}
-            onChange={(e) => modifier("intitule", e.target.value)}
-            style={styles.input}
-          />
-        </label>
-
-        <label style={styles.champ}>
-          Durée (heures)
-          <input
-            type="number"
-            required
-            min="1"
-            value={valeurs.dureeHeures}
-            onChange={(e) => modifier("dureeHeures", e.target.value)}
-            style={styles.input}
-          />
-        </label>
-
-        <label style={styles.champ}>
-          Niveau
-          <select
-            value={valeurs.niveauDifficulte}
-            onChange={(e) => modifier("niveauDifficulte", e.target.value)}
-            style={styles.input}
-          >
-            {NIVEAUX.map((n) => (
-              <option key={n} value={n}>{n}</option>
-            ))}
-          </select>
-        </label>
-
-        <label style={styles.champ}>
-          Ordre dans le module
-          <input
-            type="number"
-            required
-            min="1"
-            value={valeurs.ordreDansModule}
-            onChange={(e) => modifier("ordreDansModule", e.target.value)}
-            style={styles.input}
-          />
-        </label>
-
-        {!modeEdition && (
-          <>
-            <RelationSelect
-              endpoint="/modules"
-              valeur={valeurs.moduleId}
-              onChange={(v) => modifier("moduleId", v)}
-              label="Module"
+      <form onSubmit={soumettre} className="card form-card formulaire">
+        <div className="grille-champs">
+          <label>
+            Intitulé
+            <input
+              required
+              value={valeurs.intitule}
+              onChange={(e) => modifier("intitule", e.target.value)}
             />
+          </label>
 
-            <label style={styles.champ}>
-              Formateur (id)
-              <input
-                required
-                placeholder="ex. Dr_Benali"
-                value={valeurs.formateurId}
-                onChange={(e) => modifier("formateurId", e.target.value)}
-                style={styles.input}
+          <label>
+            Durée (heures)
+            <input
+              type="number"
+              required
+              min="1"
+              value={valeurs.dureeHeures}
+              onChange={(e) => modifier("dureeHeures", e.target.value)}
+            />
+          </label>
+
+          <label>
+            Niveau
+            <select
+              value={valeurs.niveauDifficulte}
+              onChange={(e) => modifier("niveauDifficulte", e.target.value)}
+            >
+              {NIVEAUX.map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Ordre dans le module
+            <input
+              type="number"
+              required
+              min="1"
+              value={valeurs.ordreDansModule}
+              onChange={(e) => modifier("ordreDansModule", e.target.value)}
+            />
+          </label>
+
+          {!modeEdition && (
+            <>
+              <RelationSelect
+                endpoint="/modules"
+                valeur={valeurs.moduleId}
+                onChange={(v) => modifier("moduleId", v)}
+                label="Module"
               />
-            </label>
 
-            <label style={styles.champ}>
-              Compétence (id)
-              <input
-                required
-                placeholder="ex. Comp_HTML"
-                value={valeurs.competenceId}
-                onChange={(e) => modifier("competenceId", e.target.value)}
-                style={styles.input}
-              />
-            </label>
+              <label>
+                Formateur (id)
+                <input
+                  required
+                  placeholder="ex. Dr_Benali"
+                  value={valeurs.formateurId}
+                  onChange={(e) => modifier("formateurId", e.target.value)}
+                />
+              </label>
 
-            <label style={styles.champ}>
-              Technologie (id)
-              <input
-                required
-                placeholder="ex. Tech_HTML5"
-                value={valeurs.technologieId}
-                onChange={(e) => modifier("technologieId", e.target.value)}
-                style={styles.input}
-              />
-            </label>
-          </>
-        )}
+              <label>
+                Compétence (id)
+                <input
+                  required
+                  placeholder="ex. Comp_HTML"
+                  value={valeurs.competenceId}
+                  onChange={(e) => modifier("competenceId", e.target.value)}
+                />
+              </label>
 
-        {erreur && <p style={styles.erreur}>{erreur}</p>}
+              <label>
+                Technologie (id)
+                <input
+                  required
+                  placeholder="ex. Tech_HTML5"
+                  value={valeurs.technologieId}
+                  onChange={(e) => modifier("technologieId", e.target.value)}
+                />
+              </label>
+            </>
+          )}
 
-        <button type="submit" disabled={enCours}>
-          {enCours ? "Enregistrement..." : "Enregistrer"}
-        </button>
+        </div>
+
+        {erreur && <p className="erreur">{erreur}</p>}
+
+        <div className="form-actions">
+          <Link to={modeEdition ? `/cours/${id}` : "/cours"} className="btn">Annuler</Link>
+          <button type="submit" className="btn btn-primary" disabled={enCours}>
+            {enCours ? "Enregistrement..." : "Enregistrer"}
+          </button>
+        </div>
       </form>
-    </main>
+    </div>
   );
 }
-
-const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
-  form: { display: "flex", flexDirection: "column", gap: "16px", maxWidth: "420px" },
-  champ: { display: "flex", flexDirection: "column", gap: "6px", fontSize: "14px" },
-  input: { padding: "8px", fontSize: "14px", borderRadius: "6px", border: "1px solid #ccc" },
-  erreur: { color: "#e53e3e" },
-};

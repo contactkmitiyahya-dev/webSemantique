@@ -77,9 +77,15 @@ export default function CoursListe() {
   }
 
   return (
-    <main style={styles.page}>
-      <h1>Cours</h1>
-      <Link to="/cours/nouveau">+ Nouveau cours</Link>
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Cours</h1>
+          <p className="page-subtitle">{total} {total > 1 ? "cours" : "cours"}</p>
+        </div>
+        <Link to="/cours/nouveau" className="btn btn-primary">+ Nouveau cours</Link>
+      </div>
+
       <div style={styles.barre}>
         <SearchBox valeur={q} onChange={changerRecherche} placeholder="Rechercher un cours..." />
       </div>
@@ -90,54 +96,47 @@ export default function CoursListe() {
         onReset={reinitialiser}
       />
 
-      {erreur && <p style={styles.erreur}>{erreur}</p>}
-      {chargement && <p>Chargement...</p>}
+      {erreur && <p className="erreur">{erreur}</p>}
 
-      {!chargement && !erreur && (
-        <>
-          <p>{total} cours</p>
-          {donnees.length === 0 && <p>Aucun cours trouvé.</p>}
-          <ul style={styles.liste}>
-            {donnees.map((c) => (
-              <li key={c.id} style={styles.item}>
-                <Link to={`/cours/${c.id}`}>{c.intitule}</Link>
-                <span>{c.niveauDifficulte}</span>
-                <span>{c.dureeHeures} h</span>
-              </li>
-            ))}
-          </ul>
-          <div style={styles.pagination}>
-            <button disabled={page <= 1} onClick={() => setPage(page - 1)}>
-              Précédent
+      {chargement ? (
+        <div className="loader-wrap"><div className="loader" /></div>
+      ) : erreur ? null : donnees.length === 0 ? (
+        <div className="empty-state"><p>Aucun cours trouvé.</p></div>
+      ) : (
+        <div className="table-card">
+          <table className="data-table">
+            <thead>
+              <tr><th>Cours</th><th>Niveau</th><th>Durée</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              {donnees.map((x) => (
+                <tr key={x.id} className="table-row">
+                  <td className="font-medium"><Link to={`/cours/${x.id}`}>{x.intitule}</Link></td>
+                  <td>{x.niveauDifficulte && <span className="badge">{x.niveauDifficulte}</span>}</td>
+                  <td>{x.dureeHeures != null && `${x.dureeHeures} h`}</td>
+                  <td className="actions-cell">
+                    <Link to={`/cours/${x.id}`} className="btn-sm btn-outline">Voir</Link>
+                    <Link to={`/cours/${x.id}/modifier`} className="btn-sm btn-outline">Modifier</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <button className="btn-sm btn-outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              ← Précédent
             </button>
-            <span>
-              Page {page} / {pages}
-            </span>
-            <button disabled={page >= pages} onClick={() => setPage(page + 1)}>
-              Suivant
+            <span className="page-info">Page {page} / {pages}</span>
+            <button className="btn-sm btn-outline" disabled={page >= pages} onClick={() => setPage(page + 1)}>
+              Suivant →
             </button>
           </div>
-        </>
+        </div>
       )}
-    </main>
+    </div>
   );
 }
 
 const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
   barre: { marginBottom: "12px" },
-  erreur: { color: "#e53e3e" },
-  liste: { listStyle: "none", padding: 0 },
-  item: {
-    display: "flex",
-    gap: "16px",
-    padding: "10px 0",
-    borderBottom: "1px solid #eee",
-  },
-  pagination: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    marginTop: "16px",
-  },
 };

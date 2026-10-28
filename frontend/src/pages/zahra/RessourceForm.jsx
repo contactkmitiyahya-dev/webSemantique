@@ -76,112 +76,105 @@ export default function RessourceForm() {
   }
 
   if (chargement) {
-    return <main style={styles.page}><p>Chargement...</p></main>;
+    return <div className="loader-wrap"><div className="loader" /></div>;
   }
 
   return (
-    <main style={styles.page}>
-      <Link to={modeEdition ? `/ressources/${id}` : "/ressources"}>← Retour</Link>
-      <h1>{modeEdition ? "Modifier la ressource" : "Nouvelle ressource"}</h1>
+    <div className="page-container">
+      <Link to={modeEdition ? `/ressources/${id}` : "/ressources"} className="retour">← Retour</Link>
+      <div className="page-header">
+        <h1 className="page-title">{modeEdition ? "Modifier la ressource" : "Nouvelle ressource"}</h1>
+      </div>
 
-      <form onSubmit={soumettre} style={styles.form}>
-        <label style={styles.champ}>
-          Intitulé
-          <input
-            required
-            value={valeurs.intitule}
-            onChange={(e) => modifier("intitule", e.target.value)}
-            style={styles.input}
-          />
-        </label>
+      <form onSubmit={soumettre} className="card form-card formulaire">
+        <div className="grille-champs">
+          <label>
+            Intitulé
+            <input
+              required
+              value={valeurs.intitule}
+              onChange={(e) => modifier("intitule", e.target.value)}
+            />
+          </label>
 
-        <label style={styles.champ}>
-          URL
-          <input
-            type="url"
-            required
-            value={valeurs.urlRessource}
-            onChange={(e) => modifier("urlRessource", e.target.value)}
-            style={styles.input}
-          />
-        </label>
+          <label>
+            URL
+            <input
+              type="url"
+              required
+              value={valeurs.urlRessource}
+              onChange={(e) => modifier("urlRessource", e.target.value)}
+            />
+          </label>
 
-        <label style={styles.champ}>
-          Langue
-          <select
-            value={valeurs.langue}
-            onChange={(e) => modifier("langue", e.target.value)}
-            style={styles.input}
-          >
-            <option value="fr">Français</option>
-            <option value="en">Anglais</option>
-          </select>
-        </label>
+          <label>
+            Langue
+            <select
+              value={valeurs.langue}
+              onChange={(e) => modifier("langue", e.target.value)}
+            >
+              <option value="fr">Français</option>
+              <option value="en">Anglais</option>
+            </select>
+          </label>
 
-        {!modeEdition && (
-          <>
-            <label style={styles.champ}>
-              Type
-              <select
-                value={valeurs.type}
-                onChange={(e) => modifier("type", e.target.value)}
-                style={styles.input}
-              >
-                {TYPES.map((t) => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-            </label>
+          {!modeEdition && (
+            <>
+              <label>
+                Type
+                <select
+                  value={valeurs.type}
+                  onChange={(e) => modifier("type", e.target.value)}
+                >
+                  {TYPES.map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              </label>
 
-            <label style={styles.champ}>
-              Compétence (id)
-              <input
-                required
-                placeholder="ex. Comp_HTML"
-                value={valeurs.competenceId}
-                onChange={(e) => modifier("competenceId", e.target.value)}
-                style={styles.input}
-              />
-            </label>
+              <label>
+                Compétence (id)
+                <input
+                  required
+                  placeholder="ex. Comp_HTML"
+                  value={valeurs.competenceId}
+                  onChange={(e) => modifier("competenceId", e.target.value)}
+                />
+              </label>
 
-            <label style={styles.champ}>
-              Nombre de pages (optionnel)
-              <input
-                type="number"
-                min="1"
-                value={valeurs.nombrePages}
-                onChange={(e) => modifier("nombrePages", e.target.value)}
-                style={styles.input}
-              />
-            </label>
+              <label>
+                Nombre de pages (optionnel)
+                <input
+                  type="number"
+                  min="1"
+                  value={valeurs.nombrePages}
+                  onChange={(e) => modifier("nombrePages", e.target.value)}
+                />
+              </label>
 
-            <label style={styles.champ}>
-              Durée en minutes (optionnel)
-              <input
-                type="number"
-                min="1"
-                value={valeurs.dureeMinutes}
-                onChange={(e) => modifier("dureeMinutes", e.target.value)}
-                style={styles.input}
-              />
-            </label>
-          </>
-        )}
+              <label>
+                Durée en minutes (optionnel)
+                <input
+                  type="number"
+                  min="1"
+                  value={valeurs.dureeMinutes}
+                  onChange={(e) => modifier("dureeMinutes", e.target.value)}
+                />
+              </label>
+            </>
+          )}
 
-        {erreur && <p style={styles.erreur}>{erreur}</p>}
+        </div>
 
-        <button type="submit" disabled={enCours}>
-          {enCours ? "Enregistrement..." : "Enregistrer"}
-        </button>
+        {erreur && <p className="erreur">{erreur}</p>}
+
+        <div className="form-actions">
+          <Link to={modeEdition ? `/ressources/${id}` : "/ressources"} className="btn">Annuler</Link>
+          <button type="submit" className="btn btn-primary" disabled={enCours}>
+            {enCours ? "Enregistrement..." : "Enregistrer"}
+          </button>
+        </div>
       </form>
-    </main>
+    </div>
   );
 }
-
-const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
-  form: { display: "flex", flexDirection: "column", gap: "16px", maxWidth: "420px" },
-  champ: { display: "flex", flexDirection: "column", gap: "6px", fontSize: "14px" },
-  input: { padding: "8px", fontSize: "14px", borderRadius: "6px", border: "1px solid #ccc" },
-  erreur: { color: "#e53e3e" },
-};

@@ -16,7 +16,7 @@ function ArbrePrerequis({ id, profondeur }) {
       .catch((e) => setErreur(e.message));
   }, [id]);
 
-  if (erreur) return <li style={styles.erreur}>{id} : {erreur}</li>;
+  if (erreur) return <li className="erreur">{id} : {erreur}</li>;
   if (!donnees) return <li>{id}...</li>;
 
   return (
@@ -82,90 +82,110 @@ export default function ModuleFiche() {
   }, [id, rafraichir]);
 
   if (chargement) {
-    return <main style={styles.page}><p>Chargement...</p></main>;
+    return <div className="loader-wrap"><div className="loader" /></div>;
   }
 
   if (erreur) {
     return (
       <main style={styles.page}>
-        <p style={styles.erreur}>{erreur}</p>
-        <Link to="/modules">Retour à la liste</Link>
+        <p className="erreur">{erreur}</p>
+        <Link to="/modules" className="retour">← Retour à la liste</Link>
       </main>
     );
   }
 
   return (
     <main style={styles.page}>
-      <Link to="/modules">← Retour à la liste</Link>
-      <h1>{module.intitule}</h1>
-      <Link to={`/modules/${module.id}/modifier`}>Modifier ce module</Link>
-      <button onClick={supprimer} style={{ marginLeft: "16px", color: "#e53e3e" }}>
-        Supprimer
-      </button>
-      {erreurSuppression && <p style={styles.erreur}>{erreurSuppression}</p>}
-      <p>
-        Niveau : {module.niveauDifficulte} · Durée : {module.dureeHeures} h
-      </p>
-
-      <h2>Cours</h2>
-      {module.cours.length === 0 ? (
-        <p>Aucun cours.</p>
-      ) : (
-        <ul>
-          {module.cours.map((c) => (
-            <li key={c.id}>{c.label}</li>
-          ))}
-        </ul>
-      )}
-
-      <h2>Arbre des prérequis</h2>
-      {module.prerequis.length === 0 ? (
-        <p>Aucun prérequis : module de départ.</p>
-      ) : (
-        <ul style={styles.arbre}>
-          {module.prerequis.map((p) => (
-            <ArbrePrerequis key={p.id} id={p.id} profondeur={1} />
-          ))}
-        </ul>
-      )}
-
-      <h2>Ajouter un prérequis</h2>
-      <div style={{ display: "flex", gap: "8px", alignItems: "flex-end" }}>
-        <RelationSelect
-          endpoint="/modules"
-          valeur={prerequisAjout}
-          onChange={setPrerequisAjout}
-          label="Module prérequis"
-        />
-        <button onClick={ajouterPrerequis} disabled={!prerequisAjout}>
-          Ajouter
-        </button>
+      <Link to="/modules" className="retour">← Retour à la liste</Link>
+      <div className="page-header">
+        <h1 className="page-title">{module.intitule}</h1>
+        <div className="actions">
+          <Link to={`/modules/${module.id}/modifier`} className="btn">Modifier</Link>
+          <button onClick={supprimer} className="btn danger">Supprimer</button>
+        </div>
       </div>
-      {erreurAjout && <p style={styles.erreur}>{erreurAjout}</p>}
+      {erreurSuppression && <p className="erreur">{erreurSuppression}</p>}
 
-      <h2>Tous les prérequis (directs et indirects)</h2>
-      {prerequisTous.length === 0 ? (
-        <p>Aucun.</p>
-      ) : (
-        <ul>
-          {prerequisTous.map((p) => (
-            <li key={p.id}>
-              <Link to={`/modules/${p.id}`}>{p.label}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <dl className="caracteristiques">
+        <div><dt>Niveau</dt><dd>{module.niveauDifficulte ?? "—"}</dd></div>
+        <div><dt>Durée</dt><dd>{module.dureeHeures != null ? `${module.dureeHeures} h` : "—"}</dd></div>
+        <div><dt>Cours</dt><dd>{module.cours.length}</dd></div>
+        <div><dt>Prérequis (tous)</dt><dd>{prerequisTous.length}</dd></div>
+      </dl>
+
+      <div className="grille-relations">
+        <div className="card">
+          <h2 className="card-title">Cours</h2>
+          {module.cours.length === 0 ? (
+            <p className="empty-text">Aucun cours.</p>
+          ) : (
+            <ul className="tag-list">
+              {module.cours.map((c) => (
+                <li key={c.id}>
+                  <Link to={`/cours/${c.id}`} className="tag tag-lien">{c.label}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="card">
+          <h2 className="card-title">Arbre des prérequis</h2>
+          {module.prerequis.length === 0 ? (
+            <p className="empty-text">Aucun prérequis : module de départ.</p>
+          ) : (
+            <ul style={styles.arbre}>
+              {module.prerequis.map((p) => (
+                <ArbrePrerequis key={p.id} id={p.id} profondeur={1} />
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="card">
+          <h2 className="card-title">Tous les prérequis (directs et indirects)</h2>
+          {prerequisTous.length === 0 ? (
+            <p className="empty-text">Aucun.</p>
+          ) : (
+            <ul className="tag-list">
+              {prerequisTous.map((p) => (
+                <li key={p.id}>
+                  <Link to={`/modules/${p.id}`} className="tag tag-lien">{p.label}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="card">
+          <h2 className="card-title">Ajouter un prérequis</h2>
+          <div className="actions" style={{ alignItems: "flex-end" }}>
+            <RelationSelect
+              endpoint="/modules"
+              valeur={prerequisAjout}
+              onChange={setPrerequisAjout}
+              label="Module prérequis"
+            />
+            <button className="btn btn-primary" onClick={ajouterPrerequis} disabled={!prerequisAjout}>
+              Ajouter
+            </button>
+          </div>
+          {erreurAjout && <p className="erreur" style={{ marginTop: "12px" }}>{erreurAjout}</p>}
+        </div>
+      </div>
     </main>
   );
 }
 
 const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
-  erreur: { color: "#e53e3e" },
+  page: {},
   arbre: {
     listStyle: "none",
-    paddingLeft: "20px",
-    borderLeft: "2px solid #ddd",
-    marginLeft: "8px",
+    margin: 0,
+    paddingLeft: "16px",
+    borderLeft: "2px solid var(--line-strong)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px",
   },
 };

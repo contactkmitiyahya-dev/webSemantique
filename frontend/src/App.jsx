@@ -1,6 +1,7 @@
-// TEMPORAIRE (Ala) – à remplacer par la version de Yahya (React Router, menu, accueil)
-// Seules les routes d'Ala sont branchées ; les autres membres ajouteront les leurs.
+// Cadre de l'application : navigation par domaine, barre de question, thème, accueil, routes.
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import client from './api/client'
 import FormateursListe from './pages/ala/FormateursListe'
 import FormateurFiche from './pages/ala/FormateurFiche'
 import PersonnelListe from './pages/ala/PersonnelListe'
@@ -44,91 +45,238 @@ import Questions from './pages/zahra/Questions'
 import QuestionBar from './components/QuestionBar'
 import './App.css'
 
-// Menu : une entrée par membre
-const MENU = [
+// Navigation par domaine (et non par membre). « classe » : classe de l'ontologie affichée à côté,
+// « api » : route qui donne le total sur l'accueil, « membre » : auteur de la page (en petit sous le lien).
+const DOMAINES = [
   {
-    membre: 'Yahya',
+    titre: 'Offre de formation',
     liens: [
-      { to: '/apprenants', texte: 'Apprenants' },
-      { to: '/apprenants/stats', texte: 'Statistiques' },
-      { to: '/certifications', texte: 'Certifications' },
-      { to: '/nlp', texte: 'Question (NLP)' },
+      { to: '/formations', membre: 'Imem', texte: 'Formations', classe: 'Formation', api: 'formations' },
+      { to: '/parcours', membre: 'Imem', texte: 'Parcours', classe: 'Parcours', api: 'parcours' },
+      { to: '/modules', membre: 'Zahra', texte: 'Modules', classe: 'Module', api: 'modules' },
+      { to: '/cours', membre: 'Zahra', texte: 'Cours', classe: 'Cours', api: 'cours' },
+      { to: '/ressources', membre: 'Zahra', texte: 'Ressources', classe: 'RessourcePedagogique', api: 'ressources' },
     ],
   },
   {
-    membre: 'Ala',
+    titre: 'Apprenants',
     liens: [
-      { to: '/formateurs', texte: 'Formateurs' },
-      { to: '/personnel', texte: 'Personnel' },
-      { to: '/organismes', texte: 'Organismes' },
-      { to: '/domaines', texte: 'Domaines' },
+      { to: '/apprenants', membre: 'Yahya', texte: 'Apprenants', classe: 'Apprenant', api: 'apprenants' },
+      { to: '/apprenants/stats', membre: 'Yahya', texte: 'Statistiques' },
+      { to: '/certifications', membre: 'Yahya', texte: 'Certifications', classe: 'Certification', api: 'certifications' },
     ],
   },
   {
-    membre: 'Imem',
+    titre: 'Compétences',
     liens: [
-      { to: '/formations', texte: 'Formations' },
-      { to: '/parcours', texte: 'Parcours' },
-      { to: '/recherche', texte: 'Recherche globale' },
+      { to: '/competences', membre: 'Linda', texte: 'Compétences', classe: 'Competence', api: 'competences' },
+      { to: '/technologies', membre: 'Linda', texte: 'Technologies', classe: 'Technologie', api: 'technologies' },
+      { to: '/evaluations', membre: 'Linda', texte: 'Évaluations', classe: 'Evaluation', api: 'evaluations' },
     ],
   },
   {
-    membre: 'Linda',
+    titre: 'Acteurs',
     liens: [
-      { to: '/competences', texte: 'Compétences' },
-      { to: '/technologies', texte: 'Technologies' },
-      { to: '/evaluations', texte: 'Évaluations' },
+      { to: '/formateurs', membre: 'Ala', texte: 'Formateurs', classe: 'Formateur', api: 'formateurs' },
+      { to: '/personnel', membre: 'Ala', texte: 'Personnel', classe: 'PersonnelAdministratif', api: 'responsables' },
+      { to: '/organismes', membre: 'Ala', texte: 'Organismes', classe: 'Organisme', api: 'organismes' },
+      { to: '/domaines', membre: 'Ala', texte: 'Domaines', classe: 'Domaine', api: 'domaines' },
     ],
   },
   {
-    membre: 'Zahra',
+    titre: 'Explorer',
     liens: [
-      { to: '/modules', texte: 'Modules' },
-      { to: '/cours', texte: 'Cours' },
-      { to: '/ressources', texte: 'Ressources' },
-      { to: '/questions', texte: 'Questions' },
+      { to: '/recherche', membre: 'Imem', texte: 'Recherche globale' },
+      { to: '/nlp', membre: 'Yahya', texte: 'Question en français' },
+      { to: '/questions', membre: 'Zahra', texte: 'Questions guidées' },
     ],
   },
 ]
+const TOUS_LES_LIENS = DOMAINES.flatMap((d) => d.liens)
 
+// Lien actif = le plus long chemin du menu qui préfixe l'URL (/apprenants/stats ne rallume pas /apprenants)
+function lienActif(pathname) {
+  return TOUS_LES_LIENS
+    .filter((l) => pathname === l.to || pathname.startsWith(`${l.to}/`))
+    .sort((a, b) => b.to.length - a.to.length)[0]?.to
+}
+
+// ------------------------------------------------------------------ thème
+const THEMES = [
+  { valeur: 'system', texte: 'Auto' },
+  { valeur: 'light', texte: 'Clair' },
+  { valeur: 'dark', texte: 'Sombre' },
+]
+
+function lireTheme() {
+  try {
+    const t = localStorage.getItem('eduparcours-theme')
+    return t === 'light' || t === 'dark' ? t : 'system'
+  } catch {
+    return 'system'
+  }
+}
+
+function useTheme() {
+  const [theme, setTheme] = useState(lireTheme)
+  useEffect(() => {
+    const racine = document.documentElement
+    if (theme === 'system') delete racine.dataset.theme
+    else racine.dataset.theme = theme
+    try {
+      if (theme === 'system') localStorage.removeItem('eduparcours-theme')
+      else localStorage.setItem('eduparcours-theme', theme)
+    } catch { /* stockage indisponible : le choix vaut pour cette visite */ }
+  }, [theme])
+  return [theme, setTheme]
+}
+
+// ------------------------------------------------------------------ navigation
+function Navigation({ theme, setTheme }) {
+  const { pathname } = useLocation()
+  const actif = lienActif(pathname)
+  const [api, setApi] = useState('attente')
+
+  useEffect(() => {
+    client.get('/sante').then(() => setApi('ok')).catch(() => setApi('ko'))
+  }, [])
+
+  return (
+    <nav className="nav" aria-label="Navigation principale">
+      <Link to="/" className="marque">
+        <span className="marque-nom">Edu<em>Parcours</em></span>
+        <span className="marque-sous">Registre des formations</span>
+      </Link>
+
+      <div className="nav-groupes">
+        {DOMAINES.map((d) => (
+          <div key={d.titre} className="nav-groupe">
+            <span className="nav-titre">{d.titre}</span>
+            {d.liens.map((l) => (
+              <NavLink key={l.to} to={l.to} className={() => (l.to === actif ? 'active' : '')}
+                       aria-current={l.to === actif ? 'page' : undefined}>
+                <span className="nav-texte">
+                  {l.texte}
+                  {l.membre && <span className="nav-membre">{l.membre}</span>}
+                </span>
+                {l.classe && <span className="nav-classe">{l.classe}</span>}
+              </NavLink>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <div className="nav-pied">
+        <span className={`etat-api ${api}`}>
+          {api === 'ok' ? 'API · Fuseki connectés' : api === 'ko' ? 'API injoignable (port 8000)' : 'Connexion à l’API…'}
+        </span>
+        <div className="theme-choix" role="group" aria-label="Thème">
+          {THEMES.map((t) => (
+            <button key={t.valeur} type="button" aria-pressed={theme === t.valeur} onClick={() => setTheme(t.valeur)}>
+              {t.texte}
+            </button>
+          ))}
+        </div>
+      </div>
+    </nav>
+  )
+}
+
+// ------------------------------------------------------------------ accueil
 function Accueil() {
+  const [totaux, setTotaux] = useState({})
+
+  useEffect(() => {
+    TOUS_LES_LIENS.filter((l) => l.api).forEach((l) => {
+      client.get(`/${l.api}`, { params: { taille: 100 } })
+        .then((r) => {
+          const d = r.data
+          const n = typeof d?.total === 'number' ? d.total : Array.isArray(d?.donnees) ? d.donnees.length
+            : Array.isArray(d) ? d.length : null
+          setTotaux((t) => ({ ...t, [l.api]: n }))
+        })
+        .catch(() => setTotaux((t) => ({ ...t, [l.api]: null })))
+    })
+  }, [])
+
   return (
     <div>
-      <h1>EduParcours</h1>
-      <p>Projet Web sémantique – thématique Éducation et Formation.</p>
-      <p className="doux">React (5173) → FastAPI (8000) → Fuseki (3030). Choisissez une rubrique dans le menu.</p>
+      <header className="accueil-entete">
+        <div>
+          <div className="surtitre">PREFIX edu: &lt;http://www.eduparcours.org/ontologie#&gt;</div>
+          <h1>Registre EduParcours</h1>
+          <p>
+            Formations, parcours, compétences et apprenants, décrits par une ontologie OWL et interrogés
+            en SPARQL. Posez une question en français dans la barre du haut, ou ouvrez une classe ci-dessous.
+          </p>
+        </div>
+        <div className="actions">
+          <Link to="/formations/nouvelle" className="btn primaire">Nouvelle formation</Link>
+          <Link to="/recherche" className="btn">Recherche globale</Link>
+        </div>
+      </header>
+
+      <div className="domaines">
+        {DOMAINES.filter((d) => d.liens.some((l) => l.api)).map((d) => (
+          <section key={d.titre} className="domaine">
+            <h2>{d.titre}</h2>
+            <div className="classes">
+              {d.liens.filter((l) => l.api).map((l) => {
+                const n = totaux[l.api]
+                return (
+                  <Link key={l.to} to={l.to} className="classe">
+                    <span className={`classe-nombre ${n == null ? 'inconnu' : ''}`}>
+                      {n === undefined ? '…' : n === null ? '—' : n}
+                    </span>
+                    <span className="classe-nom">{l.texte}</span>
+                    <span className="classe-uri">edu:{l.classe}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
     </div>
   )
 }
 
-// Route d'un autre membre pas encore fusionnée (ex. /cours/Cours_React depuis une fiche)
+// Route d'une partie pas encore intégrée (ex. lien vers /cours/X depuis une fiche)
 function NonDisponible() {
   const { pathname } = useLocation()
   return (
-    <div>
-      <h1>Page non disponible</h1>
-      <p>La page <code>{pathname}</code> appartient à une autre partie du projet et n'est pas encore intégrée.</p>
-      <Link to="/">← Accueil</Link>
+    <div className="non-disponible">
+      <h1>Page introuvable</h1>
+      <p className="doux">L’adresse <code>{pathname}</code> ne correspond à aucune page du registre.</p>
+      <Link to="/" className="btn">Retour à l’accueil</Link>
     </div>
   )
 }
 
-export default function App() {
+// ------------------------------------------------------------------ cadre
+function Cadre() {
+  const [theme, setTheme] = useTheme()
+  const [menuOuvert, setMenuOuvert] = useState(false)
+  const { pathname } = useLocation()
+
+  // Sur mobile, le menu se referme après chaque navigation
+  useEffect(() => { setMenuOuvert(false) }, [pathname])
+
   return (
-    <BrowserRouter>
-      <div className="mise-en-page">
-        <nav className="menu">
-          <Link to="/" className="logo">EduParcours</Link>
-          {MENU.map((groupe) => (
-            <div key={groupe.membre} className="menu-groupe">
-              <span className="menu-membre">{groupe.membre}</span>
-              {groupe.liens.map((l) => <NavLink key={l.to} to={l.to}>{l.texte}</NavLink>)}
-            </div>
-          ))}
-        </nav>
-        <main className="contenu">
+    <div className={`app ${menuOuvert ? 'menu-ouvert' : ''}`}>
+      <Navigation theme={theme} setTheme={setTheme} />
+      {menuOuvert && <div className="voile" onClick={() => setMenuOuvert(false)} />}
+
+      <div className="principal">
+        <div className="barre-haut">
+          <button type="button" className="bouton-menu" onClick={() => setMenuOuvert(true)} aria-label="Ouvrir le menu">
+            Menu
+          </button>
           {/* Barre de question NLP (Linda), présente sur toutes les pages */}
           <QuestionBar />
+        </div>
+
+        <main className="contenu">
           <Routes>
             <Route path="/" element={<Accueil />} />
             <Route path="/formateurs" element={<FormateursListe />} />
@@ -183,6 +331,14 @@ export default function App() {
           </Routes>
         </main>
       </div>
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Cadre />
     </BrowserRouter>
   )
 }

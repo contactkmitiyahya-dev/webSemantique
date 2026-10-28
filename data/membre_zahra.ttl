@@ -1,0 +1,175 @@
+@prefix edu: <http://www.eduparcours.org/ontologie#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Tranche Zahra : Module, Cours, RessourcePedagogique
+# Chargé après l'ontologie (ontologie/EduParcours_final.rdf), qui n'est pas modifiée.
+# Chargement : python scripts/load_data.py --reset
+#
+# Une chaîne de 5 modules, du front-end à la mise en production :
+#   Fondamentaux_Web -> Mise_En_Forme -> Interactivite -> Architecture_MVC -> Production
+#   - aPourPrerequis : lien direct vers le module précédent uniquement
+#     (la transitivité est parcourue par les requêtes avec + et *) ;
+#   - aPourSuivantDirect : sens inverse (fonctionnelle et inverse-fonctionnelle,
+#     aucun module de l'ontologie ne pointe déjà vers ces modules) ;
+#   - chaque module contient au moins un cours (minCardinality 1 sur contientCours),
+#     écrit dans les deux sens (contientCours / appartientAuModule) ;
+#   - chaque cours a un formateur, une technologie et une compétence (restrictions de Cours) ;
+#   - un seul type « feuille » par individu (disjonctions de l'ontologie).
+#
+# Données attendues par les tests (backend/tests/test_zahra.py, test_questions.py) :
+#   - prérequis de Module_Interactivite = { Module_Mise_En_Forme, Module_Fondamentaux_Web } ;
+#   - compétences requises de Module_Production incluent HTML, CSS, JavaScript, Node.js ;
+#   - Cours_HTML5_Semantique : module Fondamentaux_Web, formateur Dr_Benali, techno Tech_HTML5 ;
+#   - Video_HTML5_Intro : langue « fr », compétence HTML, utilisée par Cours_HTML5_Semantique,
+#     libellé contenant « Vidéo » (question VIDEOS) ;
+#   - module suivant Module_Interactivite = Module_Architecture_MVC.
+#
+# À L'ATTENTION D'ALA : Cours_HTML5_Semantique est enseigné par Dr_Benali (exigé par
+# test_detail_cours), Dr_Benali passe donc de 6 à 7 cours (test_formateurs_get_detail).
+# Les libellés reprennent ceux de docs/questions_types.csv et data/synonymes.csv.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# 1. Modules
+# -----------------------------------------------------------------------------
+
+edu:Module_Fondamentaux_Web a owl:NamedIndividual, edu:ModuleFondamental ;
+    rdfs:label "Fondamentaux du Web"@fr ;
+    edu:intitule "Fondamentaux du Web"^^xsd:string ;
+    edu:dureeHeures 18 ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_HTML ;
+    edu:contientCours edu:Cours_HTML5_Semantique ;
+    edu:aPourSuivantDirect edu:Module_Mise_En_Forme .
+
+edu:Module_Mise_En_Forme a owl:NamedIndividual, edu:ModuleFondamental ;
+    rdfs:label "Mise en forme et responsive"@fr ;
+    edu:intitule "Mise en forme et responsive"^^xsd:string ;
+    edu:dureeHeures 22 ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_CSS, edu:Comp_ResponsiveDesign ;
+    edu:contientCours edu:Cours_Flexbox_Responsive ;
+    edu:aPourPrerequis edu:Module_Fondamentaux_Web ;
+    edu:aPourSuivantDirect edu:Module_Interactivite .
+
+edu:Module_Interactivite a owl:NamedIndividual, edu:ModuleIntermediaire ;
+    rdfs:label "Interactivité et dynamisme"@fr ;
+    edu:intitule "Interactivité et dynamisme"^^xsd:string ;
+    edu:dureeHeures 30 ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_JavaScript ;
+    edu:contientCours edu:Cours_DOM_Evenements ;
+    edu:aPourPrerequis edu:Module_Mise_En_Forme ;
+    edu:aPourSuivantDirect edu:Module_Architecture_MVC .
+
+edu:Module_Architecture_MVC a owl:NamedIndividual, edu:ModuleAvance ;
+    rdfs:label "Architecture MVC côté serveur"@fr ;
+    edu:intitule "Architecture MVC côté serveur"^^xsd:string ;
+    edu:dureeHeures 35 ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_NodeJS, edu:Comp_Express ;
+    edu:contientCours edu:Cours_Express_MVC ;
+    edu:aPourPrerequis edu:Module_Interactivite ;
+    edu:aPourSuivantDirect edu:Module_Production .
+
+edu:Module_Production a owl:NamedIndividual, edu:ModuleAvance ;
+    rdfs:label "Mise en production"@fr ;
+    edu:intitule "Mise en production"^^xsd:string ;
+    edu:dureeHeures 24 ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:requiertCompetence edu:Comp_Deploiement, edu:Comp_Git ;
+    edu:contientCours edu:Cours_Conteneurs_Production ;
+    edu:aPourPrerequis edu:Module_Architecture_MVC .
+
+
+# -----------------------------------------------------------------------------
+# 2. Cours (un par module)
+# -----------------------------------------------------------------------------
+
+edu:Cours_HTML5_Semantique a owl:NamedIndividual, edu:CoursHTML ;
+    rdfs:label "HTML5 sémantique et accessibilité"@fr ;
+    edu:intitule "HTML5 sémantique et accessibilité"^^xsd:string ;
+    edu:dureeHeures 12 ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:appartientAuModule edu:Module_Fondamentaux_Web ;
+    edu:enseignePar edu:Dr_Benali ;
+    edu:developpeCompetence edu:Comp_HTML ;
+    edu:utiliseTechnologie edu:Tech_HTML5 ;
+    edu:utiliseRessource edu:Video_HTML5_Intro .
+
+edu:Cours_Flexbox_Responsive a owl:NamedIndividual, edu:CoursCSS ;
+    rdfs:label "Flexbox, Grid et mise en page adaptative"@fr ;
+    edu:intitule "Flexbox, Grid et mise en page adaptative"^^xsd:string ;
+    edu:dureeHeures 16 ;
+    edu:niveauDifficulte "Débutant"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:appartientAuModule edu:Module_Mise_En_Forme ;
+    edu:enseignePar edu:Mr_Ferchichi ;
+    edu:developpeCompetence edu:Comp_CSS, edu:Comp_ResponsiveDesign ;
+    edu:utiliseTechnologie edu:Tech_CSS3 ;
+    edu:utiliseRessource edu:Doc_Guide_Responsive .
+
+edu:Cours_DOM_Evenements a owl:NamedIndividual, edu:CoursJavaScript ;
+    rdfs:label "Manipulation du DOM et gestion des événements"@fr ;
+    edu:intitule "Manipulation du DOM et gestion des événements"^^xsd:string ;
+    edu:dureeHeures 20 ;
+    edu:niveauDifficulte "Intermédiaire"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:appartientAuModule edu:Module_Interactivite ;
+    edu:enseignePar edu:Mr_Hamdi ;
+    edu:developpeCompetence edu:Comp_JavaScript ;
+    edu:utiliseTechnologie edu:Tech_JavaScript ;
+    edu:utiliseRessource edu:Exercice_DOM_Formulaire .
+
+edu:Cours_Express_MVC a owl:NamedIndividual, edu:CoursNodeJS ;
+    rdfs:label "Application Express structurée en MVC"@fr ;
+    edu:intitule "Application Express structurée en MVC"^^xsd:string ;
+    edu:dureeHeures 28 ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:appartientAuModule edu:Module_Architecture_MVC ;
+    edu:enseignePar edu:Dr_Mansouri ;
+    edu:developpeCompetence edu:Comp_NodeJS, edu:Comp_Express ;
+    edu:utiliseTechnologie edu:Tech_NodeJS .
+
+edu:Cours_Conteneurs_Production a owl:NamedIndividual, edu:CoursBackend ;
+    rdfs:label "Conteneurisation et déploiement continu"@fr ;
+    edu:intitule "Conteneurisation et déploiement continu"^^xsd:string ;
+    edu:dureeHeures 18 ;
+    edu:niveauDifficulte "Avancé"^^xsd:string ;
+    edu:ordreDansModule 1 ;
+    edu:appartientAuModule edu:Module_Production ;
+    edu:enseignePar edu:Mr_Jaziri ;
+    edu:developpeCompetence edu:Comp_Deploiement ;
+    edu:utiliseTechnologie edu:Tech_Docker, edu:Tech_Git .
+
+
+# -----------------------------------------------------------------------------
+# 3. Ressources pédagogiques (une par grand type : vidéo, document, exercice)
+# -----------------------------------------------------------------------------
+
+edu:Video_HTML5_Intro a owl:NamedIndividual, edu:TutorielCourt ;
+    rdfs:label "Vidéo HTML5 : les balises sémantiques"@fr ;
+    edu:urlRessource "https://example.org/videos/html5-semantique"^^xsd:string ;
+    edu:langue "fr"^^xsd:string ;
+    edu:dureeMinutes 12 ;
+    edu:ressourceCibleCompetence edu:Comp_HTML .
+
+edu:Doc_Guide_Responsive a owl:NamedIndividual, edu:SupportDeCours ;
+    rdfs:label "Guide du responsive design"@fr ;
+    edu:urlRessource "https://example.org/docs/guide-responsive.pdf"^^xsd:string ;
+    edu:langue "fr"^^xsd:string ;
+    edu:nombrePages 24 ;
+    edu:ressourceCibleCompetence edu:Comp_ResponsiveDesign, edu:Comp_CSS .
+
+edu:Exercice_DOM_Formulaire a owl:NamedIndividual, edu:Exercice ;
+    rdfs:label "Exercice : validation d'un formulaire en JavaScript"@fr ;
+    edu:urlRessource "https://example.org/exercices/dom-formulaire"^^xsd:string ;
+    edu:langue "fr"^^xsd:string ;
+    edu:ressourceCibleCompetence edu:Comp_JavaScript .

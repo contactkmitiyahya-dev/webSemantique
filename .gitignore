@@ -5,6 +5,10 @@
 *.n3
 *.nt
 *.jsonld
+# … sauf l'ontologie et les données de chaque membre, nécessaires au chargement
+!data/*.ttl
+!ontologie/EduParcours_final.ttl
+!ontologie/EduParcours_final.rdf
 
 # Python
 __pycache__/

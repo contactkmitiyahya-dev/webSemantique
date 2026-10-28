@@ -1,41 +1,532 @@
-/* TEMPORAIRE (Ala) – à remplacer par la version de Yahya : variables et styles de base */
+/* ============================================================================
+   EduParcours — système de design commun (toutes les pages, tous les membres)
+
+   Direction : un registre de formations. Papier froid, encre bleu-nuit,
+   accent sarcelle profond ; titres en serif « académique », interface en
+   IBM Plex Sans, identifiants d'ontologie et SPARQL en IBM Plex Mono.
+   Mise en page : navigation latérale sombre, barre de question en haut,
+   contenu sur une colonne de 1180 px au plus.
+
+   Thèmes : clair par défaut, sombre si le système le demande, ou forcé par
+   data-theme="light" / "dark" sur <html> (bouton en bas du menu).
+   Les anciens noms de variables (Ala : --fond, --texte… ; Yahya : --bg,
+   --text…) sont des alias des jetons ci-dessous : aucune page n'a à changer.
+   ========================================================================== */
 
 :root {
-  --fond: #f4f6fa;
-  --surface: #ffffff;
-  --texte: #1e293b;
-  --texte-doux: #64748b;
-  --bordure: #e2e8f0;
-  --survol: #f1f5f9;
-  --accent: #2563eb;
-  --accent-fond: #dbeafe;
-  --danger: #dc2626;
-  --menu-fond: #0f172a;
+  /* ---- Couleurs (thème clair) ---- */
+  --bg:            #f3f6f7;
+  --surface:       #ffffff;
+  --surface-2:     #eef2f3;
+  --line:          #dce3e6;
+  --line-strong:   #c3ced3;
+  --fg:            #15212b;
+  --fg-muted:      #566672;
+  --fg-faint:      #82919b;
+  --accent:        #0d6b66;
+  --accent-strong: #09524e;
+  --accent-soft:   #e0efed;
+  --on-accent:     #ffffff;
+  --ok:            #1d7447;
+  --ok-soft:       #e2f2e8;
+  --warn:          #935600;
+  --warn-soft:     #faefd9;
+  --danger:        #b42318;
+  --danger-soft:   #fdebe8;
+  --nav-bg:        #101920;
+  --nav-fg:        #b3c0c7;
+  --nav-fg-strong: #ffffff;
+  --nav-active:    #17332f;
+  --nav-line:      #1f2b33;
+  --code-bg:       #0f1a20;
+  --code-fg:       #cfe2de;
+  --code-key:      #7fd1c5;
+  --overlay:       rgba(12, 20, 26, 0.48);
+  --shadow-pop:    0 16px 40px rgba(16, 25, 32, 0.18);
+  --focus:         0 0 0 3px rgba(13, 107, 102, 0.28);
 
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* ---- Typographie ---- */
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-sans:    "IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, Consolas, "Courier New", monospace;
+  --t-xs: 0.75rem;   /* étiquettes */
+  --t-sm: 0.8125rem; /* métadonnées, tableaux */
+  --t-md: 0.9375rem; /* texte courant */
+  --t-lg: 1.125rem;  /* titres de bloc */
+  --t-xl: 1.75rem;   /* titre de page */
+
+  /* ---- Formes ---- */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-pill: 999px;
+
+  /* ---- Alias : anciens noms (Ala) ---- */
+  --fond: var(--bg);
+  --texte: var(--fg);
+  --texte-doux: var(--fg-muted);
+  --bordure: var(--line);
+  --survol: var(--surface-2);
+  --accent-fond: var(--accent-soft);
+  --menu-fond: var(--nav-bg);
+
+  /* ---- Alias : anciens noms (Yahya, Linda) ---- */
+  --text: var(--fg);
+  --text-muted: var(--fg-muted);
+  --border: var(--line);
+  --surface2: var(--surface-2);
+  --accent2: var(--accent);
+  --accent-g: var(--accent);
+  --success: var(--ok);
+  --warning: var(--warn);
+  --radius: var(--r-md);
+  --radius-sm: var(--r-sm);
+  --shadow: none;
+  --trans: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  color-scheme: light;
+  font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.5;
-  color: var(--texte);
-  background: var(--fond);
+  line-height: 1.55;
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
 }
 
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--fond); }
-h1 { font-size: 1.6rem; margin: 0 0 12px; }
-a { color: var(--accent); }
-code { background: var(--survol); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:            #0d1418;
+    --surface:       #131c21;
+    --surface-2:     #19242b;
+    --line:          #24323b;
+    --line-strong:   #33454f;
+    --fg:            #e3eaed;
+    --fg-muted:      #9badb6;
+    --fg-faint:      #6c7f89;
+    --accent:        #4dbdb3;
+    --accent-strong: #74d2c9;
+    --accent-soft:   #12302d;
+    --on-accent:     #052220;
+    --ok:            #5cc58e;
+    --ok-soft:       #11291c;
+    --warn:          #e4a83f;
+    --warn-soft:     #2d2411;
+    --danger:        #ef7a6e;
+    --danger-soft:   #33181a;
+    --nav-bg:        #091013;
+    --nav-fg:        #9db0b9;
+    --nav-fg-strong: #f1f5f6;
+    --nav-active:    #12302d;
+    --nav-line:      #162127;
+    --code-bg:       #081013;
+    --code-fg:       #cfe2de;
+    --code-key:      #7fd1c5;
+    --overlay:       rgba(0, 0, 0, 0.6);
+    --shadow-pop:    0 16px 40px rgba(0, 0, 0, 0.5);
+    --focus:         0 0 0 3px rgba(77, 189, 179, 0.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:            #0d1418;
+  --surface:       #131c21;
+  --surface-2:     #19242b;
+  --line:          #24323b;
+  --line-strong:   #33454f;
+  --fg:            #e3eaed;
+  --fg-muted:      #9badb6;
+  --fg-faint:      #6c7f89;
+  --accent:        #4dbdb3;
+  --accent-strong: #74d2c9;
+  --accent-soft:   #12302d;
+  --on-accent:     #052220;
+  --ok:            #5cc58e;
+  --ok-soft:       #11291c;
+  --warn:          #e4a83f;
+  --warn-soft:     #2d2411;
+  --danger:        #ef7a6e;
+  --danger-soft:   #33181a;
+  --nav-bg:        #091013;
+  --nav-fg:        #9db0b9;
+  --nav-fg-strong: #f1f5f6;
+  --nav-active:    #12302d;
+  --nav-line:      #162127;
+  --code-bg:       #081013;
+  --code-fg:       #cfe2de;
+  --code-key:      #7fd1c5;
+  --overlay:       rgba(0, 0, 0, 0.6);
+  --shadow-pop:    0 16px 40px rgba(0, 0, 0, 0.5);
+  --focus:         0 0 0 3px rgba(77, 189, 179, 0.35);
+  color-scheme: dark;
+}
 
-input, select { font: inherit; padding: 6px 8px; border: 1px solid var(--bordure); border-radius: 6px; background: var(--surface); color: var(--texte); }
-input:focus, select:focus { outline: 2px solid var(--accent-fond); border-color: var(--accent); }
+/* ============================================================== base */
 
-.btn { font: inherit; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--bordure); background: var(--surface); color: var(--texte); cursor: pointer; }
-.btn:hover:not(:disabled) { background: var(--survol); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn.primaire { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn.primaire:hover:not(:disabled) { background: #1d4ed8; }
-.btn.danger { color: var(--danger); border-color: #fecaca; }
-.btn.danger:hover:not(:disabled) { background: #fef2f2; }
-.btn.petit { padding: 3px 10px; font-size: 0.85rem; }
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font-size: var(--t-md); }
 
-.erreur { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
-.doux { color: var(--texte-doux); }
+h1, h2, h3, h4 { color: var(--fg); text-wrap: balance; }
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--t-xl);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+h2 { font-size: 1.2rem; font-weight: 600; line-height: 1.3; margin: 0 0 10px; }
+h3 { font-size: 1rem; font-weight: 600; line-height: 1.35; margin: 0 0 8px; }
+p { margin: 0 0 10px; }
+
+a { color: var(--accent); text-underline-offset: 2px; }
+a:hover { color: var(--accent-strong); }
+
+code, kbd, samp, pre { font-family: var(--font-mono); }
+code {
+  font-size: 0.85em;
+  background: var(--surface-2);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  padding: 0 5px;
+  border-radius: 4px;
+}
+
+:focus-visible { outline: none; box-shadow: var(--focus); border-radius: var(--r-sm); }
+::selection { background: var(--accent-soft); color: var(--fg); }
+
+/* ---- Champs de formulaire (tous les membres) ---- */
+input, select, textarea, .input {
+  font: inherit;
+  font-size: var(--t-md);
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  padding: 7px 10px;
+  min-height: 36px;
+  transition: var(--trans);
+}
+textarea { min-height: 84px; resize: vertical; line-height: 1.5; }
+input::placeholder, textarea::placeholder { color: var(--fg-faint); }
+input:hover, select:hover, textarea:hover { border-color: var(--fg-faint); }
+input:focus, select:focus, textarea:focus, .input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus);
+}
+input[type="checkbox"], input[type="radio"] { min-height: 0; padding: 0; accent-color: var(--accent); }
+input:disabled, select:disabled, textarea:disabled { opacity: 0.6; cursor: not-allowed; }
+label { color: var(--fg-muted); }
+
+/* ============================================================== boutons
+   .btn (Ala, Imem) · .btn-primary / -secondary / -outline / -danger / -sm (Yahya, Linda) */
+
+.btn, .btn-sm {
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--fg);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--trans);
+}
+.btn:hover:not(:disabled), .btn-sm:hover:not(:disabled) { background: var(--surface-2); border-color: var(--fg-faint); color: var(--fg); }
+.btn:disabled, .btn-sm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn.primaire, .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primaire:hover:not(:disabled), .btn-primary:hover:not(:disabled) {
+  background: var(--accent-strong); border-color: var(--accent-strong); color: var(--on-accent);
+}
+.btn-secondary { background: var(--surface); }
+.btn-outline { background: transparent; color: var(--fg-muted); }
+.btn.danger, .btn-danger { color: var(--danger); border-color: var(--line-strong); background: var(--surface); }
+.btn.danger:hover:not(:disabled), .btn-danger:hover:not(:disabled) {
+  background: var(--danger-soft); border-color: var(--danger); color: var(--danger);
+}
+.btn-danger-plein { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn-danger-plein:hover:not(:disabled) { filter: brightness(0.92); background: var(--danger); color: #fff; }
+.btn.petit, .btn-sm { min-height: 30px; padding: 0 10px; font-size: var(--t-xs); }
+
+/* Boutons sans classe (pages de Zahra) : même allure que .btn */
+button:not([class]) {
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
+  transition: var(--trans);
+}
+button:not([class]):hover:not(:disabled) { background: var(--surface-2); border-color: var(--fg-faint); }
+button:not([class]):disabled { opacity: 0.5; cursor: not-allowed; }
+button[type="submit"]:not([class]) { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+button[type="submit"]:not([class]):hover:not(:disabled) { background: var(--accent-strong); border-color: var(--accent-strong); }
+
+/* ============================================================== en-têtes de page
+   .entete-page (Ala) · .entete (Imem) · .page-header (Yahya, Linda) */
+
+.entete-page, .entete, .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.entete-page h1, .entete h1, .page-title { margin: 0 0 4px; }
+.page-title { font-family: var(--font-display); font-size: var(--t-xl); font-weight: 650; }
+.page-subtitle, .sous-titre, .entete-page p, .entete p {
+  margin: 0;
+  color: var(--fg-muted);
+  font-size: var(--t-sm);
+}
+.sous-titre { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.actions, .boutons, .fiche-actions, .cert-actions, .inline-form, .search-bar {
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+}
+.retour, .back-link, .fil-ariane {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+.retour:hover, .back-link:hover { color: var(--accent); }
+.fil-ariane a { color: var(--fg-muted); text-decoration: none; }
+.fil-ariane a:hover { color: var(--accent); }
+
+/* La page de Yahya fixait sa propre largeur : le cadre de l'application s'en charge */
+.page-container { max-width: none; margin: 0; padding: 0; animation: none; }
+.page-narrow { max-width: 720px; }
+
+/* ============================================================== cartes et blocs
+   Une bordure fine, sans ombre : l'ombre est réservée à ce qui flotte (modales). */
+
+.carte, .bloc, .card, .table-card, .nlp-card, .cert-card, .caracteristiques, .info-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: none;
+}
+.carte, .bloc, .card, .nlp-card, .cert-card { padding: 18px 20px; }
+.carte, .card { margin-bottom: 16px; }
+.table-card { overflow: hidden; margin-bottom: 16px; }
+.carte h3, .bloc h3, .card-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--fg-muted);
+  margin: 0 0 12px;
+}
+
+/* Fiches : listes propriété / valeur */
+.proprietes, .caracteristiques { margin: 0; }
+.proprietes { display: grid; grid-template-columns: max-content 1fr; gap: 8px 22px; }
+.proprietes dt { color: var(--fg-muted); font-size: var(--t-sm); }
+.proprietes dd { margin: 0; min-width: 0; }
+.caracteristiques {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px 20px;
+  padding: 16px 20px;
+}
+.caracteristiques dt {
+  font-size: var(--t-xs); color: var(--fg-muted);
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+.caracteristiques dd { margin: 3px 0 0; font-weight: 500; font-variant-numeric: tabular-nums; }
+.info-list { margin-top: 14px; }
+.info-row {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 9px 0; border-bottom: 1px solid var(--line);
+  font-size: var(--t-sm);
+}
+.info-row:last-child { border-bottom: none; }
+.info-label, .etiquette { color: var(--fg-muted); font-size: var(--t-sm); }
+
+.grille-relations, .blocs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.liens, .puces { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+.liens li, .puces li { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.puces li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--line-strong); transform: translateY(-2px); }
+
+/* ============================================================== pastilles, badges, étiquettes */
+
+.badge, .pastille, .tag, .compteur, .nombre, .count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--r-pill);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  line-height: 1.6;
+  padding: 0 9px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.badge { background: var(--accent-soft); color: var(--accent); }
+.badge-lg { font-size: var(--t-sm); padding: 2px 12px; }
+.pastille, .compteur, .nombre, .count-badge { background: var(--surface-2); color: var(--fg-muted); font-weight: 500; }
+.pastille.vert, .tag-green { background: var(--ok-soft); color: var(--ok); }
+.pastille.orange, .tag-gold { background: var(--warn-soft); color: var(--warn); }
+.pastille.rouge, .count-full { background: var(--danger-soft); color: var(--danger); }
+.tag { background: var(--accent-soft); color: var(--accent); font-weight: 500; white-space: normal; }
+.tag-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.count-badge { margin-left: auto; }
+.lecture-seule { font-size: var(--t-xs); color: var(--fg-faint); font-style: italic; }
+
+/* ============================================================== tableaux
+   .dt (DataTable d'Imem) · .data-table (Yahya, Linda) · .nlp-results-table */
+
+.dt-conteneur, .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
+.table-card { overflow-x: auto; }
+.dt, .data-table, .nlp-results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-sm);
+  background: var(--surface);
+}
+.dt th, .data-table th, .nlp-results-table th {
+  background: var(--surface-2);
+  color: var(--fg-muted);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  user-select: none;
+}
+.dt td, .data-table td, .nlp-results-table td {
+  padding: 11px 14px;
+  border-top: 1px solid var(--line);
+  color: var(--fg);
+  vertical-align: middle;
+}
+.dt tbody tr:first-child td, .data-table tbody tr:first-child td { border-top: none; }
+.dt tbody tr:hover td, .table-row:hover td, .nlp-results-table tbody tr:hover td { background: var(--surface-2); }
+.dt th.droite, .dt td.droite { text-align: right; font-variant-numeric: tabular-nums; }
+.dt th.triable { cursor: pointer; }
+.dt th.triable:hover { color: var(--accent); }
+.dt tbody tr.cliquable { cursor: pointer; }
+.dt-vide { padding: 32px; text-align: center; color: var(--fg-muted); }
+.dt-pagination, .pagination {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 12px 2px; font-size: var(--t-sm); color: var(--fg-muted); font-variant-numeric: tabular-nums;
+}
+.pagination { padding: 10px 14px; border-top: 1px solid var(--line); justify-content: flex-end; }
+.dt-pagination div { display: flex; gap: 6px; align-items: center; }
+.page-info { color: var(--fg-muted); font-size: var(--t-sm); }
+.table-total td { background: var(--surface-2); font-weight: 600; }
+.font-medium { font-weight: 500; }
+.font-mono { font-family: var(--font-mono); font-size: 0.92em; }
+.actions-cell { display: flex; gap: 6px; align-items: center; }
+
+/* ============================================================== messages */
+
+.erreur, .alert {
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  margin: 0 0 14px;
+  font-size: var(--t-sm);
+  border: 1px solid transparent;
+}
+.erreur, .alert-error { background: var(--danger-soft); color: var(--danger); border-color: color-mix(in srgb, var(--danger) 30%, transparent); }
+.alert-success { background: var(--ok-soft); color: var(--ok); border-color: color-mix(in srgb, var(--ok) 30%, transparent); }
+.alert-warning { background: var(--warn-soft); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
+.doux, .empty-text, .rs-aide { color: var(--fg-muted); font-size: var(--t-sm); }
+.text-muted { color: var(--fg-muted); }
+.empty-text { font-style: italic; }
+
+.loader-wrap { display: flex; justify-content: center; padding: 56px 0; }
+.loader {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--line); border-top-color: var(--accent);
+  animation: tourne 0.8s linear infinite;
+}
+@keyframes tourne { to { transform: rotate(360deg); } }
+.empty-state { text-align: center; padding: 48px 24px; color: var(--fg-muted); }
+/* Les pictogrammes emoji décoratifs ne font pas partie de la charte */
+.empty-icon, .cert-icon, .hero-icon, .feature-icon, .brand-icon, .qbar-icone { display: none; }
+
+/* ============================================================== formulaires (mises en page) */
+
+.formulaire { display: flex; flex-direction: column; gap: 18px; max-width: 920px; }
+.grille-champs, .form-grid, .grille-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px 18px;
+}
+.grille-champs label, .grille-2 label, .modal-corps > label, .form-group, .form-label, .champ-relation {
+  display: flex; flex-direction: column; gap: 5px;
+  font-size: var(--t-sm); font-weight: 500; color: var(--fg-muted);
+}
+.grille-champs label.large, .form-full { grid-column: 1 / -1; }
+.grille-champs label.case { flex-direction: row; align-items: center; align-self: end; gap: 8px; color: var(--fg); }
+.form-hint { font-weight: 400; color: var(--fg-faint); font-size: var(--t-xs); }
+.form-card { max-width: 760px; }
+.form-actions { display: flex; flex-direction: row; justify-content: flex-end; gap: 8px; }
+.choix { border: none; padding: 0; margin: 0; min-width: 0; }
+.choix legend {
+  font-size: var(--t-sm); font-weight: 500; color: var(--fg-muted);
+  padding: 0 0 6px; display: flex; gap: 8px; align-items: center;
+}
+.colonnes-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+
+/* ============================================================== code, SPARQL
+   Le terminal de requêtes reste sombre dans les deux thèmes : c'est une console. */
+
+pre, .nlp-code-box, .sparql pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin: 8px 0 0;
+}
+.sparql { margin-top: 18px; }
+.sparql summary {
+  cursor: pointer; color: var(--fg-muted); font-size: var(--t-sm);
+  font-family: var(--font-mono); list-style-position: inside;
+}
+.sparql summary:hover { color: var(--accent); }
+
+@media (max-width: 600px) {
+  .proprietes { grid-template-columns: 1fr; gap: 2px; }
+  .proprietes dd { margin-bottom: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

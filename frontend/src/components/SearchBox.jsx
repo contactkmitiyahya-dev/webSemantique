@@ -7,8 +7,10 @@
  *   placeholder : string (optionnel)
  *   delai       : ms (optionnel, défaut 300) — onChange n'est appelé qu'après une pause de frappe
  *                 (repris de la doublure d'Ala : évite une requête par touche ; 0 = immédiat)
+ * Styles : composants.css (.champ-recherche)
  */
 import { useEffect, useRef, useState } from "react";
+import "./composants.css";
 
 export default function SearchBox({
   valeur = "",
@@ -36,53 +38,25 @@ export default function SearchBox({
   }
 
   return (
-    <div style={styles.conteneur}>
-      <span style={styles.icone}>🔍</span>
+    <div className="champ-recherche">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.7"
+           strokeLinecap="round" aria-hidden="true">
+        <circle cx="7" cy="7" r="4.5" />
+        <path d="M10.5 10.5 14 14" />
+      </svg>
       <input
         ref={inputRef}
         type="text"
-        style={styles.input}
         value={texte}
         placeholder={placeholder}
+        aria-label={placeholder}
         onChange={(e) => setTexte(e.target.value)}
       />
       {texte && (
-        <button style={styles.effacer} onClick={effacer} title="Effacer">
+        <button type="button" onClick={effacer} title="Effacer" aria-label="Effacer la recherche">
           ✕
         </button>
       )}
     </div>
   );
 }
-
-const styles = {
-  conteneur: {
-    display: "flex",
-    alignItems: "center",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    padding: "6px 10px",
-    background: "#fff",
-    gap: "8px",
-    minWidth: "220px",
-  },
-  icone: {
-    fontSize: "14px",
-    color: "#888",
-  },
-  input: {
-    border: "none",
-    outline: "none",
-    fontSize: "14px",
-    flex: 1,
-    background: "transparent",
-  },
-  effacer: {
-    border: "none",
-    background: "none",
-    cursor: "pointer",
-    fontSize: "12px",
-    color: "#999",
-    padding: "0 2px",
-  },
-};

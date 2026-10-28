@@ -1,0 +1,113 @@
+@prefix edu: <http://www.eduparcours.org/ontologie#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Tranche Yahya : Apprenant, Certification
+# Chargé après l'ontologie (ontologie/EduParcours_final.rdf), qui n'est pas modifiée.
+# Chargement : python scripts/load_data.py --reset
+#
+# Les 9 apprenants de départ (Ahmed, Omar, Lina_Master…) et les 6 certifications
+# sont déjà dans l'ontologie. Ce fichier ajoute 5 apprenants, un par profil :
+#   Chaima  EtudiantDoctorat            -> classée ApprenantFullStackReady et
+#                                          ApprenantQualifieFrontend par le raisonneur
+#   Malek   EtudiantLicence
+#   Wiem    ProfessionnelEnReconversion -> 3 inscriptions : la limite (maxCardinality 3)
+#   Ghassen ProfessionnelEnMiseANiveau
+#   Oumayma AutodidacteDebutant         -> sans encadrant ni certification
+#
+# Règles respectées :
+#   - aucune nouvelle certification : test_nlp_question_compter_certifications attend 6 ;
+#   - au plus 3 formations par apprenant (estInscritA) ;
+#   - un seul type « feuille » par apprenant ;
+#   - estCoequipierDe est symétrique : écrit dans un seul sens, comme dans l'ontologie ;
+#   - aucun prénom en double, et aucun prénom proche d'un libellé existant
+#     (la reconnaissance d'entités est floue, seuil 80) ;
+#   - Mr_Hamdi n'encadre personne de plus (test_ala attend [« Karim »]).
+#
+# À L'ATTENTION DES AUTRES MEMBRES – liens créés vers vos individus
+# (le sujet du triplet est toujours un apprenant de Yahya)
+#   Imem  (formations)  estInscritA : Formation_Master_Web, Formation_Licence_Info,
+#                       Formation_Initiation_SQL, BootCamp_Web, Formation_Frontend,
+#                       Formation_FullStack, Formation_Backend, Formation_Debutant_Web
+#   Ala   (formateurs)  estEncadrePar : Dr_Mansouri, Mme_Bouazizi, Mr_Ferchichi, Mr_Jaziri
+#   Linda (évaluations) passeEvaluation : Quiz_HTML, Quiz_NodeJS, Soutenance_Backend
+#   Zahra (modules)     estInscritAuModule : Module_Fondamentaux_Web, Module_Mise_En_Forme,
+#                       Module_Architecture_MVC, Module_Production
+# =============================================================================
+
+
+edu:Chaima a owl:NamedIndividual, edu:EtudiantDoctorat ;
+    rdfs:label "Chaima"@fr ;
+    edu:nom "Riahi"^^xsd:string ;
+    edu:prenom "Chaima"^^xsd:string ;
+    edu:email "chaima.riahi@eduparcours.org"^^xsd:string ;
+    edu:dateNaissance "1997-02-11T00:00:00"^^xsd:dateTime ;
+    edu:dateInscription "2026-09-08T00:00:00"^^xsd:dateTime ;
+    edu:niveauEtudes "Doctorat"^^xsd:string ;
+    edu:estInscritA edu:Formation_Master_Web ;
+    edu:possedeCompetence edu:Comp_HTML, edu:Comp_CSS, edu:Comp_JavaScript,
+        edu:Comp_React, edu:Comp_NodeJS ;
+    edu:maitriseTechnologie edu:Tech_React, edu:Tech_NodeJS ;
+    edu:obtientCertification edu:Certificat_DeveloppeurWeb ;
+    edu:estEncadrePar edu:Dr_Mansouri ;
+    edu:estCoequipierDe edu:Malek .
+
+edu:Malek a owl:NamedIndividual, edu:EtudiantLicence ;
+    rdfs:label "Malek"@fr ;
+    edu:nom "Baccouche"^^xsd:string ;
+    edu:prenom "Malek"^^xsd:string ;
+    edu:email "malek.baccouche@eduparcours.org"^^xsd:string ;
+    edu:dateNaissance "2005-06-03T00:00:00"^^xsd:dateTime ;
+    edu:dateInscription "2026-09-14T00:00:00"^^xsd:dateTime ;
+    edu:niveauEtudes "Licence"^^xsd:string ;
+    edu:estInscritA edu:Formation_Licence_Info, edu:Formation_Initiation_SQL ;
+    edu:estInscritAuModule edu:Module_Fondamentaux_Web, edu:Module_Mise_En_Forme ;
+    edu:possedeCompetence edu:Comp_HTML, edu:Comp_SQL ;
+    edu:maitriseTechnologie edu:Tech_HTML5, edu:Tech_MySQL ;
+    edu:passeEvaluation edu:Quiz_HTML ;
+    edu:estEncadrePar edu:Mme_Bouazizi .
+
+edu:Wiem a owl:NamedIndividual, edu:ProfessionnelEnReconversion ;
+    rdfs:label "Wiem"@fr ;
+    edu:nom "Sassi"^^xsd:string ;
+    edu:prenom "Wiem"^^xsd:string ;
+    edu:email "wiem.sassi@eduparcours.org"^^xsd:string ;
+    edu:dateNaissance "1992-11-19T00:00:00"^^xsd:dateTime ;
+    edu:dateInscription "2026-10-01T00:00:00"^^xsd:dateTime ;
+    edu:niveauEtudes "Master"^^xsd:string ;
+    edu:estInscritA edu:BootCamp_Web, edu:Formation_Frontend, edu:Formation_FullStack ;
+    edu:possedeCompetence edu:Comp_HTML, edu:Comp_CSS, edu:Comp_ResponsiveDesign ;
+    edu:maitriseTechnologie edu:Tech_HTML5, edu:Tech_CSS3 ;
+    edu:obtientCertification edu:Certificat_Frontend ;
+    edu:estEncadrePar edu:Mr_Ferchichi .
+
+edu:Ghassen a owl:NamedIndividual, edu:ProfessionnelEnMiseANiveau ;
+    rdfs:label "Ghassen"@fr ;
+    edu:nom "Mejri"^^xsd:string ;
+    edu:prenom "Ghassen"^^xsd:string ;
+    edu:email "ghassen.mejri@eduparcours.org"^^xsd:string ;
+    edu:dateNaissance "1989-04-27T00:00:00"^^xsd:dateTime ;
+    edu:dateInscription "2026-10-12T00:00:00"^^xsd:dateTime ;
+    edu:niveauEtudes "Master"^^xsd:string ;
+    edu:estInscritA edu:Formation_Backend ;
+    edu:estInscritAuModule edu:Module_Architecture_MVC, edu:Module_Production ;
+    edu:possedeCompetence edu:Comp_NodeJS, edu:Comp_Express, edu:Comp_Deploiement, edu:Comp_Git ;
+    edu:maitriseTechnologie edu:Tech_NodeJS, edu:Tech_Docker, edu:Tech_Git ;
+    edu:passeEvaluation edu:Quiz_NodeJS, edu:Soutenance_Backend ;
+    edu:obtientCertification edu:Certificat_Backend ;
+    edu:estEncadrePar edu:Mr_Jaziri .
+
+edu:Oumayma a owl:NamedIndividual, edu:AutodidacteDebutant ;
+    rdfs:label "Oumayma"@fr ;
+    edu:nom "Kefi"^^xsd:string ;
+    edu:prenom "Oumayma"^^xsd:string ;
+    edu:email "oumayma.kefi@eduparcours.org"^^xsd:string ;
+    edu:dateNaissance "2007-08-15T00:00:00"^^xsd:dateTime ;
+    edu:dateInscription "2026-10-20T00:00:00"^^xsd:dateTime ;
+    edu:niveauEtudes "Baccalauréat"^^xsd:string ;
+    edu:estInscritA edu:Formation_Debutant_Web ;
+    edu:possedeCompetence edu:Comp_HTML ;
+    edu:suitParcours edu:Parcours_Debutant .

@@ -62,73 +62,70 @@ export default function ModuleForm() {
   }
 
   if (chargement) {
-    return <main style={styles.page}><p>Chargement...</p></main>;
+    return <div className="loader-wrap"><div className="loader" /></div>;
   }
 
   return (
-    <main style={styles.page}>
-      <Link to={modeEdition ? `/modules/${id}` : "/modules"}>← Retour</Link>
-      <h1>{modeEdition ? "Modifier le module" : "Nouveau module"}</h1>
+    <div className="page-container">
+      <Link to={modeEdition ? `/modules/${id}` : "/modules"} className="retour">← Retour</Link>
+      <div className="page-header">
+        <h1 className="page-title">{modeEdition ? "Modifier le module" : "Nouveau module"}</h1>
+      </div>
 
-      <form onSubmit={soumettre} style={styles.form}>
-        <label style={styles.champ}>
-          Intitulé
-          <input
-            required
-            value={valeurs.intitule}
-            onChange={(e) => modifier("intitule", e.target.value)}
-            style={styles.input}
-          />
-        </label>
+      <form onSubmit={soumettre} className="card form-card formulaire">
+        <div className="grille-champs">
+          <label>
+            Intitulé
+            <input
+              required
+              value={valeurs.intitule}
+              onChange={(e) => modifier("intitule", e.target.value)}
+            />
+          </label>
 
-        <label style={styles.champ}>
-          Durée (heures)
-          <input
-            type="number"
-            required
-            min="1"
-            value={valeurs.dureeHeures}
-            onChange={(e) => modifier("dureeHeures", e.target.value)}
-            style={styles.input}
-          />
-        </label>
+          <label>
+            Durée (heures)
+            <input
+              type="number"
+              required
+              min="1"
+              value={valeurs.dureeHeures}
+              onChange={(e) => modifier("dureeHeures", e.target.value)}
+            />
+          </label>
 
-        <label style={styles.champ}>
-          Niveau
-          <select
-            value={valeurs.niveauDifficulte}
-            onChange={(e) => modifier("niveauDifficulte", e.target.value)}
-            style={styles.input}
-          >
-            {NIVEAUX.map((n) => (
-              <option key={n} value={n}>{n}</option>
-            ))}
-          </select>
-        </label>
+          <label>
+            Niveau
+            <select
+              value={valeurs.niveauDifficulte}
+              onChange={(e) => modifier("niveauDifficulte", e.target.value)}
+            >
+              {NIVEAUX.map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </label>
 
-        {!modeEdition && (
-          <RelationSelect
-            endpoint="/modules"
-            valeur={valeurs.prerequisId}
-            onChange={(v) => modifier("prerequisId", v)}
-            label="Prérequis (optionnel)"
-          />
-        )}
+          {!modeEdition && (
+            <RelationSelect
+              endpoint="/modules"
+              valeur={valeurs.prerequisId}
+              onChange={(v) => modifier("prerequisId", v)}
+              label="Prérequis (optionnel)"
+            />
+          )}
 
-        {erreur && <p style={styles.erreur}>{erreur}</p>}
+        </div>
 
-        <button type="submit" disabled={enCours}>
-          {enCours ? "Enregistrement..." : "Enregistrer"}
-        </button>
+        {erreur && <p className="erreur">{erreur}</p>}
+
+        <div className="form-actions">
+          <Link to={modeEdition ? `/modules/${id}` : "/modules"} className="btn">Annuler</Link>
+          <button type="submit" className="btn btn-primary" disabled={enCours}>
+            {enCours ? "Enregistrement..." : "Enregistrer"}
+          </button>
+        </div>
       </form>
-    </main>
+    </div>
   );
 }
-
-const styles = {
-  page: { padding: "24px", fontFamily: "sans-serif" },
-  form: { display: "flex", flexDirection: "column", gap: "16px", maxWidth: "420px" },
-  champ: { display: "flex", flexDirection: "column", gap: "6px", fontSize: "14px" },
-  input: { padding: "8px", fontSize: "14px", borderRadius: "6px", border: "1px solid #ccc" },
-  erreur: { color: "#e53e3e" },
-};
